@@ -1,0 +1,41 @@
+---
+title: "wealth-mobility"
+author: "Abhraneel Sarma"
+date: "8/3/2018"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(magrittr)
+```
+
+```{r}
+df <- read.csv("Data.csv")
+
+links <- df %>%
+  mutate( 
+    quintile = quintile - 1,
+    race = ifelse(white, "white", "black")
+  ) %>%
+  select('pquintile', 'quintile') %>%
+  mutate(pquintile = pquintile + 4) %>%
+  group_by(pquintile, quintile) %>%
+  summarise( n = n())
+
+nodes <- df %>%
+  mutate(
+    quintile = quintile - 1,
+    pquintile = pquintile + 4
+  ) %>%
+  gather(quintile, pquintile, key = demographic, value = quintile) %>%
+  mutate(
+    race = ifelse(white, "white", "black") ,
+    demographic = ifelse(demographic == "quintile", "child", "parent")
+  ) %>%
+  select(race, demographic, quintile) %>%
+  group_by(quintile) %>%
+  summarise( n = n())
+
+write_csv(links, 'wealth-mob.csv')
+```
