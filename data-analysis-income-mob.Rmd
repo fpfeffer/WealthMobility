@@ -12,7 +12,11 @@ library(magrittr)
 
 ```{r}
 df <- read.csv("Data.csv")
+```
 
+
+```{r}
+# creating JSON file - mostly useless
 links <- df %>%
   mutate( 
     quintile = quintile - 1,
@@ -37,5 +41,5 @@ nodes <- df %>%
   group_by(quintile) %>%
   summarise( n = n())
 
-write_csv(links, 'wealth-mob.csv')
+#write_csv(links, 'wealth-mob.csv')
 ```
