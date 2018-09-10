@@ -1,7 +1,30 @@
-var canvas = {w: 960, h: 500},
+var canvas = { w: 960, h: 540 },
 	margin = { left: 10, bottom: 10, right: 10, top: 10 };
+	black_ratio_quintile = {
+		"1": 0.769,
+		"2": 0.485,
+		"3": 0.255,
+		"4": 0.011,
+		"5": 0.047
+	},
+	wealth_scale = {
+		"0": {
+			"1": [0.34, 0.63, 0.803, 0.898],
+			"2": [0.225, 0.489, 0.725, 0.877],
+			"3": [0.17, 0.384, 0.632, 0.851],
+			"4": [0.114, 0.266, 0.476, 0.757],
+			"5": [0.067, 0.137, 0.272, 0.583]
+		},
+		"1": {
+			"1": [0.447, 0.75, 0.929, 0.983],
+			"2": [0.398, 0.704, 0.948, 0.975],
+			"3": [0.378, 0.652, 0.972, 0.999],
+			"4": [0.365, 0.657, 0.657, 0.999],
+			"5": [0.019, 0.035, 0.479, 0.999]
+		}
+	}
 
-var div_wealthy = d3.select('#graph-wealthy')
+var div = d3.select('#graph')
 			.append('div')
 			.style('position', 'relative')
 			.style('left', '0px')
@@ -9,46 +32,60 @@ var div_wealthy = d3.select('#graph-wealthy')
 			.style('width', canvas.w + 'px')
 			.style('height', canvas.h + 'px');
 
-var div_poor = d3.select('#graph-poor')
-			.append('div')
-			.style('position', 'relative')
-			.style('left', '0px')
-			.style('top', '0px')
-			.style('width', canvas.w + 'px')
-			.style('height', canvas.h + 'px');
-
-var count = 5000;
+var count = 10000;
 
 var yScale = d3.scaleLinear()
-	.domain([0, 4])
+	.domain([1, 5])
 	.range([-0.8, 0.8])
 
-function draw_flow(element, proportionBlack, parent_quintile, white_threshold, black_threshold) {
+function draw_flow(element, parent = "all") {
+	d3.select('canvas').remove();
+
+	parent == "all" ? count = 10000 : count = 4000;
+	console.log(count);
+
+	var qScale = d3.scaleThreshold()
+		.domain([0.331, 0.554, 0.721, 0.858])
+		.range([1, 2, 3, 4, 5]);
+
 	var wScale = d3.scaleThreshold()
-		.domain(white_threshold)
-		.range([0, 1, 2, 3, 4])
+	// 	.domain(white_threshold)
+	 	.range([1, 2, 3, 4, 5]);
 
 	var bScale = d3.scaleThreshold()
-		.domain(black_threshold)
-		.range([0, 1, 2, 3, 4])
+	// 	.domain(black_threshold)
+	 	.range([1, 2, 3, 4, 5]);
+
 
 	var data = d3.range(count).map(i => {
-		p = Math.random();
-		var isB = (p < proportionBlack) ? 1 : 0;
-		var q = (isB ? bScale : wScale)( Math.random() );
+		if (parent == "all"){
+			var p = Math.random();
+			var p_quintile = qScale(p);
+		} else {
+			p_quintile = parent;
+			count = 4000;
+		}
+		
+		var isB = (Math.random() <= black_ratio_quintile[p_quintile]) ? 1 : 0;
+
+		if (isB){
+			var q = bScale.domain(wealth_scale[isB][p_quintile])( Math.random() );
+		} else {
+			var q = wScale.domain(wealth_scale[isB][p_quintile])( Math.random() );
+		};
 
 		return {
 			speed: Math.random() * 2 + 1,
 			x: Math.random() * 2 - 1,
-			y0: yScale(parent_quintile),
+			y0: yScale(p_quintile),
 			y1: yScale(q),
-			dy: Math.random() * 0.2,
+			dy: (Math.random() - 0.5)* 0.25,
 			isB
 		}
 	})
 
 	data = d3.shuffle(data);
-
+	
 	var regl = createREGL({container: element.node()})
 
 	var drawPoints = regl({
@@ -63,7 +100,7 @@ function draw_flow(element, proportionBlack, parent_quintile, white_threshold, b
 				
 				// cubic ease
 				float ct = t < 0.5
-					? 512.0 * pow(t, 10.0)
+					? 32.0 * pow(t, 6.0)
 					: -0.5 * pow(abs(2.0 * t - 2.0), 10.0) + 1.0;
 
 				float x = mix(-1.0, 1.0, t);
@@ -103,7 +140,6 @@ function draw_flow(element, proportionBlack, parent_quintile, white_threshold, b
 	})
 
 	regl.frame(({ time }) => {
-
 		drawPoints({ 
 			data: data,
 			interp: time / 50 
@@ -111,5 +147,4 @@ function draw_flow(element, proportionBlack, parent_quintile, white_threshold, b
 	})
 }
 
-draw_flow(div_wealthy, 1/20, 4, [0.067, 0.137, 0.272, 0.583], [0.019, 0.035, 0.479, 0.999]);
-draw_flow(div_poor, 2/3, 0, [0.34, 0.63, 0.803, 0.898], [0.447, 0.75, 0.929, 0.983]);
+draw_flow(div);
