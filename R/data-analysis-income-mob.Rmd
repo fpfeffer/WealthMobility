@@ -2,10 +2,20 @@
 title: "wealth-mobility"
 author: "Abhraneel Sarma"
 date: "8/3/2018"
-output: html_document
+output:
+  html_document:
+    df_print: kable
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    toc: yes
 ---
 
-```{r}
+If you are missing any of the packages below, use `install.packages("packagename")` to install them.
+The `import::` syntax requires the `import` package to be installed, and provides a simple way to 
+import specific functions from a package without polluting your entire namespace (unlike `library()`)
+
+```{r setup, message = FALSE, warning = FALSE}
 library(tidyverse)
 library(magrittr)
 library(rstan)
@@ -17,207 +27,89 @@ library(tidybayes)
 library(ggstance)
 ```
 
+
+## The Data
+The de-identified data consists of the following variables: `parent's wealth quintile`, `child's wealth quintile`, `white (binary; whether the race of the person is white or not)` and `female (binary; whether the person's gender is female or not)`. We do not use female in the subsequent analysis.
+
 ```{r}
 df <- read.csv("../data/Data.csv")
 
-df %<>% mutate(
-  id = as.factor(id),
-  white = as.factor(white),
-  female = as.factor(female),
-  pquintile = as.factor(pquintile)
-) %>%
+df %<>%
+  na.omit() %>%
+  select(id, white, female, pwealthqn, wealthqn) %>%
+  rename(
+    quantile = wealthqn,
+    pquantile = pwealthqn
+  ) %>%
+  mutate(
+    id = as.factor(id),
+    white = as.factor(white),
+    female = as.factor(female),
+    pquantile = as.factor(pquantile)
+  ) %>%
   as.data.frame(.)
 
 head(df)
 ```
 
+
 ## Model
+Here, we've used an adjacent category model `(family = "acat")` for the ordinal logistic regression. However, I do not have a strong basis for choosing this family, and a cumulative logit model or other families for ordinal regression can be used as well.
 
 $$
 \begin{align}
-log(\frac{Pr(Y = i)}{Pr(Y = i+1)}) & =  \\
-b &\sim \textrm{Normal}(0, 1)
+log(\frac{Pr(y_i = k)}{Pr(y_i = k+1)}) & = \alpha_k - \phi_i \\
+\phi_i & = \beta_p P_i +  \beta_r[k] R_i\\
+\beta_p, \beta_r &\sim \textrm{Normal}(0, 1) \\
+\alpha_k & \sim \textrm{Normal}(0,1)
 \end{align}
 $$
 
-
+```{r}
+get_prior(quantile ~ pquantile + cs(white), data = df, family = "acat")
+```
 
 ```{r}
-m1.acm = brm(quintile ~ pquintile + cs(white), data = df, family = "acat", prior=prior(normal(0, 1), class=b), iter = 2500, chains = 2)
+# Load the model instead of running them
+load("m1.cat-specific.RData")
+#m1.acm = brm(quantile ~ pquantile + cs(white), data = df, family = "acat", prior=prior(normal(0, 1), class=b), iter = 5000, warmup = 2000, chains = 2)
 
-stancode(m1.acm)
 summary(m1.acm)
 ```
 
 ```{r}
-m1.acm1 = brm(quintile ~ pquintile + cs(white) + (1|id), data = df, family = "acat", prior=prior(normal(0, 1), class=b), iter = 2500, chains = 2)
-#summary(m1.acm1)
+#This could not be uploaded to github because of size restrictions
+#m1.acm1 = brm(quantile ~ pquantile + cs(white) + (1|id), data = df, family = "acat", prior=prior(normal(0, 1), class=b), iter = 5000, warmup = 2000, chains = 2)
+summary(m1.acm1)
 ```
 
 
 ```{r}
-save(m1.acm, m1.acm1, file="m1.cat-specific.RData")
-
 df %>%
-  data_grid(pquintile, white) %>%
+  data_grid(pquantile, white) %>%
   add_fitted_draws(m1.acm, re_formula = NA) %>%
-  group_by(white, pquintile, .category) %>%
+  group_by(white, pquantile, .category) %>%
   mean_qi(.value)
 ```
 
+```{r fig.height = 3, fig.width = 12}
+df %>%
+  data_grid(pquantile, white) %>%
+  add_fitted_draws(m1.acm, re_formula = NA) %>%
+  group_by(.category, pquantile, white) %>%
+  ggplot(aes(y = .category, x = .value, color = white))+
+  stat_pointintervalh(.width = 0.95, position = position_dodgev(height = 0.5), show.legend = TRUE) +
+  facet_grid(.~pquantile)
+```
 
 ```{r fig.height = 3, fig.width = 12}
 df %>%
-  data_grid(pquintile, white) %>%
-  add_fitted_draws(m1.acm, re_formula = NA) %>%
-  group_by(.category, pquintile, white) %>%
-  #point_interval() %>%
+  data_grid(pquantile, white) %>%
+  add_fitted_draws(m1.acm1, re_formula = NA) %>%
+  group_by(.category, pquantile, white) %>%
   ggplot(aes(y = .category, x = .value, color = white))+
   stat_pointintervalh(.width = 0.95, position = position_dodgev(height = 0.5), show.legend = TRUE) +
-  facet_grid(.~pquintile)
+  facet_grid(.~pquantile)
 ```
-
-
-```{r}
-loo(m1.acm, m1.acm1)
-```
-
-```{r}
-#m1.fixed = brm(quintile ~ pquintile*white, data = df, family = "categorical", prior=prior(normal(0, 1), class=b), iter = 2500, chains = 2)
-
-load("m1.multilevel.RData")
-```
-
-```{r fig.height = 4, fig.width = 6}
-df %>%
-  mutate(white = (white - 1) ) %>%
-  data_grid(pquintile, white) %>%
-  add_fitted_draws(m1.fixed, re_formula = NA) %>%
-  ggplot(aes(x = .value, y = pquintile, color = .category)) +
-  stat_pointintervalh(position = position_dodgev(height = 0.75), show.legend = TRUE) +
-  facet_grid(.~white)
-```
-
-
-```{r}
-library(rethinking)
-library(tidybayes.rethinking)
-```
-
-```{r}
-df %<>% mutate(
-  id = as.factor(id),
-  white = as.integer(white + 1), #as.factor(white),
-  female = as.factor(female),
-  #pquintile = as.factor(pquintile)
-) %>%
-  as.data.frame(.)
-
-head(df)
-```
-
-```{r}
-#m4.multilevel <- map2stan(
-#  alist(
-#    quintile ~ dordlogit(phi, cutpoints), # dbinom(1, p),
-#    phi <- a + a_parent[pquintile] + a_white[white],
-#    a ~ dnorm(0, 1),
-#    a_white[white] ~ dnorm(0, sigma_white),
-#    a_parent[pquintile] ~ dnorm(0, sigma_parent),
-#    sigma_white ~ dcauchy(0, 1),
-#    sigma_parent ~ dcauchy(0, 1),
-#    cutpoints ~ dnorm(0, 10)
-#  ), 
-#  data = df,
-#  start = list(cutpoints = c(-2, -1, 0, 1)),
-#  iter = 2500, warmup = 1000, chains = 2, cores = 2
-#)
-
-load("m4.multilevel.RData")
-
-precis(m4.multilevel, depth = 2)
-```
-
-```{r}
-df %>%
-  data_grid(white, pquintile, quintile) %>%
-  tidy_sim(m4.multilevel) %>%
-  group_by(white, pquintile, quintile.predicted) %>%
-  summarise(n = n())
-```
-
-
-```{r}
-post <- as.data.frame(extract.samples(m4.multilevel, n = 1000)$cutpoints) %>%
-  rename(cutpoints.1 = V1, cutpoints.2 = V2, cutpoints.3 = V3, cutpoints.4 = V4) %>% 
-  slice(rep(1:n(), 50))
-
-pred <- df %>%
-  data_grid(white, pquintile, quintile) %>%
-  tidy_link(m4.multilevel) %>%
-  ungroup() %>%
-  mutate(.r = rep(seq(1:50000), each = 5)) %>%
-  group_by(.r, .iteration, white, pquintile) %>%
-  summarise(phi = mean(phi)) %>%
-  bind_cols(post)
-
-pred_samples <- pred %>%
-  mutate(
-    p.1 = inv.logit(cutpoints.1 - phi),
-    p.2 = inv.logit(cutpoints.2 - phi),
-    p.3 = inv.logit(cutpoints.3 - phi),
-    p.4 = inv.logit(cutpoints.4 - phi)
-  )
-
-pred_samples
-
-pred_samples %>%
-  ungroup() %>%
-  group_by(white, pquintile) %>%
-  summarise(
-    p.1 = mean(p.1),
-    p.2 = mean(p.2),
-    p.3 = mean(p.3),
-    p.4 = mean(p.4)
-  )
-  
-#pred_samples %>%
-#  ggplot(aes(x = p, y = quintile)) +
-#  stat_pointintervalh(position = position_dodgev(height = 0.5), show.legend = TRUE) +
-#  facet_grid(pquintile~white)
-```
-
-
-```{r}
-data(Trolley)
-d <- Trolley
-
-m11.2 <- map2stan(
-  alist(
-    response ~ dordlogit(phi, cutpoints),
-    phi <- bA*action + bI*intention + bC*contact + bAI*action*intention + bCI*contact*intention,
-    c(bA, bI, bC, bAI, bCI) ~ dnorm(0, 10),
-    cutpoints <- dnorm(0, 10)
-  ),
-  data = d,
-  start = list(cutpoints = c(-1.9,-1.2, -0.7, 0.2, 0.9, 1.8))
-)
-
-samples <- as.data.frame(extract.samples(m11.2))[1,]
-ak <- as.list(samples[1:6])
-phi <- samples$bA + samples$bI + samples$bC + samples$bAI + samples$bCI
-pordlogit(1:6, a=ak, phi=phi)
-
-for (s in (1:10)){
-  samples <- post_m11.2[s,]
-  ak <- as.list(samples[1:6])
-  phi <- samples$bA + samples$bI + samples$bC + samples$bAI + samples$bCI
-  p <- pordlogit(1:6, a=ak, phi=phi)
-  print(p)
-}
-```
-
-
-
 
 

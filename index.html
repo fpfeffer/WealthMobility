@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+
+	<!-- Bootstrap Core JS  -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+	<!-- Bootstrap Core CSS  -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900" rel="stylesheet">
+
+	<style>
+		h1 {
+			font-family: 'Raleway', sans-serif;
+			font-weight: 800;
+			font-size: 24px;
+			line-height: 28px;
+		}
+
+		h3 {
+			margin-top: 32px;
+			margin-bottom: 0px;
+			font-family: 'Raleway', sans-serif;
+			font-weight: 800;
+			font-size: 16px;
+			line-height: 21px;
+		}
+
+		p {
+			font-family: 'Raleway', sans-serif;
+			font-weight: 500;
+			font-size: 14px;
+			line-height: 16px;
+		}
+
+		a {
+			color: #dc2127;
+		}
+
+		a:hover,
+		a:focus,
+		a:active{
+		  color: #CC1F24;
+		  text-decoration: none;
+		}
+	</style>		
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8">
+					<h1>Wealth Mobility Data Visualization</h1>
+
+					<h3>Introduction</h3>
+					<p>
+						description of the project
+						<br>
+						We visualize the data collected from a survey of parent and children wealth at the University of Michigan.
+					</p>
+
+					<h3>Visualization 1: <a href="social-structure/">Social Structure</a></h3>
+					<p>
+						These visualizations show the data collected by the survey, the quantile in which a child is born into (parent's wealth quantile) and the quantile in which a child ends up.  This data is weighted by the representation of each group in the US population estimates. We show the quintiles and quartile estimates.			
+					</p>
+
+					<h3>Visualization 2: <a href="transition-probability/">Transition probability for each quintile</a></h3>
+					<p>
+						These visualizations model the data collected by the survey using a Bayesian ordinal logistic regression model. We estimate the probability of a child ending up in each quintile (dependent variable) and use the parent quintile and the race of each survey respondent, as category-specific effects) as predictors. The visualization depicts an equal number of children born into families of different races and contrasts the probability of where they may end up.
+					</p>
+				</div>
+			</div>
+		</div>		
+	</body>
+</html>
