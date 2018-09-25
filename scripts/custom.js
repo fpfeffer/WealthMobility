@@ -20,11 +20,13 @@ var svg = d3.select('#graph')
 
 var dpi = window.devicePixelRatio;
 
+var wrap = d3.textwrap().bounds({height: 32, width: 80});
+
 function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, wealth_scale, parent = "all") {
 	d3.select('canvas').remove();
-	d3.selectAll('.prob-frequency').remove();
+	d3.selectAll('.label-prob').remove();
 
-	parent == "all" ? count = 10000 : count = 4000;
+	parent == "all" ? count = 100000 : count = 10000;
 
 	var yScale = d3.scaleLinear()
 		.domain([1, num_quantile])
@@ -91,15 +93,41 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 					})
 					.object(data)
 
-	// for (i = 1; i <= num_quantile; i++){
-	// 	console.log(yScale(i), prob_quintile_pquintile[yScale(i)]);
+	svg.append('g')
+		.attr('class', 'label-prob')
+		.attr('transform', 'translate(0, 0)')
+		.append('text')
+		.attr('class', 'prob-frequency header black-probability')
+		.text('white children');
 
-	// 	svg.append('g')
-	// 		.attr('class', 'prob-frequency')
-	// 		.attr('transform', 'translate(0, '+ (yScale_px(i)) +')')
-	// 		.append('text')
-	// 		.text(Object.values(prob_quintile_pquintile[yScale(i)]));
-	// }
+	svg.append('g')
+		.attr('class', 'label-prob')
+		.attr('transform', 'translate(80, 0)')
+		.append('text')
+		.attr('class', 'prob-frequency header black-probability')
+		.text('black children');
+
+	for (i = 1; i <= num_quantile; i++){
+		console.log(yScale(i), prob_quintile_pquintile[yScale(i)]);
+
+		svg.append('g')
+			.attr('class', 'label-prob')
+			.attr('transform', 'translate(0, '+ ((yScale_px(i)) - 8) +')')
+			.append('text')
+			.attr('class', 'prob-frequency white-probability')
+			.text(Object.values(prob_quintile_pquintile[yScale(i)])[0]);
+
+		svg.append('g')
+			.attr('class', 'label-prob')
+			.attr('transform', 'translate(80, '+ ((yScale_px(i)) - 8) +')')
+			.append('text')
+			.attr('class', 'prob-frequency black-probability')
+			.text(Object.values(prob_quintile_pquintile[yScale(i)])[1]);
+	}
+
+
+
+	d3.selectAll('text.prob-frequency').call(wrap);
 
 
 	

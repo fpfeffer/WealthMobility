@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<!-- Bootstrap Core JS  -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+	<!-- Bootstrap Core CSS  -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900" rel="stylesheet">
+
+	<style>
+		#graph {
+			position: relative;
+		}
+
+		.black {
+			font-weight: 600;
+			color: white;
+			background-color: rgba(96, 107, 210, 0.85);
+			padding: 4px 8px;
+			border-radius: : 4px;
+		}
+
+		.white {
+			font-weight: 600;
+			color: white;
+			background-color: rgba(255, 130, 94, 0.85);
+			padding: 4px 8px;
+		}
+
+		h3 {
+			font-family: 'Raleway', sans-serif;
+			font-weight: 500;
+			font-size: 19px;
+			line-height: 32px;
+		}
+
+		.drop-btn {
+			width: 128px !important;
+			display: inline-block;
+			padding: 6px 12px !important;
+			text-align: left;
+			margin: 0px 8px;
+		}
+	</style>
+</head>
+<script>
+	var black_ratio_quintile = {
+		"1": 0.769,
+		"2": 0.485,
+		"3": 0.255,
+		"4": 0.011,
+		"5": 0.047
+	},
+	wealth_scale = {
+		"0": {
+			"1": [0.34, 0.63, 0.803, 0.898],
+			"2": [0.225, 0.489, 0.725, 0.877],
+			"3": [0.17, 0.384, 0.632, 0.851],
+			"4": [0.114, 0.266, 0.476, 0.757],
+			"5": [0.067, 0.137, 0.272, 0.583]
+		},
+		"1": {
+			"1": [0.447, 0.75, 0.929, 0.983],
+			"2": [0.398, 0.704, 0.948, 0.975],
+			"3": [0.378, 0.652, 0.972, 0.999],
+			"4": [0.365, 0.657, 0.657, 0.999],
+			"5": [0.019, 0.035, 0.479, 0.999]
+		}
+	},
+	qScale_domain = [0.331, 0.554, 0.721, 0.858]
+</script>
+
+<body>
+	<div class="container">
+		<!-- Interactive visualization -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3><span class="black" style="border-radius: 4px">Black</span> and <span class="white" style="border-radius: 4px">White</span> children raised in 
+					<span>
+						<div class="dropdown" style="display: inline-block;">
+							<button class="btn btn-default dropdown-toggle drop-btn" type="button" data-toggle="dropdown">all
+							<span class="caret"></span></button>
+							<ul class="dropdown-menu dropdown-bar">
+								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 5)">top 20%</a></li>
+								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 4)">20% - 40%</a></li>
+								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 3)">40% - 60%</a></li>
+								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 2)">60% - 80%</a></li>
+								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 1)">bottom 20%</a></li>
+								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale)">all</a></li>
+							</ul>
+						</div>
+					</span> of the households (by wealth).
+				</h3>
+				<div id='graph'></div>
+			</div>
+		</div>
+	</div>
+</body>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://npmcdn.com/regl/dist/regl.js"></script>
+
+<script src="../scripts/interactive.js"></script>
+<script>
+	$(function(){
+		$(".dropdown-menu").on('click', 'li a', function(){
+			$(".drop-btn:first-child").html($(this).text()+ ' <span class="caret"></span>');
+		});
+	});
+
+	draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale);
+</script>
+</html>

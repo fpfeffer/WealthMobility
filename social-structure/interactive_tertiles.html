@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<!-- Bootstrap Core JS  -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+	<!-- Bootstrap Core CSS  -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900" rel="stylesheet">
+
+	<style>
+		#graph {
+			position: relative;
+		}
+
+		.black {
+			font-weight: 600;
+			color: white;
+			background-color: rgba(96, 107, 210, 0.85);
+			padding: 4px 8px;
+			border-radius: : 4px;
+		}
+
+		.white {
+			font-weight: 600;
+			color: white;
+			background-color: rgba(255, 130, 94, 0.85);
+			padding: 4px 8px;
+		}
+
+		h3 {
+			font-family: 'Raleway', sans-serif;
+			font-weight: 500;
+			font-size: 19px;
+			line-height: 32px;
+		}
+
+		.drop-btn {
+			width: 128px !important;
+			display: inline-block;
+			padding: 6px 12px !important;
+			text-align: left;
+			margin: 0px 8px;
+		}
+	</style>
+</head>
+<script>
+	var black_ratio_tertile = {
+			"1": 0.354,
+			"2": 0.006,
+			"3": 0.008
+		},
+		wealth_scale = {
+			// this is the wealth scale for whites
+			"0": {
+				"1": [0.438, 0.786],
+				"2": [0.324, 0.699],
+				"3": [0.152, 0.433]
+			},
+			// this is the wealth scale for blacks
+			"1": {
+				"1": [0.636, 0.952],
+				"2": [0.551, 0.968],
+				"3": [0.125, 0.563]
+			}
+		},
+		qScale_domain = [0.329, 0.664];
+</script>
+<body>
+	<div class="container">
+		<!-- Interactive visualization -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3><span class="black" style="border-radius: 4px">Black</span> and <span class="white" style="border-radius: 4px">White</span> children raised in 
+					<span>
+						<div class="dropdown" style="display: inline-block;">
+							<button class="btn btn-default dropdown-toggle drop-btn" type="button" data-toggle="dropdown">all
+							<span class="caret"></span></button>
+							<ul class="dropdown-menu dropdown-bar">
+								<li><a onclick="draw_flow(div, 3, qScale_domain, black_ratio_tertile, wealth_scale, 3)">top 33%</a></li>
+								<li><a onclick="draw_flow(div, 3, qScale_domain, black_ratio_tertile, wealth_scale, 2)">middle 33%</a></li>
+								<li><a onclick="draw_flow(div, 3, qScale_domain, black_ratio_tertile, wealth_scale, 1)">bottom 33%</a></li>
+								<li><a onclick="draw_flow(div, 3, qScale_domain, black_ratio_tertile, wealth_scale)">all</a></li>
+							</ul>
+						</div>
+					</span> of the households (by wealth).
+				</h3>
+				<div id='graph'></div>
+			</div>
+		</div>
+	</div>
+</body>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://npmcdn.com/regl/dist/regl.js"></script>
+<script src="../scripts/interactive.js"></script>
+<script>
+	$(function(){
+		$(".dropdown-menu").on('click', 'li a', function(){
+			$(".drop-btn:first-child").html($(this).text()+ ' <span class="caret"></span>');
+		});
+	})
+
+	draw_flow(div, 3, qScale_domain, black_ratio_tertile, wealth_scale);
+</script>
+</html>
