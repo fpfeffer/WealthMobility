@@ -32,7 +32,7 @@
 
 		h3 {
 			font-family: 'Raleway', sans-serif;
-			font-weight: 600;
+			font-weight: 700;
 			font-size: 19px;
 			line-height: 32px;
 		}
@@ -65,6 +65,10 @@
 			font-size: 16px;
 			line-height: 14px;
 			text-align: center;
+		}
+
+		g.label-prob-header > foreignObject > div {
+			font-weight: 600 !important;
 		}
 	</style>
 </head>
@@ -116,7 +120,14 @@
 					</span> of the households (by wealth).
 				</h3>
 				<p>For every 10,000 children raised in Black and White households, see where they end up.</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-9">
 				<div id='graph'></div>
+			</div>
+			<div class="col-md-3">
+				<div id="stats"></div>
 			</div>
 		</div>
 	</div>
@@ -137,3 +148,4 @@
 	draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 5);
 </script>
 </html>
+

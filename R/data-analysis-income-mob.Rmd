@@ -54,7 +54,10 @@ head(df)
 
 
 ## Model
-Here, we've used an adjacent category model `(family = "acat")` for the ordinal logistic regression. However, I do not have a strong basis for choosing this family, and a cumulative logit model or other families for ordinal regression can be used as well.
+Here, we've used an adjacent category model `(family = "acat")` for the ordinal logistic regression. 
+I've used ordinal regression because the outcome variable (a child's wealth quantile) is discrete but ordered; as opposed to a multinomial regression which would have been used had there been no definite order in the discrete outcome variable. There are different families that can be used to model ordinal regressions, such as `cumulative`, `adjacent category` (used here), `stopping ratio`, `continuation ratio`. I do not have a strong basis for choosing this family, and a cumulative logit model or other families for ordinal regression can be used as well.
+
+We use skeptical weak priors $\textrm{N(0,1)}$ in this model for all the parameters.
 
 $$
 \begin{align}
@@ -79,8 +82,8 @@ summary(m1.acm)
 
 ```{r}
 #This could not be uploaded to github because of size restrictions
-#m1.acm1 = brm(quantile ~ pquantile + cs(white) + (1|id), data = df, family = "acat", prior=prior(normal(0, 1), class=b), iter = 5000, warmup = 2000, chains = 2)
-summary(m1.acm1)
+# m1.acm1 = brm(quantile ~ pquantile + cs(white) + (1|id), data = df, family = "acat", prior=prior(normal(0, 1), class=b), iter = 5000, warmup = 2000, chains = 2)
+# summary(m1.acm1)
 ```
 
 
@@ -102,6 +105,7 @@ df %>%
   facet_grid(.~pquantile)
 ```
 
+
 ```{r fig.height = 3, fig.width = 12}
 df %>%
   data_grid(pquantile, white) %>%
@@ -111,5 +115,4 @@ df %>%
   stat_pointintervalh(.width = 0.95, position = position_dodgev(height = 0.5), show.legend = TRUE) +
   facet_grid(.~pquantile)
 ```
-
 

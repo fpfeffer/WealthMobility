@@ -44,6 +44,29 @@
 			text-align: left;
 			margin: 0px 8px;
 		}
+
+		text {
+			font-family: 'Raleway', sans-serif;
+			font-weight: 400;
+			font-size: 14px;
+			line-height: 14px;
+		}
+
+		foreignObject > div {
+			font-family: 'Raleway', sans-serif;
+			font-weight: 400;
+			font-size: 14px;
+			line-height: 14px;
+			text-align: center;
+		}
+
+		g.label-prob-header > foreignObject > div {
+			font-weight: 600 !important;
+		}
+
+		div.col-md-1 {
+			padding: 0px;
+		}
 	</style>
 </head>
 <script>
@@ -76,9 +99,9 @@
 	<div class="container">
 		<!-- Interactive visualization -->
 		<div class="row">
-			<div class="col-md-12">
-				<h3><span class="black" style="border-radius: 4px">Black</span> and <span class="white" style="border-radius: 4px">White</span> children raised in 
-					<span>
+			<div class="col-md-10 col-md-offset-1">
+				<h3><span class="black" style="border-radius: 4px">Black</span> and <span class="white" style="border-radius: 4px">White</span> children raised in different households (by wealth)
+					<!-- <span>
 						<div class="dropdown" style="display: inline-block;">
 							<button class="btn btn-default dropdown-toggle drop-btn" type="button" data-toggle="dropdown">all
 							<span class="caret"></span></button>
@@ -91,18 +114,29 @@
 								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale)">all</a></li>
 							</ul>
 						</div>
-					</span> of the households (by wealth).
+					</span> --> 
 				</h3>
-				<div id='graph'></div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-1">
+				<div class="stats" id="stats-parent"></div>
+			</div>
+			<div class="col-md-10">
+				<div id="graph"></div>
+			</div>
+			<div class="col-md-1">
+				<div class="stats" id="stats-child"></div>
 			</div>
 		</div>
 	</div>
 </body>
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="../scripts/d3-textwrap.min.js" type="text/javascript"></script>
 <script src="https://npmcdn.com/regl/dist/regl.js"></script>
 
-<script src="../scripts/interactive.js"></script>
+<script src="../scripts/main.js"></script>
 <script>
 	$(function(){
 		$(".dropdown-menu").on('click', 'li a', function(){
@@ -113,3 +147,4 @@
 	draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale);
 </script>
 </html>
+

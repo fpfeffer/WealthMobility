@@ -1,4 +1,8 @@
-var canvas = { w: 900, h: 540 },
+var graph_width = d3.select('div#graph').node().getBoundingClientRect().width;
+	min_stats_width = 200;
+	stats_width = d3.select('div#stats').node().getBoundingClientRect().width > min_stats_width 
+						? min_stats_width : d3.select('div#stats').node().getBoundingClientRect().width;
+	canvas = { w: graph_width, h: 9*graph_width/16 },
 	margin = { left: 10, bottom: 10, right: 10, top: 10 },
 	text_container = {w: 120, h: 64};
 
@@ -11,12 +15,11 @@ var div = d3.select('#graph')
 			.style('height', canvas.h + 'px')
 			.style('display', 'inline-block');
 
-var svg = d3.select('#graph')
+var svg = d3.select('#stats')
 			.append('svg')
 			.attr('height', canvas.h)
-			.attr('width', 180)
-			.style('display', 'inline')
-			.style('margin-left', 16);
+			.attr('width', stats_width)
+			.style('display', 'inline');
 
 var dpi = window.devicePixelRatio;
 
@@ -26,14 +29,13 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 	d3.select('canvas').remove();
 	d3.selectAll('.label-prob').remove();
 
-	parent == "all" ? count = 100000 : count = 10000;
+	parent == "all" ? count = 200000 : count = 10000;
 
 	var yScale = d3.scaleLinear()
 		.domain([1, num_quantile])
 		.range([-0.8, 0.8]);
 
 	g_height = yScale.range().reduce((a, b) => Math.abs(a) + Math.abs(b), 0);
-	console.log((2 - g_height)/4);
 
 	var yScale_px = d3.scaleLinear()
 		.domain([1, num_quantile])
@@ -74,8 +76,8 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 		};
 
 		return {
-			speed: 1 + Math.random() / 2,
-			x: Math.random() * 1 - 1,
+			speed: 3 + 3 * Math.random(),
+			x: Math.random() * 2,
 			y0: yScale(p_quintile),
 			y1: yScale(q),
 			dy: (Math.random() - 0.5)* 0.25,
@@ -84,32 +86,31 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 	})
 
 	data = d3.shuffle(data);
+	time_limit = 4.25 / d3.min( data.map(x => x.speed / 60) );
 
 	prob_quintile_pquintile = d3.nest()
 					.key(function(d) { return d.y1; })
 					.key(function(d) {return d.isB; })
 					.rollup(function(v) {
-						return Math.round(v.length / (count/2) * 10000);
+						return Math.round(v.length / (count/2) * 100)/100;
 					})
 					.object(data)
 
 	svg.append('g')
-		.attr('class', 'label-prob')
+		.attr('class', 'label-prob-header')
 		.attr('transform', 'translate(0, 0)')
 		.append('text')
-		.attr('class', 'prob-frequency header black-probability')
-		.text('white children');
+		.attr('class', 'prob-frequency header white-probability')
+		.text('% white children');
 
 	svg.append('g')
-		.attr('class', 'label-prob')
-		.attr('transform', 'translate(80, 0)')
+		.attr('class', 'label-prob-header')
+		.attr('transform', 'translate('+ stats_width/2 +', 0)')
 		.append('text')
 		.attr('class', 'prob-frequency header black-probability')
-		.text('black children');
+		.text('% black children');
 
 	for (i = 1; i <= num_quantile; i++){
-		console.log(yScale(i), prob_quintile_pquintile[yScale(i)]);
-
 		svg.append('g')
 			.attr('class', 'label-prob')
 			.attr('transform', 'translate(0, '+ ((yScale_px(i)) - 8) +')')
@@ -119,17 +120,14 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 
 		svg.append('g')
 			.attr('class', 'label-prob')
-			.attr('transform', 'translate(80, '+ ((yScale_px(i)) - 8) +')')
+			.attr('transform', 'translate('+ stats_width/2 +', '+ ((yScale_px(i)) - 8) +')')
 			.append('text')
 			.attr('class', 'prob-frequency black-probability')
 			.text(Object.values(prob_quintile_pquintile[yScale(i)])[1]);
 	}
 
 
-
 	d3.selectAll('text.prob-frequency').call(wrap);
-
-
 	
 	var regl = createREGL({container: element.node()})
 
@@ -140,19 +138,23 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 			attribute float isB;
 			varying float c;
 			uniform float size;
-			uniform float interp;			
+			uniform float interp;
 			void main() {
-				float t = mod(x + interp*speed, 1.0);
-				
+				float t = x + interp*speed;
+
+				float xprime = t - 3.00;
+
+				float dx = xprime <= -1.0 ? 0.0 : (xprime + 1.0) / 2.0;
+
 				// cubic ease
-				float ct = t < 0.5
-					? 32.0 * pow(t, 6.0)
-					: -0.5 * pow(abs(2.0 * t - 2.0), 10.0) + 1.0;
+				float ct = dx < 0.5
+					? 32.0 * pow(dx, 6.0)
+					: -0.5 * pow(abs(2.0 * dx - 2.0), 10.0) + 1.0;
 
-				float x = mix(-1.0, 1.0, t);
-				float y = mix(y0, y1, ct);
+				float y = y0 + (y1 - y0) * ct;
+				// float y = xprime < 0.0 ? y0 : y1;
 
-				gl_Position = vec4(x, y + dy, 0, 1);
+				gl_Position = vec4(xprime, y + dy, 0, 1);
 				gl_PointSize = size;
 
 				c = isB;
@@ -177,7 +179,7 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 			isB: data.map(d => d.isB)
 		},
 		uniforms: {
-			size: 4 * dpi,
+			size: 5 * dpi,
 			interp: function(context, props){
 				return props.interp;
 			}
@@ -187,9 +189,11 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 	})
 
 	regl.frame(({ time }) => {
-		drawPoints({ 
-			data: data,
-			interp: time / 60 
-		})
+		if (time < time_limit){
+			drawPoints({ 
+				data: data,
+				interp: time / 60
+			})
+		}
 	})
 }
