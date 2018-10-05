@@ -35,7 +35,9 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 	d3.select('canvas').remove();
 	d3.selectAll('.prob-frequency').remove();
 
-	parent == "all" ? count = 10000 : count = 4000;
+	//parent == "all" ? count = 10000 : count = 4000;
+	count = 30000;
+	wealth_length = 4;
 
 	var yScale = d3.scaleLinear()
 		.domain([1, num_quantile])
@@ -66,13 +68,6 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 	 	.range(range_array);
 
 	var data = d3.range(count).map(i => {
-		// if (parent == "all"){
-		// 	var p = Math.random();
-		// 	var p_quintile = qScale(p);
-		// } else {
-		// 	p_quintile = parent;
-		// }
-
 		var p = Math.random();
 		var p_quintile = qScale(p);
 		
@@ -85,8 +80,8 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 		};
 
 		return {
-			speed: 3 + 3 * Math.random(),
-			x: Math.random() * 2,
+			speed: 3 + 2 * Math.random(),
+			x: Math.random() * wealth_length,
 			y0: yScale(p_quintile),
 			y1: yScale(q),
 			dy: (Math.random() - 0.5)* 0.225,
@@ -96,14 +91,14 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 
 	data = d3.shuffle(data);
 
-	time_limit = 4.25 / d3.min(data.map(x => x.speed / 60));
+	time_limit = (wealth_length + 2.25) / d3.min(data.map(x => x.speed / 60));
 	//console.log( 4 / d3.median(data.map(x => x.speed / 60)) );
 
 	prob_pquintile = d3.nest()
 					.key(function(d) { return d.y0; })
 					.key(function(d) {return d.isB; })
 					.rollup(function(v) {
-						return v.length; //Math.round(v.length / (count/2) * 10000);
+						return Math.round(v.length); // / (count/2) * 100)/100; //Math.round(v.length / (count/2) * 10000);
 					})
 					.object(data);
 
@@ -111,55 +106,69 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 					.key(function(d) { return d.y1; })
 					.key(function(d) {return d.isB; })
 					.rollup(function(v) {
-						return v.length; //Math.round(v.length / (count/2) * 10000);
+						return Math.round(v.length); // / (count/2) * 100)/100; //Math.round(v.length / (count/2) * 10000);
 					})
 					.object(data);
 
 	svg_parent.append('g')
 		.attr('class', 'label-prob-header')
-		.attr('transform', 'translate(0, 12)')
+		.attr('transform', 'translate(0, 0)')
 		.append('text')
 		.attr('class', 'prob-frequency header white-probability')
-		.text('# people in parent generation');
+		.text('racial composition in parent generation');
 
 	svg_child.append('g')
 		.attr('class', 'label-prob-header')
-		.attr('transform', 'translate(0, 12)')
+		.attr('transform', 'translate(0, 0)')
 		.append('text')
 		.attr('class', 'prob-frequency header black-probability')
-		.text('# people in child generation');
+		.text('racial composition in child generation');
 
 	for (i = 1; i <= num_quantile; i++){
+		var pquintile = Object.values(prob_pquintile[yScale(i)])
+
 		svg_parent.append('g')
 			.attr('class', 'label-prob')
 			.attr('transform', 'translate(0, '+ ((yScale_px(i)) - 20) +')')
 			.append('text')
 			.attr('class', 'prob-frequency parent-probability')
-			.text('white: ' + Object.values(prob_pquintile[yScale(i)])[0]);
+			.text('white: ' + Math.round(pquintile[0]/d3.sum(pquintile) * 1000)/10 + "%" );
 
 		svg_parent.append('g')
 			.attr('class', 'label-prob')
 			.attr('transform', 'translate(0, '+ ((yScale_px(i)) + 4) +')')
 			.append('text')
 			.attr('class', 'prob-frequency parent-probability')
-			.text('black: ' + Object.values(prob_pquintile[yScale(i)])[1]);
-
-		svg_child.append('g')
-			.attr('class', 'label-prob')
-			.attr('transform', 'translate(0, '+ ((yScale_px(i)) - 20) +')')
-			.append('text')
-			.attr('class', 'prob-frequency child-probability')
-			.text('white: ' + Object.values(prob_quintile[yScale(i)])[0]);
-
-		svg_child.append('g')
-			.attr('class', 'label-prob')
-			.attr('transform', 'translate(0, '+ ((yScale_px(i)) + 4) +')')
-			.append('text')
-			.attr('class', 'prob-frequency child-probability')
-			.text('black: ' + Object.values(prob_quintile[yScale(i)])[1]);
+			.text('black: ' + Math.round(pquintile[1]/d3.sum(pquintile) * 1000)/10 + "%" );
 	}
 
 	d3.selectAll('text.prob-frequency').call(wrap);
+
+	setTimeout(function(){
+		for (i = 1; i <= num_quantile; i++){
+			var cquintile = Object.values(prob_quintile[yScale(i)])
+
+			svg_child.append('g')
+				.attr('class', 'label-prob')
+				.attr('transform', 'translate(0, '+ ((yScale_px(i)) - 20) +')')
+				.append('text')
+				.attr('class', 'prob-frequency child-probability')
+				.text('white: ' + Math.round(cquintile[0]/d3.sum(cquintile) * 1000)/10 + "%" );
+
+			svg_child.append('g')
+				.attr('class', 'label-prob')
+				.attr('transform', 'translate(0, '+ ((yScale_px(i)) + 4) +')')
+				.append('text')
+				.attr('class', 'prob-frequency child-probability')
+				.text('black: ' + Math.round(cquintile[1]/d3.sum(cquintile) * 1000)/10 + "%" );
+
+			d3.selectAll('text.prob-frequency').call(wrap);
+		}
+	}, (2.25 / d3.max( data.map(x => x.speed / 60)))*1000 );
+
+	setTimeout(function(){
+		$('.reset-button').css('visibility', 'visible');
+	}, time_limit*1000 );
 	
 	var regl = createREGL({container: element.node()})
 
@@ -174,7 +183,7 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 			void main() {
 				float t = x + interp*speed;
 
-				float xprime = t - 3.0;
+				float xprime = t - 5.0;
 
 				float dx = xprime <= -1.0 ? 0.0 : (xprime + 1.0) / 2.0;
 
