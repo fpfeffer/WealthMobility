@@ -1,7 +1,7 @@
 var graph_width = d3.select('div#graph').node().getBoundingClientRect().width;
-	min_stats_width = 200;
-	stats_width = d3.select('div#stats').node().getBoundingClientRect().width > min_stats_width 
-						? min_stats_width : d3.select('div#stats').node().getBoundingClientRect().width;
+	max_stats_width = 200;
+	stats_width = d3.select('div#stats').node().getBoundingClientRect().width > max_stats_width 
+						? max_stats_width : d3.select('div#stats').node().getBoundingClientRect().width;
 	canvas = { w: graph_width, h: 12*graph_width/16 },
 	margin = { left: 10, bottom: 10, right: 10, top: 10 },
 	text_container = {w: 120, h: 64};
@@ -24,6 +24,8 @@ var svg = d3.select('#stats')
 var dpi = window.devicePixelRatio;
 
 var wrap = d3.textwrap().bounds({height: 32, width: 80});
+
+var quintile_labels = ['Bottom 20%', '', 'Middle 20%', '', 'Top 20%']
 
 function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, wealth_scale, parent = "all") {
 	d3.select('canvas').remove();
@@ -99,14 +101,14 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 					.object(data);
 
 	svg.append('g')
-		.attr('class', 'label-prob-header')
+		.attr('class', 'label-prob')
 		.attr('transform', 'translate(0, 0)')
 		.append('text')
 		.attr('class', 'prob-frequency header white-probability')
 		.text('Probability for white children');
 
 	svg.append('g')
-		.attr('class', 'label-prob-header')
+		.attr('class', 'label-prob')
 		.attr('transform', 'translate('+ stats_width/2 +', 0)')
 		.append('text')
 		.attr('class', 'prob-frequency header black-probability')
@@ -118,16 +120,28 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 		for (i = 1; i <= num_quantile; i++){
 			svg.append('g')
 				.attr('class', 'label-prob')
-				.attr('transform', 'translate(0, '+ ((yScale_px(i)) - 8) +')')
+				.attr('transform', 'translate(0, '+ ((yScale_px(i))-16 ) +')')
+				.append('text')
+				.attr('class', 'prob-frequency white-probability')
+				.text(quintile_labels[i-1]);
+			svg.append('g')
+				//.attr('class', 'label-prob')
+				.attr('transform', 'translate(0, '+ ((yScale_px(i))+4 ) +')')
 				.append('text')
 				.attr('class', 'prob-frequency white-probability')
 				.text(Object.values(prob_quintile_pquintile[yScale(i)])[0] + "%");
 
 			svg.append('g')
 				.attr('class', 'label-prob')
-				.attr('transform', 'translate('+ stats_width/2 +', '+ ((yScale_px(i)) - 8) +')')
+				.attr('transform', 'translate('+ stats_width/2 +', '+ ((yScale_px(i))-16 ) +')')
 				.append('text')
 				.attr('class', 'prob-frequency black-probability')
+				.text(quintile_labels[i-1]);
+			svg.append('g')
+				//.attr('class', 'label-prob')
+				.attr('transform', 'translate('+ stats_width/2 +', '+ ((yScale_px(i))+4 ) +')')
+				.append('text')
+				.attr('class', 'prob-frequency white-probability')
 				.text(Object.values(prob_quintile_pquintile[yScale(i)])[1] + "%");
 
 			d3.selectAll('text.prob-frequency').call(wrap);
