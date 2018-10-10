@@ -91,7 +91,11 @@
 			}
 		}
 
-		g.label-prob > foreignObject > div {
+		.label-header > foreignObject > div {
+			font-weight: 600 !important;
+		}
+
+		.label-category > foreignObject > div {
 			font-weight: 600 !important;
 		}
 
@@ -127,21 +131,21 @@
 	qScale_domain = [0.191, 0.396, 0.593, 0.801];	
 </script>
 <body>
-	<div class="container">
+	<div class="container-fluid">
 		<!-- Interactive visualization -->
 		<div class="row">
-			<div class="col-md-12">
+			<div class="col-md-10 col-md-offset-1">
 				<h3><span class="black" style="border-radius: 4px">Black</span> and <span class="white" style="border-radius: 4px">White</span> children raised in 
 					<span>
 						<div class="dropdown" style="display: inline-block;">
 							<button class="btn btn-default dropdown-toggle drop-btn" type="button" data-toggle="dropdown">40% - 60%
 							<span class="caret"></span></button>
 							<ul class="dropdown-menu dropdown-bar">
-								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 5)">top 20%</a></li>
-								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 4)">20% - 40%</a></li>
-								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 3)">40% - 60%</a></li>
-								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 2)">60% - 80%</a></li>
-								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 1)">bottom 20%</a></li>
+								<li class="drop-menu-item"><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 5)">top 20%</a></li>
+								<li class="drop-menu-item"><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 4)">20% - 40%</a></li>
+								<li class="drop-menu-item"><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 3)">40% - 60%</a></li>
+								<li class="drop-menu-item"><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 2)">60% - 80%</a></li>
+								<li class="drop-menu-item"><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 1)">bottom 20%</a></li>
 							</ul>
 						</div>
 					</span> of the wealth distribution: See where they end up as adults.
@@ -150,7 +154,10 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-9">
+			<div class="col-md-1 col-md-offset-1">
+				<div id='stats-origin'></div>
+			</div>
+			<div class="col-md-6">
 				<div id='graph'></div>
 			</div>
 			<div class="col-md-3">
@@ -172,7 +179,7 @@
 		});
 	});
 
-	draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 3);
+	draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 3);// "all");
 </script>
 </html>
 

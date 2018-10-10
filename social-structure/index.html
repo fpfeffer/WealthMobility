@@ -85,7 +85,11 @@
 			}
 		}
 
-		g.label-prob > foreignObject > div {
+		.label-header > foreignObject > div {
+			font-weight: 600 !important;
+		}
+
+		.label-category > foreignObject > div {
 			font-weight: 600 !important;
 		}
 
@@ -150,10 +154,10 @@
 	qScale_domain = [0.191, 0.396, 0.593, 0.801];	
 </script>
 <body>
-	<div class="container">
+	<div class="container-fluid">
 		<!-- Interactive visualization -->
 		<div class="row">
-			<div class="col-md-10 col-md-offset-1">
+			<div class="col-sm-8 col-sm-offset-2">
 				<h3><span class="black" style="border-radius: 4px">Black</span> and <span class="white" style="border-radius: 4px">White</span> children across the wealth structure
 					<!-- <span>
 						<div class="dropdown" style="display: inline-block;">
@@ -174,13 +178,13 @@
 			</div>
 		</div>
 		<div class="row" style="margin-top: 40px;">
-			<div class="col-xs-1 col-sm-1">
+			<div class="col-xs-2 col-sm-2 col-sm-offset-1">
 				<div class="stats" id="stats-parent"></div>
 			</div>
-			<div class="col-xs-10 col-sm-10">
+			<div class="col-xs-6 col-sm-6">
 				<div id="graph"></div>
 			</div>
-			<div class="col-xs-1 col-sm-1">
+			<div class="col-xs-2 col-sm-2">
 				<div class="stats" id="stats-child"></div>
 			</div>
 		</div>
