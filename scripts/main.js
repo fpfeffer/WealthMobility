@@ -37,7 +37,7 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 	d3.selectAll('.label-prob').remove();
 
 	//parent == "all" ? count = 10000 : count = 4000;
-	count = 30000;
+	count = 20000;
 	wealth_length = 4;
 
 	var yScale = d3.scaleLinear()
