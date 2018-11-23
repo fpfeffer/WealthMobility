@@ -1,6 +1,6 @@
-# Wealth Mobility Data Visualization
+# Race and Intergenerational Wealth Mobility
 
-## Introduction
+## Overview
 description of the project
 We visualize the data collected from a survey of parent and children wealth at the University of Michigan.
 
