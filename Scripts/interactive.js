@@ -129,7 +129,7 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 		.attr('transform', 'translate(0, '+ (yScale_px(parent) ) +')')
 		.append('text')
 		.attr('class', 'prob-frequency header black-probability')
-		.text(quantile_labels[5-parent] + ' wealth quantile');
+		.text(quantile_labels[5-parent]);
 
 	d3.selectAll('text.prob-frequency').call(wrap);
 
