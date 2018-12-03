@@ -9,6 +9,7 @@
 	<!-- Bootstrap Core CSS  -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 	<style>
 		h1 {
@@ -45,7 +46,7 @@
 		  text-decoration: none;
 		}*/
 
-		#graph {
+		.graph {
 			position: relative;
 		}
 
@@ -247,7 +248,7 @@
 				<div id='stats-origin-mr'></div>
 			</div>
 			<div class="col-xs-6 col-sm-6">
-				<div id="graph-mr"></div>
+				<div id="graph-mr" class="graph"></div>
 			</div>
 			<div class="col-xs-3 col-sm-3">
 				<div id="stats-mr"></div>
@@ -283,7 +284,7 @@
 						</div>
 					</span> --> 
 				</h3>
-				<div class="reset-button button" onclick="draw_flow_ws(div, 5, qScale_domain, black_ratio_quintile, wealth_scale)">Replay <i class="material-icons">replay</i></div>
+				<div class="reset-button button" onclick="draw_flow_ws(div_ws, 5, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws)">Replay <i class="material-icons">replay</i></div>
 			</div>
 		</div>
 		<div class="row" style="margin-top: 40px;">
@@ -291,7 +292,7 @@
 				<div class="stats-ws" id="stats-parent-ws"></div>
 			</div>
 			<div class="col-xs-6 col-sm-6">
-				<div id="graph-ws"></div>
+				<div id="graph-ws" class="graph"></div>
 			</div>
 			<div class="col-xs-2 col-sm-2">
 				<div class="stats-ws" id="stats-child-ws"></div>

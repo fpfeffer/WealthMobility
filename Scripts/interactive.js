@@ -35,8 +35,8 @@ var quintile_labels = ['Bottom 20%', '', 'Middle 20%', '', 'Top 20%']
 
 function draw_flow_mr(element, num_quantile, qScale_domain, black_ratio_scale, wealth_scale, parent = "all") {
 	d3.select('div#graph-mr').select('div').select('canvas').remove();
-	d3.selectAll('.label-prob').remove();
-	d3.selectAll('.label-prob-percent').remove();
+	d3.selectAll('.label-prob-mr').remove();
+	d3.selectAll('.label-prob-percent-mr').remove();
 
 	quantile_labels = Object.values( document.getElementsByClassName('drop-menu-item') ).map(d => d.innerText);
 
@@ -110,21 +110,21 @@ function draw_flow_mr(element, num_quantile, qScale_domain, black_ratio_scale, w
 					.object(data);
 
 	svg_destination_mr.append('g')
-		.attr('class', 'label-prob label-header')
+		.attr('class', 'label-prob-mr label-header')
 		.attr('transform', 'translate(0, 0)')
 		.append('text')
 		.attr('class', 'prob-frequency header white-probability')
 		.text('Probability for white children');
 
 	svg_destination_mr.append('g')
-		.attr('class', 'label-prob label-header')
+		.attr('class', 'label-prob-mr label-header')
 		.attr('transform', 'translate('+ stats_width/3 +', 0)')
 		.append('text')
 		.attr('class', 'prob-frequency header black-probability')
 		.text('Probability for black children');
 
 	svg_origin_mr.append('g')
-		.attr('class', 'label-prob label-header')
+		.attr('class', 'label-prob-mr label-header')
 		.attr('transform', 'translate(0, '+ (yScale_px(parent) - 16) +')')
 		.append('text')
 		.attr('class', 'prob-frequency header black-probability')
@@ -135,19 +135,19 @@ function draw_flow_mr(element, num_quantile, qScale_domain, black_ratio_scale, w
 	setTimeout(function(){
 		for (i = 1; i <= num_quantile; i++){
 			svg_destination_mr.append('g')
-				.attr('class', 'label-prob-percent')
+				.attr('class', 'label-prob-percent-mr')
 				.attr('transform', 'translate(0, '+ (yScale_px(i) ) +')')
 				.append('text')
 				.attr('class', 'prob-frequency white-probability')
 				.text(Object.values(prob_quintile_pquintile[yScale(i)])[0] + "%");
 			svg_destination_mr.append('g')
-				.attr('class', 'label-prob-percent')
+				.attr('class', 'label-prob-percent-mr')
 				.attr('transform', 'translate('+ stats_width/3 +', '+ (yScale_px(i)) +')')
 				.append('text')
 				.attr('class', 'prob-frequency white-probability')
 				.text(Object.values(prob_quintile_pquintile[yScale(i)])[1] + "%");
 			svg_destination_mr.append('g')
-				.attr('class', 'label-prob label-category')
+				.attr('class', 'label-prob-mr label-category')
 				.attr('transform', 'translate('+ 2*stats_width/3 +', '+ (yScale_px(i) ) +')')
 				.append('text')
 				.attr('class', 'prob-frequency white-probability')
