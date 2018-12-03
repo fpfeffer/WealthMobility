@@ -126,10 +126,10 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 
 	svg_origin.append('g')
 		.attr('class', 'label-prob label-header')
-		.attr('transform', 'translate(0, '+ (yScale_px(parent) ) +')')
+		.attr('transform', 'translate(0, '+ (yScale_px(parent) - 1) +')')
 		.append('text')
 		.attr('class', 'prob-frequency header black-probability')
-		.text(quantile_labels[5-parent]);
+		.text(quantile_labels[5-parent] + ' wealth quantile');
 
 	d3.selectAll('text.prob-frequency').call(wrap);
 
@@ -218,12 +218,12 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 		count
 	})
 
-	regl.frame(({ time }) => {
-		//if (time < time_limit){
-			drawPoints({ 
-				data: data,
-				interp: time / 60
-			})
-		//}
-	})
+	// regl.frame(({ time }) => {
+	// 	//if (time < time_limit){
+	// 		drawPoints({ 
+	// 			data: data,
+	// 			interp: time / 60
+	// 		})
+	// 	//}
+	// })
 }

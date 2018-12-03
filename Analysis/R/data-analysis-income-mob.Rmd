@@ -1,0 +1,183 @@
+---
+title: "wealth-mobility"
+author: "Abhraneel Sarma"
+date: "8/3/2018"
+output:
+  html_document:
+    df_print: kable
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    toc: yes
+---
+
+If you are missing any of the packages below, use `install.packages("packagename")` to install them.
+The `import::` syntax requires the `import` package to be installed, and provides a simple way to 
+import specific functions from a package without polluting your entire namespace (unlike `library()`)
+
+```{r setup, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(magrittr)
+library(rstan)
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+library(brms)
+library(modelr)
+library(tidybayes)
+library(ggstance)
+```
+
+
+## The Data
+The de-identified data consists of the following variables: `parent's wealth quintile`, `child's wealth quintile`, `white (binary; whether the race of the person is white or not)` and `female (binary; whether the person's gender is female or not)`. We do not use female in the subsequent analysis.
+
+```{r}
+df <- read.csv("../data/Data.csv")
+
+df %<>%
+  na.omit() %>%
+  select(id, white, female, pwealthqn, wealthqn) %>%
+  rename(
+    quantile = wealthqn,
+    pquantile = pwealthqn
+  ) %>%
+  mutate(
+    id = as.factor(id),
+    white = as.factor(white),
+    female = as.factor(female),
+    pquantile = as.factor(pquantile)#,
+    #quantile = as.factor(quantile)
+  ) %>%
+  as.data.frame(.)
+
+head(df)
+```
+
+
+## Model
+Here, we've used an adjacent category model `(family = "acat")` for the ordinal logistic regression. 
+I've used ordinal regression because the outcome variable (a child's wealth quantile) is discrete but ordered; as opposed to a multinomial regression which would have been used had there been no definite order in the discrete outcome variable. There are different families that can be used to model ordinal regressions, such as `cumulative`, `adjacent category` (used here), `stopping ratio`, `continuation ratio`. I do not have a strong basis for choosing this family, and a cumulative logit model or other families for ordinal regression can be used as well.
+
+We use skeptical weak priors $\textrm{N(0,1)}$ in this model for all the parameters.
+
+$$
+\begin{align}
+log(\frac{Pr(y_i = k)}{Pr(y_i = k+1)}) & = \alpha_k - \phi_i \\
+\phi_i & = \beta_p P_i +  \beta_r[k] R_i\\
+\beta_p, \beta_r &\sim \textrm{Normal}(0, 1) \\
+\alpha_k & \sim \textrm{Normal}(0,1)
+\end{align}
+$$
+
+```{r}
+get_prior(quantile ~ pquantile + cs(white), data = df, family = "cumulative")
+```
+
+```{r}
+load("wealth-mob.models.RData")
+#m1.olog <- brm(quantile ~ pquantile + cs(white), data = df, family = "acat", prior=prior(normal(0, 1), class=b), iter = 5000, warmup = 2000, chains = 2, cores = 2)
+
+# m3.olog <- brm(quantile ~ pquantile + white, data = df, family = cumulative("logit"), prior=prior(normal(0, 1), class=b), iter = 5000, warmup = 2000, chains = 2, cores = 2)
+
+summary(m1.olog)
+```
+
+
+```{r}
+df %>%
+  data_grid(pquantile, white) %>%
+  add_fitted_draws(m1.olog, re_formula = NA) %>%
+  group_by(white, pquantile, .category) %>%
+  mean_qi(.value) %>%
+  mutate(.value = round(.value, 2))
+```
+
+
+```{r}
+#m2.multinom <- brm(quantile ~ pquantile + white, data = df, family = "categorical", iter = 5000, chains = 2, cores = 2)
+
+summary(m2.multinom)
+```
+
+```{r}
+df %>%
+  data_grid(white, pquantile) %>%
+  add_fitted_draws(m2.multinom, re_formula = NA) %>%
+  group_by(white, pquantile, .category) %>%
+  mean_qi(.value) %>%
+  mutate(.value = round(.value, 2))
+```
+
+#### Model comparison
+Now we compare the two models by drawing samples from each
+
+```{r fig.height = 3, fig.width = 8}
+df %>%
+  data_grid(pquantile, white) %>%
+  add_fitted_draws(m1.olog, re_formula = NA) %>%
+  group_by(.category, pquantile, white) %>%
+  ggplot(aes(y = .category, x = .value, color = white))+
+  stat_pointintervalh(.width = 0.95, position = position_dodgev(height = 0.5), show.legend = TRUE) +
+  facet_grid(.~pquantile)
+```
+
+
+```{r fig.height = 3, fig.width = 8}
+df %>%
+  data_grid(pquantile, white) %>%
+  add_fitted_draws(m2.multinom, re_formula = NA) %>%
+  group_by(white, pquantile, .category) %>%
+  ggplot(aes(y = .category, x = .value, color = white))+
+  stat_pointintervalh(.width = 0.95, position = position_dodgev(height = 0.5), show.legend = TRUE) +
+  facet_grid(.~pquantile)
+```
+
+#### Frequentist models
+
+```{r}
+library(ordinal)
+
+df %<>%
+  mutate(c_quantile = as.factor(quantile))
+
+m1.olog.lm <- clm(c_quantile ~ pquantile + white, data = df, link = "logit")
+
+df %>%
+  data_grid(pquantile, white) %>%
+  predict(m1.olog.lm, ., type="prob") %>%
+  as.data.frame(.) %>%
+  mutate(
+    pquantile = rep(1:(nrow(.)/2), each = 2),
+    white = (0:(nrow(.)-1) %% 2)
+  ) %>%
+  gather(quantile, .value, 1:5) %>%
+  separate(col = quantile, into = c('delete', 'c_quantile'), sep = 't.') %>%
+  select(-delete) %>%
+  mutate(.value = round(.value, 2)) %>%
+  arrange(desc(pquantile), desc(c_quantile), desc(white))
+```
+
+
+```{r}
+library(nnet)
+
+m2.multinom.lm <- multinom(quantile ~ pquantile + white, data = df, Hess = TRUE)
+
+summary(m2.multinom.lm)
+```
+
+```{r}
+df %>%
+  data_grid(pquantile, white) %>%
+  predict(m2.multinom.lm, ., "probs") %>%
+  as.data.frame(.) %>%
+  mutate(
+    pquantile = rep(1:(nrow(.)/2), each = 2),
+    white = (0:(nrow(.)-1) %% 2)
+  ) %>%
+  gather(quantile, .value, c(`1`, `2`, `3`, `4`, `5`)) %>%
+  mutate(.value = round(.value, 2)) %>%
+  arrange(desc(pquantile), desc(quantile), desc(white))
+```
+
+

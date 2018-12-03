@@ -29,7 +29,10 @@ var svg_child = d3.select('#stats-child')
 
 var dpi = window.devicePixelRatio;
 
-var wrap = d3.textwrap().bounds({height: 32, width: (stats_width/2 - 8)});
+var label_margins = 8;
+
+var wrap = d3.textwrap().bounds({height: 32, width: (stats_width/2 - label_margins)});
+var wrap_header = d3.textwrap().bounds({height: 32, width: (stats_width - label_margins)});
 var quintile_labels = ['Bottom 20%', '', 'Middle 20%', '', 'Top 20%']
 
 function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, wealth_scale, parent = "all") {
@@ -113,17 +116,19 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 
 	svg_parent.append('g')
 		.attr('class', 'label-prob label-header')
-		.attr('transform', 'translate('+ stats_width/3 +', 0)')
+		.attr('transform', 'translate('+ label_margins/2 +', 0)')
 		.append('text')
-		.attr('class', 'prob-frequency header white-probability')
-		.text('racial composition in parent generation');
+		.attr('class', 'prob-label header white-probability')
+		.text('racial composition parent generation');
 
 	svg_child.append('g')
 		.attr('class', 'label-prob label-header')
-		.attr('transform', 'translate('+ stats_width/3 +', 0)')
+		.attr('transform', 'translate('+ label_margins/2 +', 0)')
 		.append('text')
-		.attr('class', 'prob-frequency header black-probability')
-		.text('racial composition in child generation');
+		.attr('class', 'prob-label header black-probability')
+		.text('racial composition child generation');
+
+	d3.selectAll('text.prob-label').call(wrap_header);
 
 	for (i = 1; i <= num_quantile; i++){
 		var pquintile = Object.values(prob_pquintile[yScale(i)])
@@ -160,15 +165,16 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 				.append('text')
 				.attr('class', 'prob-frequency child-probability')
 				.text(quintile_labels[i-1]);
+
 			svg_child.append('g')
-				//.attr('class', 'label-prob')
+				.attr('class', 'label-prob')
 				.attr('transform', 'translate(0, '+ ((yScale_px(i))-12) +')')
 				.append('text')
 				.attr('class', 'prob-frequency child-probability')
 				.text('white: ' + Math.round(cquintile[0]/d3.sum(cquintile) * 1000)/10 + "%" );
 
 			svg_child.append('g')
-				//.attr('class', 'label-prob')
+				.attr('class', 'label-prob')
 				.attr('transform', 'translate(0, '+ ((yScale_px(i))+12) +')')
 				.append('text')
 				.attr('class', 'prob-frequency child-probability')
@@ -241,13 +247,13 @@ function draw_flow(element, num_quantile, qScale_domain, black_ratio_scale, weal
 		count
 	})
 
-	regl.frame(({ time }) => {
-		if (time < time_limit){
-			drawPoints({ 
-				data: data,
-				interp: time / 60 
-			})	
-		}
-	})
+	// regl.frame(({ time }) => {
+	// 	if (time < time_limit){
+	// 		drawPoints({ 
+	// 			data: data,
+	// 			interp: time / 60 
+	// 		})	
+	// 	}
+	// })
 }
 
