@@ -53,7 +53,7 @@
 <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
 <h1>Supplemental Material</h1>
 
-<p style="color:red;"><i>Please Do Not Distribute</i></p>
+<p style="color:red;"><i><a href="index.html">Back to main article</a></i></p>
 
 <h3>Data, Sample, Variables</h3>
 <p></p>
@@ -63,21 +63,24 @@
 <h3>Additional Information on Animation 1</h3>
 <p></p>
 <p>Unlike the visualization in Badger et al. (2018), which relied on full population administrative data (Chetty et al. 2018), our visualization draws on a much smaller sample from survey data. Thus, rather than simply displaying transition rates based on observed cases, we need to estimate transition probabilities more parsimoniously in a statistical model. Animation 1 displays predicted probabilities from an ordered logistic regression model, i.e.</p>
-<p>$$ {Pr(y=q|x)=F(\tau_q-x\beta)-F(\tau_{q-1}-x\beta)} $$</p>
-<p>which describes the probability of a child attaining the q’th wealth quintile, y, dependent on a vector x containing dummy indicators of parental wealth quintile. F is the logistic cumulative distribution function and the τ_q parameters describe the cut-points of the latent measurement model. We estimate the ordered logistic regression separately for white and Black children, which not only accommodates different transition rates, β, across race (which could also be attained in a jointly estimated model by interacting the indicators of parental wealth quintiles with indicators of race) but also allows the cut-points of the measurement model to vary by race. The regressions are estimated using PSID’s longitudinal individual weights, which partly adjust for attrition (Berglund et al. 2017a; more on weighting below).</p>
+<p>$$ {Pr(y=q|x)=F(\tau_q-\mathbf{x}\beta) - F(\tau_{q-1}-\mathbf{x}\beta)} $$</p>
+<p>which describes the probability of a child attaining the \(q\)’th wealth quintile, \(y\), dependent on a vector \(\bf x\) containing dummy indicators of parental wealth quintile. \(F\) is the logistic cumulative distribution function and the \(\tau_q\) parameters describe the cut-points of the latent measurement model. We estimate the ordered logistic regression separately for white and Black children, which not only accommodates different transition rates, \(\beta\), across race (which could also be attained in a jointly estimated model by interacting the indicators of parental wealth quintiles with indicators of race) but also allows the cut-points of the measurement model to vary by race. The regressions are estimated using PSID’s longitudinal individual weights, which partly adjust for attrition (Berglund et al. 2017a; more on weighting below).</p>
 <p>One of the parametric assumptions of the ordered logistic models is the proportional odds assumption, which constrains all βs to be equal across outcome categories q. Testing this assumption using global significance tests (see Long and Freese 2014: 329) allows us to safely reject violations of the proportional odds assumption , lending credibility to the modeling approach chosen for the main animation.</p>
 <p>Still, other analysts may be interested in the impact of alternative modeling approaches with either more or less stringent constraints. Animation S.1 displays the results created under alternative approaches: ### First, a slightly more parsimonious approach estimates the ordered logistic regression model jointly for both races (but with interactions between parental wealth quintiles and race), producing a common set of cut-off estimates. The support of the proportional odds assumption is less unequivocal (only Wald test at p>0.1; though BIC also suggested a clear preference for ordered compared to gologit). Second, multinomial logistic regression … . Third, stereotype regression model, which occupies somewhat of a middle ground between ordered and multinomial in terms of its parsimony/assumptions (namely, ).</p>
+<p>Animation S.1: Transition probabilities produced under different modeling approaches</p>
+
 
 <h3>Additional Information on Animation 2</h3>
 <p></p>
 <p>This animation relies on the full, weighted cross-tabulation of parental and offspring wealth quintiles, separately for whites and Blacks. To correctly represent the racial distribution across quintiles we rescale the number of observations by multiplying all observations in these cross-tabulations with the average cross-sectional weight of blacks and whites in the parental generation. These cross-sectional weights also adjust for the initial PSID oversample of Black households (for a detailed description of the PSID weighting scheme see Berglund et al. 2017a; 2017b). Prior research on intergenerational mobility, chiefly by economists (following Solon’s: fn. #) has been critical of the effectiveness of the PSID weights to fully adjust for the oversampling (the so-called “SEO sample”) and reverted to unweighted analyses of only the population-representative part of the original PSID sample (the so-called “SRC sample” original sample
-Restricted to SRC sample (unweighted) … Animation S.2.
-Racial classifications – Non-Hispanic / Asian .. Animation S.3.
-</p>
+<p>Animation S.2: Wealth structure based on different samples</p>
+<p>Animation S.3: Wealth structure based on different racial classifications</p>
 
 <h3>Using Different Wealth Quantiles</h3>
 <p></p>
 <p>###</p>
+<p>Animation S.4: Wealth structure based on quartiles</p>
+<p>Animation S.5: Wealth mobility based on terciles</p>
 
 <h3>References</h3>
 <p></p>
