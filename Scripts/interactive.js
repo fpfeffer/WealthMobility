@@ -224,4 +224,22 @@ function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, pa
 	})
 }
 
+function update_model(data, model_name){
+	wealth_scale_mr = get_wealth_scale(data, model_name);
+	draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, current_pquintile);
+}
+
+function get_wealth_scale(data, model_name){
+	diction = d3.nest()
+			.key( d => d.race )
+			.key( x => x.origin)
+			.rollup( function(v) { 
+				var array = [];
+				v.map( k => +k[model_name] ).reverse().reduce(function(a, b, i) { return array[i] = a + b; }, 0);
+				return array;
+			})
+			.object(data);
+	return diction
+}
+
 
