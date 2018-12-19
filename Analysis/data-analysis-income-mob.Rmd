@@ -55,6 +55,9 @@ head(df)
 
 
 ## Model
+Different models can be used to derive the probabilitic. We employ Bayesian models as they are generative and can be used to derive probabilities for for new data. For this example, we use a ordinal logistic regression model and multinomila regression model. We also implement the frequentist version of these models, and calculate the predicted intervals; we use the mean of the point estimates in the visualization.
+
+### Bayesian Ordinal Logistic Regression model
 Here, we've used an adjacent category model `(family = "acat")` for the ordinal logistic regression. 
 I've used ordinal regression because the outcome variable (a child's wealth quantile) is discrete but ordered; as opposed to a multinomial regression which would have been used had there been no definite order in the discrete outcome variable. There are different families that can be used to model ordinal regressions, such as `cumulative`, `adjacent category` (used here), `stopping ratio`, `continuation ratio`. I do not have a strong basis for choosing this family, and a cumulative logit model or other families for ordinal regression can be used as well.
 
@@ -68,10 +71,6 @@ log(\frac{Pr(y_i = k)}{Pr(y_i = k+1)}) & = \alpha_k - \phi_i \\
 \alpha_k & \sim \textrm{Normal}(0,1)
 \end{align}
 $$
-
-```{r}
-get_prior(quantile ~ pquantile + cs(white), data = df, family = "cumulative")
-```
 
 ```{r}
 load("wealth-mob.models.RData")
@@ -92,6 +91,11 @@ df %>%
   mutate(.value = round(.value, 2))
 ```
 
+
+### Bayesian Multinomial Regression model
+Here, we've implemented a multinomial regression. This model doesn't describe the data as well as the ordinal logistic regression model, as it discards the ordered assumption of the categories. However, the results are similar to the ordered logistic model.
+
+We use skeptical weak priors $\textrm{N(0,1)}$ in this model for all the parameters.
 
 ```{r}
 #m2.multinom <- brm(quantile ~ pquantile + white, data = df, family = "categorical", iter = 5000, chains = 2, cores = 2)
@@ -133,6 +137,8 @@ df %>%
 ```
 
 #### Frequentist models
+
+We implement the frequentist analog of the Bayesian models to see if the results are similar. Under our choice of weakly informed priors, we can see the derived point estimates are similar.
 
 ```{r}
 library(ordinal)
