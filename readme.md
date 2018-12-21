@@ -1,16 +1,14 @@
-# Wealth Mobility Data Visualization
+# Visualizing Intergenerational Wealth Mobility and Racial Inequality
 
-## Introduction
-description of the project
-We visualize the data collected from a survey of parent and children wealth at the University of Michigan.
+We visualize the flow of individuals between parental wealth positions and their own wealth positions with a focus on racial differences in these flows and the reproduction of racial gaps across two generations.
 
-## Visualization 1: Social Structure
-https://github.com/abhsarma/wealth-mobility-vis/tree/master/social-structure
+## Main findings
+- Reported in "index.html" and
+- Contained in "Animations/1-mobility-rates.html" & "Animations/2-wealth-structure.html"
 
-These visualizations show the data collected by the survey, the quantile in which a child is born into (parent's wealth quantile) and the quantile in which a child ends up.  This data is weighted by the representation of each group in the US population estimates. We show the quintiles and quartile estimates.
-
-
-## Visualization 2: Transition probability for each quintile
-https://github.com/abhsarma/wealth-mobility-vis/tree/master/transition-probability
-
-These visualizations model the data collected by the survey using a Bayesian ordinal logistic regression model. We estimate the probability of a child ending up in each quintile (dependent variable) and use the parent quintile and the race of each survey respondent, as category-specific effects) as predictors. The visualization depicts an equal number of children born into families of different races and contrasts the probability of where they may end up.
+## Supplementary analyses 
+- Reported in "supplement.html" and 
+- Contained in ""Animations/s1-models.html" & "Animations/s2-quartiles.html"  & "Animations/s2-terciles.html"
+  
+## Acknowledgments
+We thank Abhraneel Sarma for his excellent research assistance and Adam Pearce for making available some of the javascript code behind the visualizations reported in Badger et al. (2018). Our work on intergenerational wealth correlations has been supported by a grant from the Russell Sage Foundation and the W. K. Kellogg Foundation. The collection of PSID data used here was partly supported by the National Institutes of Health (R01 HD069609) and the National Science Foundation (1157698). Any opinions expressed are those of the authors alone and should not be construed as representing the opinions of the funding agencies.
