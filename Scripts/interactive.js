@@ -33,9 +33,7 @@ var wrap_mr = d3.textwrap().bounds({height: 32, width: 80});
 
 var quintile_labels = ['Bottom 20%', '', 'Middle 20%', '', 'Top 20%']
 
-function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, parent) {
-	current_pquintile = parent;
-
+function draw_flow_mr(element, num_quantile, qScale_domain, black_ratio_scale, wealth_scale, parent = "all") {
 	d3.select('div#graph-mr').select('div').select('canvas').remove();
 	d3.selectAll('.label-prob-mr').remove();
 	d3.selectAll('.label-prob-percent-mr').remove();
@@ -62,9 +60,9 @@ function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, pa
 		range_array.push(i);
 	}
 
-	// var qScale = d3.scaleThreshold()
-	// 	.domain(qScale_domain)
-	// 	.range(range_array);
+	var qScale = d3.scaleThreshold()
+		.domain(qScale_domain)
+		.range(range_array);
 
 	var wScale = d3.scaleThreshold()
 	// 	.domain(white_threshold)
@@ -75,7 +73,12 @@ function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, pa
 	 	.range(range_array);
 
 	var data = d3.range(count).map(i => {
-		p_quintile = parent;
+		if (parent == "all"){
+			var p = Math.random();
+			var p_quintile = qScale(p);
+		} else {
+			p_quintile = parent;
+		}
 		
 		var isB = (Math.random() <= black_ratio_scale[p_quintile]) ? 1 : 0;
 
@@ -223,23 +226,3 @@ function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, pa
 		//}
 	})
 }
-
-function update_model(data, model_name){
-	wealth_scale_mr = get_wealth_scale(data, model_name);
-	draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, current_pquintile);
-}
-
-function get_wealth_scale(data, model_name){
-	diction = d3.nest()
-			.key( d => d.race )
-			.key( x => x.origin)
-			.rollup( function(v) { 
-				var array = [];
-				v.map( k => +k[model_name] ).reverse().reduce(function(a, b, i) { return array[i] = a + b; }, 0);
-				return array;
-			})
-			.object(data);
-	return diction
-}
-
-
