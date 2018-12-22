@@ -1,0 +1,19 @@
+white,origin,destination,w,o,d,n
+No,Lowest Tercile,Lowest Tercile,0,1,1,5532.0288
+No,Lowest Tercile,Middle Tercile,0,1,2,2750.176
+No,Lowest Tercile,Highest Tercile,0,1,3,420.24701
+No,Middle Tercile,Lowest Tercile,0,2,1,926.22607
+No,Middle Tercile,Middle Tercile,0,2,2,695.19397
+No,Middle Tercile,Highest Tercile,0,2,3,50.589001
+No,Highest Tercile,Lowest Tercile,0,3,1,28.810997
+No,Highest Tercile,Middle Tercile,0,3,2,84.772995
+No,Highest Tercile,Highest Tercile,0,3,3,99.070999
+Yes,Lowest Tercile,Lowest Tercile,1,1,1,6939.4648
+Yes,Lowest Tercile,Middle Tercile,1,1,2,5556.1299
+Yes,Lowest Tercile,Highest Tercile,1,1,3,3386.1731
+Yes,Middle Tercile,Lowest Tercile,1,2,1,7593.292
+Yes,Middle Tercile,Middle Tercile,1,2,2,8765.834
+Yes,Middle Tercile,Highest Tercile,1,2,3,7033.5811
+Yes,Highest Tercile,Lowest Tercile,1,3,1,3782.2849
+Yes,Highest Tercile,Middle Tercile,1,3,2,7000.9712
+Yes,Highest Tercile,Highest Tercile,1,3,3,14180.696
