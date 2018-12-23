@@ -128,13 +128,13 @@
 	</style>
 </head>
 <script>
-	var black_ratio_quintile_ws = {
-		"1": 0.437,
-		"2": 0.194,
-		"3": 0.068,
-		"4": 0.011,
-		"5": 0.003
-	};
+	// var black_ratio_quintile_ws = {
+	// 	"1": 0.437,
+	// 	"2": 0.194,
+	// 	"3": 0.068,
+	// 	"4": 0.011,
+	// 	"5": 0.003
+	// };
 
 	// wealth_scale_ws = {
 	// 	"0": {
@@ -152,7 +152,7 @@
 	// 		"5": [0.019, 0.035, 0.479, 0.999]
 	// 	}
 	// },
-	var qScale_domain_ws = [0.191, 0.396, 0.593, 0.801];
+	// var qScale_domain_ws = [0.191, 0.396, 0.593, 0.801];
 </script>
 <body>
 	<div class="container-fluid">
@@ -205,34 +205,6 @@
 			$(".drop-btn:first-child").html($(this).text()+ ' <span class="caret"></span>');
 		});
 	});
-
-	d3.csv('../Data/2-wealth-structure.csv').then(function(d) {
-		data = _.unzip( d.map( v => Object.values(v) ) );
-		wealth_scale_ws = get_wealth_scale(d, 'n');
-
-		// console.log(wealth_scale_ws);
-
-		draw_flow_ws(div_ws, 5, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws);
-	});
-
-	function get_wealth_scale(data, model_name){
-		const add = (a, b) => (a + b);
-
-		diction = d3.nest()
-				.key( d => d.race )
-				.key( x => x.origin)
-				.rollup( function(v) { 
-					var array = [];
-					v.map( k => +k[model_name] ).reduce(function(a, b, i) { return array[i] = a + b; }, 0);
-					array = array.map( j => j/array[array.length-1]);
-					array.pop();
-					
-					return array;
-				})
-				.object(data);
-
-		return diction
-	}
 </script>
 </html>
 

@@ -84,7 +84,7 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 		};
 
 		return {
-			speed: 24 + 2 * Math.random(),
+			speed: 4 + 2 * Math.random(),
 			x: Math.random() * wealth_length,
 			y0: yScale(p_quintile),
 			y1: yScale(q),
@@ -255,4 +255,67 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 			})	
 		}
 	})
+}
+
+d3.csv('../Data/2-wealth-structure.csv').then(function(d) {
+	data = _.unzip( d.map( v => Object.values(v) ) );
+	wealth_scale_ws = get_wealth_scale(d, 'n');
+	black_ratio_quintile_ws = get_black_ratio_quintile(d, 'n')
+	qScale_domain_ws = get_qscale(d, 'n');
+
+	draw_flow_ws(div_ws, 5, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws);
+});
+
+function get_wealth_scale(data, model_name){
+	diction = d3.nest()
+			.key( d => d.race )
+			.key( x => x.origin)
+			.rollup( function(v) { 
+				var array = [];
+				v.map( k => +k[model_name] ).reduce(function(a, b, i) { return array[i] = a + b; }, 0);
+				array = array.map( j => j/array[array.length-1]);
+				array.pop();
+
+				return array;
+			})
+			.object(data);
+
+	return diction
+}
+
+function get_black_ratio_quintile(data, model_name){
+	const add = (a, b) => (a + b);
+
+	diction = d3.nest()
+			.key( x => x.origin)
+			//.key( y => y.race)
+			.rollup( function(v) {
+				sum_isB = v.filter( i => i.race == 1).map( k => +k[model_name] ).reduce(add);
+				sum = v.map( k => +k[model_name] ).reduce(add);
+
+				return sum_isB/sum;
+			})
+			.object(data);
+
+	return diction
+}
+
+function get_qscale(data, model_name){
+	const add = (a, b) => (a + b);
+
+	total = data.map( k => +k[model_name]).reduce(add);
+	array = [];
+
+	Object.values(d3.nest()
+			.key( x => x.origin)
+			.rollup( function(v) {
+				sum = v.map( k => +k[model_name] ).reduce(add) / total;
+				return sum;
+			})
+			.object(data))
+			.reduce(function(a, b, i) { return array[i] = a + b; }, 0);
+
+	array.pop();
+
+	return array
 }
