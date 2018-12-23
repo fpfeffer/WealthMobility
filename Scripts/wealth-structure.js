@@ -94,7 +94,7 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 		};
 
 		return {
-			speed: 24 + 2 * Math.random(),
+			speed: 4 + 2 * Math.random(),
 			x: Math.random() * wealth_length,
 			y0: yScale(p_quantile),
 			y1: yScale(q),
