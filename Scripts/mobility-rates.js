@@ -33,15 +33,9 @@ var wrap_mr = d3.textwrap().bounds({height: 32, width: 80});
 
 var quintile_labels = ['Bottom 20%', '', 'Middle 20%', '', 'Top 20%']
 
-<<<<<<< HEAD:Scripts/interactive.js
-function draw_flow_mr(element, num_quantile, qScale_domain, black_ratio_scale, wealth_scale, parent = "all") {
-=======
 function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, parent) {
-	console.log(wealth_scale);
-	
 	current_pquintile = parent;
 
->>>>>>> 7302574ee5d56394067bad4a1e808d8edf74207f:Scripts/mobility-rates.js
 	d3.select('div#graph-mr').select('div').select('canvas').remove();
 	d3.selectAll('.label-prob-mr').remove();
 	d3.selectAll('.label-prob-percent-mr').remove();
@@ -68,9 +62,9 @@ function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, pa
 		range_array.push(i);
 	}
 
-	var qScale = d3.scaleThreshold()
-		.domain(qScale_domain)
-		.range(range_array);
+	// var qScale = d3.scaleThreshold()
+	// 	.domain(qScale_domain)
+	// 	.range(range_array);
 
 	var wScale = d3.scaleThreshold()
 	// 	.domain(white_threshold)
@@ -233,21 +227,4 @@ function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, pa
 			})
 		//}
 	})
-<<<<<<< HEAD:Scripts/interactive.js
 }
-=======
-}
-
-function get_wealth_scale(data, model_name){
-	diction = d3.nest()
-			.key( d => d.white )
-			.key( x => x.pwealth)
-			.rollup( function(v) { 
-				var array = [];
-				v.map( k => +k[model_name] ).reverse().reduce(function(a, b, i) { return array[i] = a + b; }, 0);
-				return array;
-			})
-			.object(data);
-	return diction
-}
->>>>>>> 7302574ee5d56394067bad4a1e808d8edf74207f:Scripts/mobility-rates.js

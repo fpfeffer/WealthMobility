@@ -8,8 +8,8 @@
 
 	<!-- Bootstrap Core CSS  -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Raleway:400,500,600" rel="stylesheet">
+	<!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
 
 	<style>
 		#graph {
@@ -134,24 +134,25 @@
 		"3": 0.068,
 		"4": 0.011,
 		"5": 0.003
-	},
-	wealth_scale_ws = {
-		"0": {
-			"1": [0.34, 0.63, 0.803, 0.898],
-			"2": [0.225, 0.489, 0.725, 0.877],
-			"3": [0.17, 0.384, 0.632, 0.851],
-			"4": [0.114, 0.266, 0.476, 0.757],
-			"5": [0.067, 0.137, 0.272, 0.583]
-		},
-		"1": {
-			"1": [0.437, 0.75, 0.929, 0.983],
-			"2": [0.398, 0.704, 0.948, 0.975],
-			"3": [0.378, 0.652, 0.972, 0.999],
-			"4": [0.365, 0.657, 0.657, 0.999],
-			"5": [0.019, 0.035, 0.479, 0.999]
-		}
-	},
-	qScale_domain_ws = [0.191, 0.396, 0.593, 0.801];	
+	};
+
+	// wealth_scale_ws = {
+	// 	"0": {
+	// 		"1": [0.34, 0.63, 0.803, 0.898],
+	// 		"2": [0.225, 0.489, 0.725, 0.877],
+	// 		"3": [0.17, 0.384, 0.632, 0.851],
+	// 		"4": [0.114, 0.266, 0.476, 0.757],
+	// 		"5": [0.067, 0.137, 0.272, 0.583]
+	// 	},
+	// 	"1": {
+	// 		"1": [0.437, 0.75, 0.929, 0.983],
+	// 		"2": [0.398, 0.704, 0.948, 0.975],
+	// 		"3": [0.378, 0.652, 0.972, 0.999],
+	// 		"4": [0.365, 0.657, 0.657, 0.999],
+	// 		"5": [0.019, 0.035, 0.479, 0.999]
+	// 	}
+	// },
+	var qScale_domain_ws = [0.191, 0.396, 0.593, 0.801];
 </script>
 <body>
 	<div class="container-fluid">
@@ -174,7 +175,7 @@
 						</div>
 					</span> --> 
 				</h3>
-				<div class="reset-button button" onclick="draw_flow_ws(div_ws, 5, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws)">Replay <i class="material-icons">replay</i></div>
+				<!-- <div class="reset-button button" onclick="draw_flow_ws(div_ws, 5, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws)">Replay <i class="material-icons">replay</i></div> -->
 			</div>
 		</div>
 		<div class="row" style="margin-top: 40px;">
@@ -205,13 +206,33 @@
 		});
 	});
 
-	draw_flow_ws(div_ws, 5, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws);
-
-	d3.csv('../Data/2-wealth-structure-black.csv').then(function(d) {
+	d3.csv('../Data/2-wealth-structure.csv').then(function(d) {
 		data = _.unzip( d.map( v => Object.values(v) ) );
-		//wealth_scale_mr = get_wealth_scale(d, 'ologit');
-		console.log(data);	
+		wealth_scale_ws = get_wealth_scale(d, 'n');
+
+		// console.log(wealth_scale_ws);
+
+		draw_flow_ws(div_ws, 5, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws);
 	});
+
+	function get_wealth_scale(data, model_name){
+		const add = (a, b) => (a + b);
+
+		diction = d3.nest()
+				.key( d => d.race )
+				.key( x => x.origin)
+				.rollup( function(v) { 
+					var array = [];
+					v.map( k => +k[model_name] ).reduce(function(a, b, i) { return array[i] = a + b; }, 0);
+					array = array.map( j => j/array[array.length-1]);
+					array.pop();
+					
+					return array;
+				})
+				.object(data);
+
+		return diction
+	}
 </script>
 </html>
 
