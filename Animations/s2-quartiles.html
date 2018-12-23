@@ -8,10 +8,11 @@
 
 	<!-- Bootstrap Core CSS  -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Raleway:400,500,600" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 	<style>
-		.graph {
+		#graph {
 			position: relative;
 		}
 
@@ -32,30 +33,23 @@
 
 		h3 {
 			font-family: 'Raleway', sans-serif;
-			font-weight: 700;
+			font-weight: 500;
 			font-size: 19px;
 			line-height: 32px;
 		}
 
-		p {
-			font-family: 'Raleway', sans-serif;
-			font-weight: 400;
-			font-size: 16px;
-			line-height: 18px;
-		}
-
-		.drop-btn {
+		/*.drop-btn {
 			width: 128px !important;
 			display: inline-block;
 			padding: 6px 12px !important;
 			text-align: left;
 			margin: 0px 8px;
-		}
+		}*/
 
 		text {
 			font-family: 'Raleway', sans-serif;
 			font-weight: 400;
-			font-size: 14px;
+			font-size: 12px;
 			line-height: 14px;
 		}
 
@@ -71,7 +65,7 @@
 			foreignObject > div {
 				font-family: 'Raleway', sans-serif;
 				font-weight: 400;
-				font-size: 14px;
+				font-size: 12px;
 				line-height: 14px;
 				text-align: center;
 			}
@@ -102,10 +96,126 @@
 		div.col-xs-1, div.col-sm-1, div.col-md-1 {
 			padding: 0px !important;
 		}
+
+		.button {
+			width: 108px !important;
+			/*display: inline-block;*/
+			text-align: center;
+			border-radius: 4px;
+			background-color: #fff;
+			border: 1px solid #dc2127;
+			color: #dc2127;
+			font-family: 'Raleway', sans-serif;
+			font-size: 16px;
+			font-weight: 600;
+			cursor: pointer;
+			padding: 6px 0px !important;
+			visibility: hidden;
+			margin: auto;
+		}
+
+		.button:hover,
+		.button:focus,
+		.button:active {
+			background-color: #dc2127;
+			color: #fff;
+			font-weight: 500;
+		}
+
+		i {
+			vertical-align:middle;
+		}
 	</style>
 </head>
+<script>
+</script>
 <body>
-<h3>Forthcoming</h3>
+	<div class="container-fluid">
+		<!-- Interactive visualization -->
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<h3>Data: 
+					<span>
+						<div class="dropdown" style="display: inline-block;">
+							<button class="btn btn-default dropdown-toggle drop-btn-long" type="button" data-toggle="dropdown">Adjusted
+							<span class="caret"></span></button>
+							<ul class="dropdown-menu dropdown-menu-model dropdown-bar">
+								<li class="drop-menu-item"><a onclick="update_model(d, 'n')">Source Only</a></li>
+								<li class="drop-menu-item"><a onclick="update_model(d_srconly, 'n')">Adjusted</a></li>
+							</ul>
+						</div>
+					</span>
+				</h3>
+				<!-- <p>For every 10,000 children raised in Black and White households each, see where they end up.</p> -->
+			</div>
+			<div class="col-sm-8 col-sm-offset-2">
+				<h3><span class="black" style="border-radius: 4px">Black</span> and <span class="white" style="border-radius: 4px">White</span> children across the wealth structure
+					<!-- <span>
+						<div class="dropdown" style="display: inline-block;">
+							<button class="btn btn-default dropdown-toggle drop-btn" type="button" data-toggle="dropdown">all
+							<span class="caret"></span></button>
+							<ul class="dropdown-menu dropdown-bar">
+								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 5)">top 20%</a></li>
+								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 4)">20% - 40%</a></li>
+								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 3)">40% - 60%</a></li>
+								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 2)">60% - 80%</a></li>
+								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 1)">bottom 20%</a></li>
+								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale)">all</a></li>
+							</ul>
+						</div>
+					</span> --> 
+				</h3>
+				<div class="reset-button button" onclick="draw_flow_ws(div_ws, 4, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws)">Replay <i class="material-icons">replay</i></div>
+			</div>
+		</div>
+		<div class="row" style="margin-top: 40px;">
+			<div class="col-xs-2 col-sm-2 col-sm-offset-1">
+				<div class="stats-ws" id="stats-parent-ws"></div>
+			</div>
+			<div class="col-xs-6 col-sm-6">
+				<div id="graph-ws" class="graph"></div>
+			</div>
+			<div class="col-xs-2 col-sm-2">
+				<div class="stats-ws" id="stats-child-ws"></div>
+			</div>
+		</div>
+	</div>
 </body>
-</html>
 
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="../Scripts/d3-textwrap.min.js" type="text/javascript"></script>
+<script src="https://npmcdn.com/regl/dist/regl.js"></script>
+<script src="../Scripts/lodash.js"></script>
+<script src="../Scripts/math.js"></script>
+
+<script src="../Scripts/wealth-structure.js"></script>
+<script>
+	$(function(){
+		$(".dropdown-menu-model").on('click', 'li a', function(){
+			$(".drop-btn-long:first-child").html($(this).text()+ ' <span class="caret"></span>');
+		});
+	});
+
+	function update_model(data, model_name){
+		wealth_scale_ws = get_wealth_scale(data, model_name);
+		black_ratio_quintile_ws = get_black_ratio_quintile(data, 'n');
+		qScale_domain_ws = get_qscale(data, 'n');
+
+		draw_flow_ws(div_ws, 4, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws)
+	}
+
+	Promise.all([
+		d3.csv("../Data/s2-quartiles.csv"),
+		d3.csv("../Data/s2-quartiles-srconly.csv"),
+	]).then(function(files) {
+		d = files[0];
+		d_srconly = files[1];
+
+		wealth_scale_ws = get_wealth_scale(d, 'n');
+		black_ratio_quintile_ws = get_black_ratio_quintile(d, 'n');
+		qScale_domain_ws = get_qscale(d, 'n');
+
+		draw_flow_ws(div_ws, 4, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws);
+	})
+</script>
+</html>

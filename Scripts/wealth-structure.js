@@ -35,7 +35,7 @@ var wrap_ws = d3.textwrap().bounds({height: 32, width: (stats_width/2 - label_ma
 var wrap_ws_header = d3.textwrap().bounds({height: 32, width: (stats_width - label_margins)});
 var quintile_labels = ['Bottom 20%', '', 'Middle 20%', '', 'Top 20%']
 
-function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, wealth_scale, parent = "all") {
+function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, wealth_scale, parent = "all") {	
 	d3.select('div#graph-ws').select('div').select('canvas').remove();
 	d3.selectAll('.label-prob-ws').remove();
 
@@ -84,7 +84,7 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 		};
 
 		return {
-			speed: 4 + 2 * Math.random(),
+			speed: 24 + 2 * Math.random(),
 			x: Math.random() * wealth_length,
 			y0: yScale(p_quintile),
 			y1: yScale(q),
@@ -256,15 +256,6 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 		}
 	})
 }
-
-d3.csv('../Data/2-wealth-structure.csv').then(function(d) {
-	data = _.unzip( d.map( v => Object.values(v) ) );
-	wealth_scale_ws = get_wealth_scale(d, 'n');
-	black_ratio_quintile_ws = get_black_ratio_quintile(d, 'n')
-	qScale_domain_ws = get_qscale(d, 'n');
-
-	draw_flow_ws(div_ws, 5, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws);
-});
 
 function get_wealth_scale(data, model_name){
 	diction = d3.nest()

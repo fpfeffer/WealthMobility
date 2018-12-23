@@ -180,6 +180,12 @@
 			$(".drop-btn:first-child").html($(this).text()+ ' <span class="caret"></span>');
 		});
 	});
+
+	d3.csv('../Data/1-mobility-rates.csv').then(function(d) {
+		wealth_scale_mr = get_wealth_scale(d, 'prob');
+
+		draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 3);// "all");
+	});
 </script>
 </html>
 

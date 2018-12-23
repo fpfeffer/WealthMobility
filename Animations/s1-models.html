@@ -54,7 +54,7 @@
 		}
 
 		.drop-btn-long {
-			width: 240px !important;
+			width: 280px !important;
 			display: inline-block;
 			padding: 6px 12px !important;
 			text-align: left;
@@ -143,7 +143,7 @@
 </head>
 <script>
 	// Global variable declaration
-	var model = 'bayesian_ordered_logistic',
+	var model = 'ologit',
 		data,
 		current_pquintile,
 		wealth_scale_mr;
@@ -183,13 +183,13 @@
 				<h3>Model: 
 					<span>
 						<div class="dropdown" style="display: inline-block;">
-							<button class="btn btn-default dropdown-toggle drop-btn-long" type="button" data-toggle="dropdown">Bayesian Ordered Logistic
+							<button class="btn btn-default dropdown-toggle drop-btn-long" type="button" data-toggle="dropdown">Ordered Logistic (joint estimation)
 							<span class="caret"></span></button>
 							<ul class="dropdown-menu dropdown-menu-model dropdown-bar">
-								<li class="drop-menu-item"><a onclick="update_model(data, this.id)" id="multinomial">Multinomial</a></li>
-								<li class="drop-menu-item"><a onclick="update_model(data, this.id)" id="bayesian_multinomial">Bayesian Multinomial</a></li>
-								<li class="drop-menu-item"><a onclick="update_model(data, this.id)" id="ordered_logistic">Ordinal Logistic</a></li>
-								<li class="drop-menu-item"><a onclick="update_model(data, this.id)" id="bayesian_ordered_logistic">Bayesian Ordinal Logistic</a></li>
+								<li class="drop-menu-item"><a onclick="update_model(data, this.id)" id="ologit_sep">Ordered Logistic (joint estimation)</a></li>
+								<li class="drop-menu-item"><a onclick="update_model(data, this.id)" id="ologit_sep">Ordered Logistic (separate estimation)</a></li>
+								<li class="drop-menu-item"><a onclick="update_model(data, this.id)" id="stereo">Stereotype</a></li>
+								<li class="drop-menu-item"><a onclick="update_model(data, this.id)" id="mlogit">Multinomial Logistic</a></li>
 							</ul>
 						</div>
 					</span>
@@ -213,7 +213,7 @@
 					</span> of the wealth distribution: See where they end up as adults.
 				</h3>
 				<!-- <p>For every 10,000 children raised in Black and White households each, see where they end up.</p> -->
-				<div class="reset-button button" onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 3)">Start <i class="material-icons">play_arrow</i></div>
+				<!-- <div class="reset-button button" onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 3)">Start <i class="material-icons">play_arrow</i></div> -->
 			</div>
 		</div>
 		<div class="row" style="margin-top: 40px;">
@@ -234,7 +234,7 @@
 <script src="../Scripts/d3-textwrap.min.js" type="text/javascript"></script>
 <script src="https://npmcdn.com/regl/dist/regl.js"></script>
 
-<script src="../Scripts/interactive.js"></script>
+<script src="../Scripts/mobility-rates.js"></script>
 <script>
 	$(function(){
 		$(".dropdown-menu-wScale").on('click', 'li a', function(){
@@ -248,14 +248,20 @@
 		});
 	});
 
-	$('.reset-button').on('click', function(){
-		$('.reset-button').css('visibility', 'hidden');
-	});
+	// $('.reset-button').on('click', function(){
+	// 	$('.reset-button').css('visibility', 'hidden');
+	// });
+
+	function update_model(data, model_name){
+		wealth_scale_mr = get_wealth_scale(data, model_name);
+		draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, current_pquintile);
+	}
 
 	d3.csv('../Data/s1-models.csv').then(function(d) {
 		data = d;
-		wealth_scale_mr = get_wealth_scale(d, 'bayesian_ordered_logistic');
-		//draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 3);// "all");
+		wealth_scale_mr = get_wealth_scale(data, 'ologit');
+
+		draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 3);// "all");
 	});
 </script>
 </html>

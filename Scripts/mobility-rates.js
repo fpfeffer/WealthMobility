@@ -229,13 +229,6 @@ function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, pa
 	})
 }
 
-d3.csv('../Data/1-mobility-rates.csv').then(function(d) {
-	data = d;
-	wealth_scale_mr = get_wealth_scale(d, 'prob');
-
-	draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 3);// "all");
-});
-
 function get_wealth_scale(data, model_name){
 	const add = (a, b) => (a + b);
 

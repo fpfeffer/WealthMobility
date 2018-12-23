@@ -9,7 +9,7 @@
 	<!-- Bootstrap Core CSS  -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link href="https://fonts.googleapis.com/css?family=Raleway:400,500,600" rel="stylesheet">
-	<!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 	<style>
 		#graph {
@@ -175,7 +175,7 @@
 						</div>
 					</span> --> 
 				</h3>
-				<!-- <div class="reset-button button" onclick="draw_flow_ws(div_ws, 5, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws)">Replay <i class="material-icons">replay</i></div> -->
+				<div class="reset-button button" onclick="draw_flow_ws(div_ws, 5, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws)">Replay <i class="material-icons">replay</i></div>
 			</div>
 		</div>
 		<div class="row" style="margin-top: 40px;">
@@ -204,6 +204,14 @@
 		$(".dropdown-menu").on('click', 'li a', function(){
 			$(".drop-btn:first-child").html($(this).text()+ ' <span class="caret"></span>');
 		});
+	});
+
+	d3.csv('../Data/2-wealth-structure.csv').then(function(d) {
+		wealth_scale_ws = get_wealth_scale(d, 'n');
+		black_ratio_quintile_ws = get_black_ratio_quintile(d, 'n')
+		qScale_domain_ws = get_qscale(d, 'n');
+
+		draw_flow_ws(div_ws, 5, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws);
 	});
 </script>
 </html>
