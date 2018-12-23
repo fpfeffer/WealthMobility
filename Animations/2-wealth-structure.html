@@ -128,7 +128,7 @@
 	</style>
 </head>
 <script>
-	// var black_ratio_quintile_ws = {
+	// var black_ratio_quantile_ws = {
 	// 	"1": 0.437,
 	// 	"2": 0.194,
 	// 	"3": 0.068,
@@ -165,17 +165,17 @@
 							<button class="btn btn-default dropdown-toggle drop-btn" type="button" data-toggle="dropdown">all
 							<span class="caret"></span></button>
 							<ul class="dropdown-menu dropdown-bar">
-								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 5)">top 20%</a></li>
-								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 4)">20% - 40%</a></li>
-								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 3)">40% - 60%</a></li>
-								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 2)">60% - 80%</a></li>
-								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale, 1)">bottom 20%</a></li>
-								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quintile, wealth_scale)">all</a></li>
+								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quantile, wealth_scale, 5)">top 20%</a></li>
+								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quantile, wealth_scale, 4)">20% - 40%</a></li>
+								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quantile, wealth_scale, 3)">40% - 60%</a></li>
+								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quantile, wealth_scale, 2)">60% - 80%</a></li>
+								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quantile, wealth_scale, 1)">bottom 20%</a></li>
+								<li><a onclick="draw_flow(div, 5, qScale_domain, black_ratio_quantile, wealth_scale)">all</a></li>
 							</ul>
 						</div>
 					</span> --> 
 				</h3>
-				<div class="reset-button button" onclick="draw_flow_ws(div_ws, 5, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws)">Replay <i class="material-icons">replay</i></div>
+				<div class="reset-button button" onclick="draw_flow_ws(div_ws, 5, qScale_domain_ws, black_ratio_quantile_ws, wealth_scale_ws)">Replay <i class="material-icons">replay</i></div>
 			</div>
 		</div>
 		<div class="row" style="margin-top: 40px;">
@@ -208,10 +208,10 @@
 
 	d3.csv('../Data/2-wealth-structure.csv').then(function(d) {
 		wealth_scale_ws = get_wealth_scale(d, 'n');
-		black_ratio_quintile_ws = get_black_ratio_quintile(d, 'n')
+		black_ratio_quantile_ws = get_black_ratio_quantile(d, 'n')
 		qScale_domain_ws = get_qscale(d, 'n');
 
-		draw_flow_ws(div_ws, 5, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws);
+		draw_flow_ws(div_ws, 5, qScale_domain_ws, black_ratio_quantile_ws, wealth_scale_ws);
 	});
 </script>
 </html>

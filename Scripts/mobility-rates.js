@@ -238,7 +238,6 @@ function get_wealth_scale(data, model_name){
 			.rollup( function(v) { 
 				var array = [];
 				v.map( k => +k[model_name] ).reduce(function(a, b, i) { return array[i] = a + b; }, 0);
-				console.log(v[0].race, v[0].origin, array)
 				return array;
 			})
 			.object(data);

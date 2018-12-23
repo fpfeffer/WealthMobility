@@ -33,7 +33,8 @@ var label_margins = 8;
 
 var wrap_ws = d3.textwrap().bounds({height: 32, width: (stats_width/2 - label_margins)});
 var wrap_ws_header = d3.textwrap().bounds({height: 32, width: (stats_width - label_margins)});
-var quintile_labels = ['Bottom 20%', '', 'Middle 20%', '', 'Top 20%']
+var quantile_labels = []; //['Bottom 20%', '', 'Middle 20%', '', 'Top 20%'];
+var labels = ['Bottom', 'Middle', 'Top']
 
 function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, wealth_scale, parent = "all") {	
 	d3.select('div#graph-ws').select('div').select('canvas').remove();
@@ -57,6 +58,14 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 	
 	for (i = 1; i <= num_quantile; i++){
 		range_array.push(i);
+
+		quantile_pct = Math.round(100/num_quantile*10)/10;
+
+		if (num_quantile == 3 || num_quantile == 5){
+			(i % 2) ? (quantile_labels[i-1] = labels[Math.round(i*labels.length/num_quantile)-1] +" "+ quantile_pct + "%") : quantile_labels[i-1] = "";
+		} else if (num_quantile == 4) {
+			((i == 1) || (i == 4)) ? (quantile_labels[i-1] = labels[Math.round(i*labels.length/num_quantile)-1] +" "+ quantile_pct + "%") : quantile_labels[i-1] = "";
+		}
 	}
 
 	var qScale = d3.scaleThreshold()
@@ -64,29 +73,29 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 		.range(range_array);
 
 	var wScale = d3.scaleThreshold()
-		//.domain(wealth_scale[isB][p_quintile])
+		//.domain(wealth_scale[isB][p_quantile])
 	 	.range(range_array);
 
 	var bScale = d3.scaleThreshold()
-		//.domain(wealth_scale[isB][p_quintile])
+		//.domain(wealth_scale[isB][p_quantile])
 	 	.range(range_array);
 
 	var data = d3.range(count).map(i => {
 		var p = Math.random();
-		var p_quintile = qScale(p);
+		var p_quantile = qScale(p);
 		
-		var isB = (Math.random() <= black_ratio_scale[p_quintile]) ? 1 : 0;
+		var isB = (Math.random() <= black_ratio_scale[p_quantile]) ? 1 : 0;
 
 		if (isB){
-			var q = bScale.domain(wealth_scale[isB][p_quintile])( Math.random() );
+			var q = bScale.domain(wealth_scale[isB][p_quantile])( Math.random() );
 		} else {
-			var q = wScale.domain(wealth_scale[isB][p_quintile])( Math.random() );
+			var q = wScale.domain(wealth_scale[isB][p_quantile])( Math.random() );
 		};
 
 		return {
-			speed: 24 + 2 * Math.random(),
+			speed: 4 + 2 * Math.random(),
 			x: Math.random() * wealth_length,
-			y0: yScale(p_quintile),
+			y0: yScale(p_quantile),
 			y1: yScale(q),
 			dy: (Math.random() - 0.5)* 0.225,
 			isB
@@ -98,7 +107,7 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 	time_limit = (wealth_length + 2.25) / d3.min(data.map(x => x.speed / 60));
 	//console.log( 4 / d3.median(data.map(x => x.speed / 60)) );
 
-	prob_pquintile = d3.nest()
+	prob_pquantile = d3.nest()
 					.key(function(d) { return d.y0; })
 					.key(function(d) {return d.isB; })
 					.rollup(function(v) {
@@ -106,7 +115,7 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 					})
 					.object(data);
 
-	prob_quintile = d3.nest()
+	prob_quantile = d3.nest()
 					.key(function(d) { return d.y1; })
 					.key(function(d) {return d.isB; })
 					.rollup(function(v) {
@@ -131,54 +140,54 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 	d3.selectAll('text.prob-label').call(wrap_ws_header);
 
 	for (i = 1; i <= num_quantile; i++){
-		var pquintile = Object.values(prob_pquintile[yScale(i)])
+		var pquantile = Object.values(prob_pquantile[yScale(i)]);
 
 		svg_parent_ws.append('g')
 			.attr('class', 'label-prob-ws label-category')
 			.attr('transform', 'translate(0, '+ (yScale_px(i) ) +')')
 			.append('text')
 			.attr('class', 'prob-frequency parent-probability')
-			.text(quintile_labels[i-1]);
+			.text(quantile_labels[i-1]);
 		svg_parent_ws.append('g')
 			.attr('class', 'label-prob-ws')
 			.attr('transform', 'translate('+ stats_width/2 +', '+ ((yScale_px(i)) - 12) +')')
 			.append('text')
 			.attr('class', 'prob-frequency parent-probability')
-			.text('white: ' + Math.round(pquintile[0]/d3.sum(pquintile) * 1000)/10 + "%" );
+			.text('white: ' + Math.round(pquantile[0]/d3.sum(pquantile) * 1000)/10 + "%" );
 		svg_parent_ws.append('g')
 			.attr('class', 'label-prob-ws')
 			.attr('transform', 'translate('+ stats_width/2 +', '+ ((yScale_px(i)) + 12) +')')
 			.append('text')
 			.attr('class', 'prob-frequency parent-probability')
-			.text('black: ' + Math.round(pquintile[1]/d3.sum(pquintile) * 1000)/10 + "%" );
+			.text('black: ' + Math.round(pquantile[1]/d3.sum(pquantile) * 1000)/10 + "%" );
 	}
 
 	d3.selectAll('text.prob-frequency').call(wrap_ws);
 
 	setTimeout(function(){
 		for (i = 1; i <= num_quantile; i++){
-			var cquintile = Object.values(prob_quintile[yScale(i)])
+			var cquantile = Object.values(prob_quantile[yScale(i)])
 
 			svg_child_ws.append('g')
 				.attr('class', 'label-prob-ws')
 				.attr('transform', 'translate('+ stats_width/2 +', '+ ((yScale_px(i)) ) +')')
 				.append('text')
 				.attr('class', 'prob-frequency child-probability')
-				.text(quintile_labels[i-1]);
+				.text(quantile_labels[i-1]);
 
 			svg_child_ws.append('g')
 				.attr('class', 'label-prob-ws')
 				.attr('transform', 'translate(0, '+ ((yScale_px(i))-12) +')')
 				.append('text')
 				.attr('class', 'prob-frequency child-probability')
-				.text('white: ' + Math.round(cquintile[0]/d3.sum(cquintile) * 1000)/10 + "%" );
+				.text('white: ' + Math.round(cquantile[0]/d3.sum(cquantile) * 1000)/10 + "%" );
 
 			svg_child_ws.append('g')
 				.attr('class', 'label-prob-ws')
 				.attr('transform', 'translate(0, '+ ((yScale_px(i))+12) +')')
 				.append('text')
 				.attr('class', 'prob-frequency child-probability')
-				.text('black: ' + Math.round(cquintile[1]/d3.sum(cquintile) * 1000)/10 + "%" );
+				.text('black: ' + Math.round(cquantile[1]/d3.sum(cquantile) * 1000)/10 + "%" );
 
 			d3.selectAll('text.prob-frequency').call(wrap_ws);
 		}
@@ -274,7 +283,7 @@ function get_wealth_scale(data, model_name){
 	return diction
 }
 
-function get_black_ratio_quintile(data, model_name){
+function get_black_ratio_quantile(data, model_name){
 	const add = (a, b) => (a + b);
 
 	diction = d3.nest()

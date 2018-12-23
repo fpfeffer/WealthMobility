@@ -165,7 +165,7 @@
 						</div>
 					</span> --> 
 				</h3>
-				<div class="reset-button button" onclick="draw_flow_ws(div_ws, 4, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws)">Replay <i class="material-icons">replay</i></div>
+				<div class="reset-button button" onclick="draw_flow_ws(div_ws, 4, qScale_domain_ws, black_ratio_quantile_ws, wealth_scale_ws)">Replay <i class="material-icons">replay</i></div>
 			</div>
 		</div>
 		<div class="row" style="margin-top: 40px;">
@@ -198,10 +198,10 @@
 
 	function update_model(data, model_name){
 		wealth_scale_ws = get_wealth_scale(data, model_name);
-		black_ratio_quintile_ws = get_black_ratio_quintile(data, 'n');
+		black_ratio_quantile_ws = get_black_ratio_quantile(data, 'n');
 		qScale_domain_ws = get_qscale(data, 'n');
 
-		draw_flow_ws(div_ws, 4, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws)
+		draw_flow_ws(div_ws, 4, qScale_domain_ws, black_ratio_quantile_ws, wealth_scale_ws)
 	}
 
 	Promise.all([
@@ -212,10 +212,10 @@
 		d_srconly = files[1];
 
 		wealth_scale_ws = get_wealth_scale(d, 'n');
-		black_ratio_quintile_ws = get_black_ratio_quintile(d, 'n');
+		black_ratio_quantile_ws = get_black_ratio_quantile(d, 'n');
 		qScale_domain_ws = get_qscale(d, 'n');
 
-		draw_flow_ws(div_ws, 4, qScale_domain_ws, black_ratio_quintile_ws, wealth_scale_ws);
+		draw_flow_ws(div_ws, 4, qScale_domain_ws, black_ratio_quantile_ws, wealth_scale_ws);
 	})
 </script>
 </html>
