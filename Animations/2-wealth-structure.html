@@ -207,9 +207,14 @@
 	});
 
 	d3.csv('../Data/2-wealth-structure.csv').then(function(d) {
-		wealth_scale_ws = get_wealth_scale(d, 'n');
-		black_ratio_quantile_ws = get_black_ratio_quantile(d, 'n')
-		qScale_domain_ws = get_qscale(d, 'n');
+		data = d;
+		data.forEach(function( x, i ){
+			x.w == 0 ? x['race'] = 1 : x['race'] = 0;
+		});
+
+		wealth_scale_ws = get_wealth_scale(data, 'n');
+		black_ratio_quantile_ws = get_black_ratio_quantile(data, 'n')
+		qScale_domain_ws = get_qscale(data, 'n');
 
 		draw_flow_ws(div_ws, 5, qScale_domain_ws, black_ratio_quantile_ws, wealth_scale_ws);
 	});

@@ -182,7 +182,11 @@
 	});
 
 	d3.csv('../Data/1-mobility-rates.csv').then(function(d) {
-		wealth_scale_mr = get_wealth_scale(d, 'prob');
+		data = d;
+		data.forEach(function( x, i ){
+			x.w == 0 ? x['race'] = 1 : x['race'] = 0;
+		});
+		wealth_scale_mr = get_wealth_scale(data, 'prob');
 
 		draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 3);// "all");
 	});

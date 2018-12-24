@@ -54,7 +54,6 @@
 		}
 
 		.drop-btn-long {
-			width: 280px !important;
 			display: inline-block;
 			padding: 6px 12px !important;
 			text-align: left;
@@ -259,6 +258,11 @@
 
 	d3.csv('../Data/s1-models.csv').then(function(d) {
 		data = d;
+		data = d;
+		data.forEach(function( x, i ){
+			x.w == 0 ? x['race'] = 1 : x['race'] = 0;
+		});
+		
 		wealth_scale_mr = get_wealth_scale(data, 'ologit');
 
 		draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 3);// "all");

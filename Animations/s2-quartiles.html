@@ -137,11 +137,11 @@
 				<h3>Data: 
 					<span>
 						<div class="dropdown" style="display: inline-block;">
-							<button class="btn btn-default dropdown-toggle drop-btn-long" type="button" data-toggle="dropdown">Adjusted
+							<button class="btn btn-default dropdown-toggle drop-btn-long" type="button" data-toggle="dropdown">Full Sample
 							<span class="caret"></span></button>
 							<ul class="dropdown-menu dropdown-menu-model dropdown-bar">
-								<li class="drop-menu-item"><a onclick="update_model(d, 'n')">Source Only</a></li>
-								<li class="drop-menu-item"><a onclick="update_model(d_srconly, 'n')">Adjusted</a></li>
+								<li class="drop-menu-item"><a onclick="update_model(d, 'n')">Full Sample</a></li>
+								<li class="drop-menu-item"><a onclick="update_model(d_srconly, 'n')">SRC Sample Only</a></li>
 							</ul>
 						</div>
 					</span>
@@ -209,7 +209,14 @@
 		d3.csv("../Data/s2-quartiles-srconly.csv"),
 	]).then(function(files) {
 		d = files[0];
+		d.forEach(function( x, i ){
+			x.w == 0 ? x['race'] = 1 : x['race'] = 0;
+		});
+
 		d_srconly = files[1];
+		d_srconly.forEach(function( x, i ){
+			x.w == 0 ? x['race'] = 1 : x['race'] = 0;
+		});
 
 		wealth_scale_ws = get_wealth_scale(d, 'n');
 		black_ratio_quantile_ws = get_black_ratio_quantile(d, 'n');
