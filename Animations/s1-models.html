@@ -9,6 +9,7 @@
 	<!-- Bootstrap Core CSS  -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 	<style>
 		.graph {
@@ -46,6 +47,13 @@
 
 		.drop-btn {
 			width: 128px !important;
+			display: inline-block;
+			padding: 6px 12px !important;
+			text-align: left;
+			margin: 0px 8px;
+		}
+
+		.drop-btn-long {
 			display: inline-block;
 			padding: 6px 12px !important;
 			text-align: left;
@@ -102,9 +110,43 @@
 		div.col-xs-1, div.col-sm-1, div.col-md-1 {
 			padding: 0px !important;
 		}
+
+		.button {
+			width: 108px !important;
+			/*display: inline-block;*/
+			text-align: center;
+			border-radius: 4px;
+			background-color: #fff;
+			border: 1px solid #dc2127;
+			color: #dc2127;
+			font-family: 'Raleway', sans-serif;
+			font-size: 16px;
+			font-weight: 600;
+			cursor: pointer;
+			padding: 6px 0px !important;
+			margin: auto;
+		}
+
+		.button:hover,
+		.button:focus,
+		.button:active {
+			background-color: #dc2127;
+			color: #fff;
+			font-weight: 500;
+		}
+
+		i {
+			vertical-align:middle;
+		}
 	</style>
 </head>
 <script>
+	// Global variable declaration
+	var model = 'ologit',
+		data,
+		current_pquintile,
+		wealth_scale_mr;
+
 	var black_ratio_quintile_mr = {
 		"1": 0.5,
 		"2": 0.5,
@@ -137,12 +179,29 @@
 		<!-- Interactive visualization -->
 		<div class="row">
 			<div class="col-md-10 col-md-offset-1">
+				<h3>Model: 
+					<span>
+						<div class="dropdown" style="display: inline-block;">
+							<button class="btn btn-default dropdown-toggle drop-btn-long" type="button" data-toggle="dropdown">Ordered Logistic (joint estimation)
+							<span class="caret"></span></button>
+							<ul class="dropdown-menu dropdown-menu-model dropdown-bar">
+								<li class="drop-menu-item"><a onclick="update_model(data, this.id)" id="ologit_sep">Ordered Logistic (joint estimation)</a></li>
+								<li class="drop-menu-item"><a onclick="update_model(data, this.id)" id="ologit_sep">Ordered Logistic (separate estimation)</a></li>
+								<li class="drop-menu-item"><a onclick="update_model(data, this.id)" id="stereo">Stereotype</a></li>
+								<li class="drop-menu-item"><a onclick="update_model(data, this.id)" id="mlogit">Multinomial Logistic (observed)</a></li>
+							</ul>
+						</div>
+					</span>
+				</h3>
+				<!-- <p>For every 10,000 children raised in Black and White households each, see where they end up.</p> -->
+			</div>
+			<div class="col-md-10 col-md-offset-1">
 				<h3><span class="black" style="border-radius: 4px">Black</span> and <span class="white" style="border-radius: 4px">White</span> children raised in 
 					<span>
 						<div class="dropdown" style="display: inline-block;">
 							<button class="btn btn-default dropdown-toggle drop-btn" type="button" data-toggle="dropdown">40% - 60%
 							<span class="caret"></span></button>
-							<ul class="dropdown-menu dropdown-bar">
+							<ul class="dropdown-menu dropdown-menu-wScale dropdown-bar">
 								<li class="drop-menu-item"><a onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 5)">top 20%</a></li>
 								<li class="drop-menu-item"><a onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 4)">20% - 40%</a></li>
 								<li class="drop-menu-item"><a onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 3)">40% - 60%</a></li>
@@ -153,6 +212,7 @@
 					</span> of the wealth distribution: See where they end up as adults.
 				</h3>
 				<!-- <p>For every 10,000 children raised in Black and White households each, see where they end up.</p> -->
+				<!-- <div class="reset-button button" onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 3)">Start <i class="material-icons">play_arrow</i></div> -->
 			</div>
 		</div>
 		<div class="row" style="margin-top: 40px;">
@@ -176,17 +236,34 @@
 <script src="../Scripts/mobility-rates.js"></script>
 <script>
 	$(function(){
-		$(".dropdown-menu").on('click', 'li a', function(){
+		$(".dropdown-menu-wScale").on('click', 'li a', function(){
 			$(".drop-btn:first-child").html($(this).text()+ ' <span class="caret"></span>');
 		});
 	});
 
-	d3.csv('../Data/1-mobility-rates.csv').then(function(d) {
+	$(function(){
+		$(".dropdown-menu-model").on('click', 'li a', function(){
+			$(".drop-btn-long:first-child").html($(this).text()+ ' <span class="caret"></span>');
+		});
+	});
+
+	// $('.reset-button').on('click', function(){
+	// 	$('.reset-button').css('visibility', 'hidden');
+	// });
+
+	function update_model(data, model_name){
+		wealth_scale_mr = get_wealth_scale(data, model_name);
+		draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, current_pquintile);
+	}
+
+	d3.csv('../Data/s1-models.csv').then(function(d) {
+		data = d;
 		data = d;
 		data.forEach(function( x, i ){
 			x.w == 0 ? x['race'] = 1 : x['race'] = 0;
 		});
-		wealth_scale_mr = get_wealth_scale(data, 'prob');
+		
+		wealth_scale_mr = get_wealth_scale(data, 'ologit');
 
 		draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 3);// "all");
 	});

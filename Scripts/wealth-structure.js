@@ -106,9 +106,23 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 	data = d3.shuffle(data);
 
 	time_limit = (wealth_length + 2.25) / d3.min(data.map(x => x.speed / 60));
+	//console.log( 4 / d3.median(data.map(x => x.speed / 60)) );
 
-	prob_pquantile = get_prob_pquintiles( Object.values(black_ratio_scale) );
-	prob_quantile = prob_quintiles;
+	prob_pquantile = d3.nest()
+					.key(function(d) { return d.y0; })
+					.key(function(d) {return d.isB; })
+					.rollup(function(v) {
+						return Math.round(v.length); // / (count/2) * 100)/100; //Math.round(v.length / (count/2) * 10000);
+					})
+					.object(data);
+
+	prob_quantile = d3.nest()
+					.key(function(d) { return d.y1; })
+					.key(function(d) {return d.isB; })
+					.rollup(function(v) {
+						return Math.round(v.length); // / (count/2) * 100)/100; //Math.round(v.length / (count/2) * 10000);
+					})
+					.object(data);
 
 	svg_parent_ws.append('g')
 		.attr('class', 'label-prob-ws label-header')
@@ -127,6 +141,8 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 	d3.selectAll('text.prob-label').call(wrap_ws_header);
 
 	for (i = 1; i <= num_quantile; i++){
+		var pquantile = Object.values(prob_pquantile[yScale(i)]);
+
 		svg_parent_ws.append('g')
 			.attr('class', 'label-prob-ws label-category')
 			.attr('transform', 'translate(0, '+ (yScale_px(i) ) +')')
@@ -138,19 +154,21 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 			.attr('transform', 'translate('+ stats_width/2 +', '+ ((yScale_px(i)) - 12) +')')
 			.append('text')
 			.attr('class', 'prob-frequency parent-probability')
-			.text('white: ' + prob_pquantile[i-1][0] + "%" );
+			.text('white: ' + Math.round(pquantile[0]/d3.sum(pquantile) * 1000)/10 + "%" );
 		svg_parent_ws.append('g')
 			.attr('class', 'label-prob-ws')
 			.attr('transform', 'translate('+ stats_width/2 +', '+ ((yScale_px(i)) + 12) +')')
 			.append('text')
 			.attr('class', 'prob-frequency parent-probability')
-			.text('black: ' + prob_pquantile[i-1][1] + "%" );
+			.text('black: ' + Math.round(pquantile[1]/d3.sum(pquantile) * 1000)/10 + "%" );
 	}
 
 	d3.selectAll('text.prob-frequency').call(wrap_ws);
 
 	setTimeout(function(){
 		for (i = 1; i <= num_quantile; i++){
+			var cquantile = Object.values(prob_quantile[yScale(i)])
+
 			svg_child_ws.append('g')
 				.attr('class', 'label-prob-ws label-category')
 				.attr('transform', 'translate('+ stats_width/2 +', '+ ((yScale_px(i)) ) +')')
@@ -163,18 +181,18 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 				.attr('transform', 'translate(0, '+ ((yScale_px(i))-12) +')')
 				.append('text')
 				.attr('class', 'prob-frequency child-probability')
-				.text('white: ' + prob_quantile[i-1][0] + "%" );
+				.text('white: ' + Math.round(cquantile[0]/d3.sum(cquantile) * 1000)/10 + "%" );
 
 			svg_child_ws.append('g')
 				.attr('class', 'label-prob-ws')
 				.attr('transform', 'translate(0, '+ ((yScale_px(i))+12) +')')
 				.append('text')
 				.attr('class', 'prob-frequency child-probability')
-				.text('black: ' + prob_quantile[i-1][1] + "%" );
+				.text('black: ' + Math.round(cquantile[1]/d3.sum(cquantile) * 1000)/10 + "%" );
 
 			d3.selectAll('text.prob-frequency').call(wrap_ws);
 		}
-	}, (2.25 / d3.max( data.map(x => x.speed / 60)))*100 ); // changed
+	}, (2.25 / d3.max( data.map(x => x.speed / 60)))*1000 );
 
 	setTimeout(function(){
 		$('.reset-button').css('visibility', 'visible');
@@ -301,43 +319,4 @@ function get_qscale(data, model_name){
 	array.pop();
 
 	return array
-}
-
-function get_prob_pquintiles(data){
-	var array = {'0': [], '1': []};
-
-	data.reduce(function(a, b, i, arr) { 
-		return array[1][i] = Math.round((arr[i]) * 1000) / 10;
-	}, 0);
-
-	data.reduce(function(a, b, i, arr) { 
-		return array[0][i] = Math.round((1-arr[i]) * 1000) / 10;
-	}, 0);
-
-	return _.unzip(Object.values(array));
-}
-
-function get_prob_quintiles( data, model_name ){
-	diction = d3.nest()
-			.key( d => d.race )
-			.key( d => d.destination )
-			.rollup( function(v) { 
-				var array = [];
-				array = v.map( k => +k[model_name] );
-				// array = array.map( j => j/array[array.length-1]);
-				// array.pop();
-
-				return array;
-			})
-			.object(data);
-
-	var arr = _.unzip( Object.values(diction).map( function(d) {
-		sum = Object.values(d).map( v => v.reduce((a, b) => a + b, 0))
-		return sum
-	}) ).map( function(d) {
-		sum = d.reduce((a, b) => a + b, 0);
-		return d.map( v => Math.round( (v/sum)*1000) / 10 );
-	} );
-
-	return arr;
 }

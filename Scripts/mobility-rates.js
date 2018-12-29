@@ -34,11 +34,13 @@ var wrap_mr = d3.textwrap().bounds({height: 32, width: 80});
 var quintile_labels = ['Bottom 20%', '', 'Middle 20%', '', 'Top 20%']
 
 function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, parent) {
+	current_pquintile = parent;
+
 	d3.select('div#graph-mr').select('div').select('canvas').remove();
 	d3.selectAll('.label-prob-mr').remove();
 	d3.selectAll('.label-prob-percent-mr').remove();
 
-	quantile_labels = Object.values( document.getElementsByClassName('drop-menu-q') ).map(d => d.innerText);
+	quantile_labels = Object.values( document.getElementsByClassName('drop-menu-item') ).map(d => d.innerText);
 
 	//parent == "all" ? count = 200000 : count = 10000;
 	count = 10000; //20000;
@@ -73,7 +75,12 @@ function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, pa
 	 	.range(range_array);
 
 	var data = d3.range(count).map(i => {
-		p_quintile = parent;
+		if (parent == "all"){
+			var p = Math.random();
+			var p_quintile = qScale(p);
+		} else {
+			p_quintile = parent;
+		}
 		
 		var isB = (Math.random() <= black_ratio_scale[p_quintile]) ? 1 : 0;
 
@@ -91,12 +98,18 @@ function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, pa
 			dy: (Math.random() - 0.5)* 0.25,
 			isB
 		}
-	});
+	})
 
 	data = d3.shuffle(data);
 	time_limit = (wealth_length + 2.25) / d3.min( data.map(x => x.speed / 60) );
 
-	prob_q = prob_quintiles(bScale.domain(), wScale.domain());
+	prob_quintile_pquintile = d3.nest()
+					.key(function(d) { return d.y1; })
+					.key(function(d) {return d.isB; })
+					.rollup(function(v) {
+						return Math.round(v.length / (count/2) * 100);
+					})
+					.object(data);
 
 	svg_destination_mr.append('g')
 		.attr('class', 'label-prob-mr label-header')
@@ -128,13 +141,13 @@ function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, pa
 				.attr('transform', 'translate(0, '+ (yScale_px(i) ) +')')
 				.append('text')
 				.attr('class', 'prob-frequency white-probability')
-				.text( prob_q[i-1][0] + "%" );
+				.text(Object.values(prob_quintile_pquintile[yScale(i)])[0] + "%");
 			svg_destination_mr.append('g')
 				.attr('class', 'label-prob-percent-mr')
 				.attr('transform', 'translate('+ stats_width/3 +', '+ (yScale_px(i)) +')')
 				.append('text')
 				.attr('class', 'prob-frequency white-probability')
-				.text( prob_q[i-1][1] + "%");
+				.text(Object.values(prob_quintile_pquintile[yScale(i)])[1] + "%");
 			svg_destination_mr.append('g')
 				.attr('class', 'label-prob-mr label-category')
 				.attr('transform', 'translate('+ 2*stats_width/3 +', '+ (yScale_px(i) ) +')')
@@ -230,27 +243,4 @@ function get_wealth_scale(data, model_name){
 			.object(data);
 
 	return diction
-}
-
-function prob_quintiles(data_black, data_white){
-	const add = (a, b) => (a + b);
-	var array = {'0': [], '1': []};
-
-	data_black.reduce(function(a, b, i, arr) { 
-		if (arr[i-1]){
-			return array[1][i] = Math.round((arr[i] - arr[i-1]) * 100); 
-		} else {
-			return array[1][i] = Math.round((arr[i]) * 100);
-		}
-	}, 0);
-
-	data_white.reduce(function(a, b, i, arr) { 
-		if (arr[i-1]){
-			return array[0][i] = Math.round((arr[i] - arr[i-1]) * 100); 
-		} else {
-			return array[0][i] = Math.round((arr[i]) * 100);
-		}
-	}, 0);
-
-	return _.unzip(Object.values(array));
 }

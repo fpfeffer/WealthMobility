@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+
+	<!-- Bootstrap Core JS  -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+	<!-- Bootstrap Core CSS  -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900" rel="stylesheet">
+
+	<style>
+		h1 {
+			font-family: 'Raleway', sans-serif;
+			font-weight: 800;
+			font-size: 24px;
+			line-height: 28px;
+		}
+
+		h3 {
+			margin-top: 32px;
+			margin-bottom: 0px;
+			font-family: 'Raleway', sans-serif;
+			font-weight: 800;
+			font-size: 16px;
+			line-height: 21px;
+		}
+
+		p {
+			font-family: 'Raleway', sans-serif;
+			font-weight: 500;
+			font-size: 14px;
+			line-height: 16px;
+		}
+
+		a {
+			color: #dc2127;
+		}
+
+		a:hover,
+		a:focus,
+		a:active{
+		  color: #CC1F24;
+		  text-decoration: none;
+		}
+	</style>		
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8">
+
+<h1>Visualizing Intergenerational Wealth Mobility and Racial Inequality</h1>
+<p>Fabian T. Pfeffer & Alexandra Killewald</p>
+  	
+<p style="color:red;"><i>Please Do Not Distribute</i></p>
+
+<h3>Abstract</h3>
+<p></p>
+<p>The black-white gap in household wealth is large and well-documented. Here, we visualize how this racial wealth gap persists across generations. Animating the flow of individuals between the relative wealth position of parents and their adult children, we show that the disadvantage of black families is a consequence both of wealth inequality in prior generations and race differences in the transmission of wealth positions across generations: black children are far more likely to be downwardly mobile in household wealth. By displaying intergenerational movements between all parental and offspring wealth quintiles together, we underline how intergenerational fluctuation coexists with the maintenance of a severely racialized wealth structure.</p>
+
+<h3>Description</h3>
+<p></p>
+<p>The U.S. wealth structure is extremely unequal and marked by very large racial gaps, with the average black household holding less than one tenth the net worth – defined as the total sum of assets minus debts – of the average white household (Oliver and Shapiro 2006). To what extent racial gaps in household net worth persist depends on how many children reproduce the wealth position of their parents, how many move up, and how many fall down. Here, we visualize and extend our recent finding of racial differences in intergenerational wealth mobility (Pfeffer and Killewald 2018) using a dynamic display of changes in relative wealth positions between parents and their children. Due to data limitations, we are only able to compare mobility rates for non-Hispanic blacks and non-Hispanic whites.</p>
+<p>Building on long-standing evidence of greater rates of intergenerational downward mobility for blacks than whites, Chetty et al. (2018) used full population tax and Census data to confirm that black children are more likely than white children to fall below their parents' relative income position. Their estimates were subsequently visualized by the <i>New York Times</i> (Badget et al. 2018). The same type of visualization is presented in Animation 1 for black-white differences in rates of intergenerational mobility in family wealth. It relies on data from the Panel Study of Income Dynamics (PSID) assembled in Pfeffer and Killewald (2018).</p>
+
+<h3>Animation 1: <a href="Animations/1-mobility-rates.html">Mobility Rates</a></h3>
+<p></p>
+<p>We display the estimated probability of attaining each quintile of the net worth distribution for black and white children who grow up in the same wealth quintile of the parental wealth distribution. For instance, among those growing up in the middle 20 percent of the parental wealth distribution, black children are much more likely to be downwardly mobile, with 39 percent of them falling to the bottom 20 percent of the wealth distribution compared to 16 percent of white children. Transition probabilities for each parental wealth quintile can be selected interactively and reaffirm the disadvantage of black children in attaining wealth irrespective of the wealth position of their parents.</p>
+
+<h3>Visualization 2: <a href="Animations/2-wealth-structure.html">Wealth Structure</a></h3>
+<p></p>
+<p>Animation 1 focuses on racial differences in mobility rates but obscures the fact that black and white children are also unequally distributed across parental wealth origins. Therefore, Animation 2 rescales the number of dots representing black and white children to match their distribution across parental wealth quintiles. The concentration of black families toward the bottom of the wealth distribution is immediately visible. And although there is considerable intergenerational fluctuation in wealth positions, the wealth distribution in the offspring generation reveals similarly striking racial wealth gaps. While the representation of blacks in the middle 20 percent of the wealth distribution increases (from 7.6 to 15.3 percent) and their overrepresentation in the bottom 20 percent of the wealth distribution decreases (from 43.7 to 29.8 percent), the overall visual impression underlines the considerable stability of racial gaps in family wealth, despite the fact that 69.8% of white children and 62.3% of black children attain a wealth quintile different from their parents’. Animation 2 thus illustrates that ample intergenerational fluctuation in wealth positions coexists with the maintenance of substantial racial inequality in wealth.</p>
+<p></p>
+<p>Overall, we conclude that today’s black-white gaps in wealth arise from both the historical disadvantage reflected in the unequal starting position of black and white children (the focus of Animation 2) and contemporary processes (the focus of Animation 1), including continued institutionalized discrimination (see also Oliver and Shapiro 2006; Killewald and Bryant 2018).</p>
+<p></p>
+<p>These animations were produced using javascript. Data and code to reproduce them as well as other versions that display the stability to alternative analytic decisions are available at <a href="http://github.com/fpfeffer/wealthmobility" target="_blank">http://github.com/fpfeffer/wealthmobility</a>.</p>
+
+<h3>References</h3>
+<p></p>
+<p>Badger, Emily, Claire Cain Miller, Adam Pearce, and Kevin Quealy. 2018. Extensive Data Shows Punishing Reach of Racism for Black Boys. <i>The New York Times</i>, March 19. <a href="https://www.nytimes.com/interactive/2018/03/19/upshot/race-class-white-and-black-men.html" target="_blank">https://www.nytimes.com/interactive/2018/03/19/upshot/race-class-white-and-black-men.html</a></p>
+<p>Chetty, Raj, Nathaniel Hendren, Maggie Jones, and Sonya Porter. 2018. Race and Economic Opportunity in the United States: An Intergenerational Perspective. <i>NBER Working paper</i> 24441. Cambridge, MA: National Bureau of Economic Research.</p>
+<p>Killewald, Alexandra and Brielle Bryan. 2018. Falling Behind: The Role of Inter- and Intragenerational Processes in Widening Racial and Ethnic Wealth Gaps through Early and Middle Adulthood. <i>Social Forces</i> 97(2): 705-40.</p>
+<p>Oliver, Melvin L. and Thomas M. Shapiro. 2006. <i>Black Wealth, White Wealth. A New Perspective on Racial Inequality.</i> Second Addition. New York: Routledge.</p>
+<p>Pfeffer, Fabian T. and Alexandra Killewald. 2018. Generations of Advantage. Multigenerational Correlations in Family Wealth. <i>Social Forces</i> 96(4): 1411–42. <a href="http://fabianpfeffer.com/wp-content/uploads/PfefferKillewald2018.pdf" target="_blank">Link</a></p>
+
+<h3>Acknowledgments</h3>
+<p></p>
+<p>We thank Abhraneel Sarma for his excellent research assistance and Adam Pearce for making available some of the javascript code behind the visualizations reported in Badger et al. (2018). Our work on intergenerational wealth correlations has been supported by a grant from the Russell Sage Foundation and the W. K. Kellogg Foundation. The collection of PSID data used here was partly supported by the National Institutes of Health (R01 HD069609) and the National Science Foundation (1157698). Any opinions expressed are those of the authors alone and should not be construed as representing the opinions of the funding agencies.</p>
+
+<h3>Supplemental Material</h3>
+<p></p>
+<p>Background materials and supplementary analyses are available <a href="supplement.html">here</a></p>
+
+				</div>
+			</div>
+		</div>		
+	</body>
+</html>
+
+
