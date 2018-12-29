@@ -221,6 +221,8 @@
 		black_ratio_quantile_ws = get_black_ratio_quantile(d, 'n');
 		qScale_domain_ws = get_qscale(d, 'n');
 
+		prob_quintiles = get_prob_quintiles(d, 'n');
+
 		draw_flow_ws(div_ws, 4, qScale_domain_ws, black_ratio_quantile_ws, wealth_scale_ws);
 	})
 </script>

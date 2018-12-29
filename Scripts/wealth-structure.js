@@ -174,7 +174,7 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 
 			d3.selectAll('text.prob-frequency').call(wrap_ws);
 		}
-	}, (2.25 / d3.max( data.map(x => x.speed / 60)))*100 ); // changed
+	}, (2.25 / d3.max( data.map(x => x.speed / 60)))*1000 );
 
 	setTimeout(function(){
 		$('.reset-button').css('visibility', 'visible');
