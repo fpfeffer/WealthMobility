@@ -34,6 +34,8 @@ var wrap_mr = d3.textwrap().bounds({height: 32, width: 80});
 var quintile_labels = ['Bottom 20%', '', 'Middle 20%', '', 'Top 20%']
 
 function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, parent) {
+	current_pquintile = parent; // for s1-models.html
+
 	d3.select('div#graph-mr').select('div').select('canvas').remove();
 	d3.selectAll('.label-prob-mr').remove();
 	d3.selectAll('.label-prob-percent-mr').remove();
