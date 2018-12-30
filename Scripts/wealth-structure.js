@@ -14,6 +14,8 @@ var div_ws = d3.select('#graph-ws')
 			.style('width', canvas.w + 'px')
 			.style('height', canvas.h + 'px')
 			.style('display', 'inline-block');
+	
+var regl = createREGL({container: div_ws.node()});
 
 var svg_parent_ws = d3.select('#stats-parent-ws')
 			.append('svg')
@@ -37,7 +39,10 @@ var quantile_labels = []; //['Bottom 20%', '', 'Middle 20%', '', 'Top 20%'];
 var labels = ['Bottom', 'Middle', 'Top']
 
 function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, wealth_scale, parent = "all") {	
-	d3.select('div#graph-ws').select('div').select('canvas').remove();
+	//d3.select('div#graph-ws').select('div').select('canvas').remove();
+	regl.destroy();
+	regl = createREGL({container: element.node()});
+
 	d3.selectAll('.label-prob-ws').remove();
 	$('.reset-button').css('visibility', 'hidden');
 
@@ -179,8 +184,6 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 	setTimeout(function(){
 		$('.reset-button').css('visibility', 'visible');
 	}, time_limit*1000 );
-	
-	var regl = createREGL({container: element.node()})
 
 	var drawPoints = regl({
 		vert: `

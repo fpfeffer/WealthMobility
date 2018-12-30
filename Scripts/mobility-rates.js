@@ -15,6 +15,8 @@ var div_mr = d3.select('#graph-mr')
 			.style('height', canvas.h + 'px')
 			.style('display', 'inline-block');
 
+var regl = createREGL({container: div_mr.node()});
+
 var svg_origin_mr = d3.select('#stats-origin-mr')
 			.append('svg')
 			.attr('height', canvas.h)
@@ -36,7 +38,10 @@ var quintile_labels = ['Bottom 20%', '', 'Middle 20%', '', 'Top 20%']
 function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, parent) {
 	current_pquintile = parent; // for s1-models.html
 
-	d3.select('div#graph-mr').select('div').select('canvas').remove();
+	//d3.select('div#graph-mr').select('div').select('canvas').remove();
+	regl.destroy();
+	regl = createREGL({container: element.node()});
+	
 	d3.selectAll('.label-prob-mr').remove();
 	d3.selectAll('.label-prob-percent-mr').remove();
 
@@ -147,8 +152,6 @@ function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, pa
 			d3.selectAll('text.prob-frequency').call(wrap_mr);
 		}
 	}, 0); //(2.25 / d3.max( data.map(x => x.speed / 60)))*1000 );
-	
-	var regl = createREGL({container: element.node()})
 
 	var drawPoints = regl({
 		vert: `
