@@ -1,0 +1,151 @@
+---
+title: "sankey-wealth-mob-vis"
+author: "Abhraneel Sarma"
+date: "1/8/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(magrittr)
+library(tidyr)
+library(purrr)
+library(jsonlite)
+library(networkD3)
+```
+
+```{r}
+df.mr <- read.csv("1-mobility-rates.csv", header=TRUE)
+
+df.mr %<>%
+  mutate(
+    o = as.character(o),
+    o = replace(o, o == "Lowest Quintile", "Quintile 1"),
+    o = replace(o, o == "Highest Quintile", "Quintile 5"),
+    d = as.character(d),
+    d = replace(d, d == "Lowest Quintile", "Quintile 1"),
+    d = replace(d, d == "Highest Quintile", "Quintile 5")
+  )
+  
+head(df.mr)
+```
+
+```{r}
+nodes.mr <- df.mr %>%
+  select(o, d, white) %>%
+  rename(
+    Parent = o,
+    Child = d,
+    race = white
+  ) %>%
+  gather(type, name, -race) %>%
+  unique() %>%
+  mutate(
+    race = ifelse(race == "No", "Black", "White"),
+    name = paste(type, race, name, sep = " "),
+    node = seq.int(nrow(.))-1
+  ) %>%
+  select(node, name, race)
+
+nodes.mr
+```
+
+
+```{r}
+links.mr <- df.mr %>%
+  select(o, d, white, prob) %>%
+  rename(
+    parent = o,
+    child = d,
+    race = white,
+    value = prob
+  ) %>%
+  mutate(
+    race = ifelse(race == "No", "Black", "White"),
+    parent = as.factor(paste("Parent", race, parent, sep = " ")),
+    source = as.numeric(parent) - 1,
+    child = as.factor(paste("Child", race, child, sep = " ")),
+    target = as.numeric(child) - 1 + 10,
+    value = value*100
+  ) %>%
+  select(source, target, value)
+
+links.mr
+```
+
+
+```{r}
+toJSON(links.mr)
+toJSON(nodes.mr)
+
+write_json(links.mr, "links.json", pretty = TRUE)
+write_json(nodes.mr, "nodes.json", pretty = TRUE)
+```
+
+```{r}
+df.ws <- read.csv("2-wealth-structure.csv", header=TRUE)
+
+df.ws %<>%
+  mutate(
+    o = as.character(o),
+    o = replace(o, o == "Lowest Quintile", "Quintile 1"),
+    o = replace(o, o == "Highest Quintile", "Quintile 5"),
+    d = as.character(d),
+    d = replace(d, d == "Lowest Quintile", "Quintile 1"),
+    d = replace(d, d == "Highest Quintile", "Quintile 5")
+  )
+  
+head(df.ws)
+```
+
+```{r}
+nodes.ws <- df.ws %>%
+  select(o, d, white) %>%
+  rename(
+    Parent = o,
+    Child = d,
+    race = white
+  ) %>%
+  gather(type, name, -race) %>%
+  unique() %>%
+  mutate(
+    race = ifelse(race == "No", "Black", "White"),
+    name = paste(type, race, name, sep = " "),
+    node = seq.int(nrow(.))-1
+  ) %>%
+  select(node, name, race)
+
+nodes.ws
+```
+
+
+```{r}
+links.ws <- df.ws %>%
+  select(o, d, white, n) %>%
+  rename(
+    parent = o,
+    child = d,
+    race = white,
+    value = n
+  ) %>%
+  mutate(
+    race = ifelse(race == "No", "Black", "White"),
+    parent = as.factor(paste("Parent", race, parent, sep = " ")),
+    source = as.numeric(parent) - 1,
+    child = as.factor(paste("Child", race, child, sep = " ")),
+    target = as.numeric(child) - 1 + 10
+  ) %>%
+  select(source, target, value)
+
+links.ws
+```
+
+
+```{r}
+toJSON(links.ws)
+toJSON(nodes.ws)
+
+write_json(links.ws, "links.json", pretty = TRUE)
+write_json(nodes.ws, "nodes.json", pretty = TRUE)
+```
+
