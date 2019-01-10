@@ -10,7 +10,7 @@
 
 	<style>
 		.node rect {
-			cursor: move;
+			/*cursor: move;*/
 			fill-opacity: .9;
 			shape-rendering: crispEdges;
 		}
@@ -22,12 +22,37 @@
 
 		.link {
 			fill: none;
-			stroke: #000;
+			stroke: #979797;
 			stroke-opacity: .2;
 		}
 
-		.link:hover {
+		/*.link:hover {
 			stroke-opacity: .5;
+		}*/
+
+		foreignObject > div {
+			font-family: 'Raleway', sans-serif;
+			font-weight: 400;
+			font-size: 12px;
+			line-height: 11px;
+		}
+
+		@media (min-width: 992px) {
+			foreignObject > div {
+				font-family: 'Raleway', sans-serif;
+				font-weight: 400;
+				font-size: 14px;
+				line-height: 12px;
+			}
+		}		
+
+		@media (max-width: 992px) {
+			foreignObject > div {
+				font-family: 'Raleway', sans-serif;
+				font-weight: 400;
+				font-size: 12px;
+				line-height: 11px;
+			}
 		}
 	</style>
 
@@ -38,115 +63,59 @@
 </body>
 
 <script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="../Scripts/d3-textwrap.min.js" type="text/javascript"></script>
 <script src="sankey.js"></script>
+<script src="custom-sankey.js"></script>
 <script>
-	
-var units = "Widgets";
+	var units = "Widgets";
 
-// set the dimensions and margins of the graph
-var margin = {top: 10, right: 10, bottom: 10, left: 10},
-		width = 700 - margin.left - margin.right,
-		height = 800 - margin.top - margin.bottom;
+	// set the dimensions and margins of the graph
+	var margin = {top: 10, right: 180, bottom: 10, left: 180},
+			width = 900 - margin.left - margin.right,
+			height = 800 - margin.top - margin.bottom;
 
-// format variables
-var formatNumber = d3.format(",.0f"),		// zero decimal places
-		format = function(d) { return formatNumber(d) + " " + units; },
-		color = d3.scaleOrdinal().range(['rgb(37%, 42%, 82%, 0.85)', 'rgb(100%, 51%, 37%, 0.85)']);
+	// format variables
+	var formatNumber = d3.format(",.0f"),		// zero decimal places
+			format = function(d) { return formatNumber(d) + " " + units; },
+			color = d3.scaleOrdinal().range(['rgb(37%, 42%, 82%, 0.85)', 'rgb(100%, 51%, 37%, 0.85)']);
 
-// append the svg object to the body of the page
-var svg = d3.select("body").append("svg")
-		.attr("width", width + margin.left + margin.right)
-		.attr("height", height + margin.top + margin.bottom)
-		.append("g")
-		.attr("transform", 
-					"translate(" + margin.left + "," + margin.top + ")");
-
-// Set the sankey diagram properties
-var sankey = d3.sankey()
-		.nodeWidth(36)
-		.nodePadding(40)
-		.size([width, height]);
-
-var path = sankey.link();
-
-// load the data
-// d3.json("1-mobility-rates.json").then(function(graph) {
-d3.json("2-wealth-structure.json").then(function(graph) {	
-	sankey.nodes(graph.nodes)
-			.links(graph.links)
-			.layout(32);
-
-// add in the links
-	var link = svg.append("g").selectAll(".link")
-			.data(graph.links)
-			.enter().append("path")
-			.attr("class", "link")
-			.attr("d", path)
-			.style("stroke-width", function(d) { return Math.max(1, d.dy); })
-			.sort(function(a, b) { return b.dy - a.dy; });
-
-// add the link titles
-	link.append("title")
-				.text(function(d) {
-				return d.source.name + " → " + 
-								d.target.name + "\n" + format(d.value); });
-
-// add in the nodes
-	var node = svg.append("g").selectAll(".node")
-			.data(graph.nodes)
-			.enter().append("g")
-			.attr("class", "node")
-			.attr("transform", function(d) { 
-			return "translate(" + d.x + "," + d.y + ")"; })
-			.call(d3.drag()
-				.subject(function(d) {
-					return d;
-				})
-				.on("start", function() {
-					this.parentNode.appendChild(this);
-				})
-				.on("drag", dragmove));
-
-// add the rectangles for the nodes
-	node.append("rect")
-			.attr("height", function(d) { return d.dy; })
-			.attr("width", sankey.nodeWidth())
-			.style("fill", function(d) { 
-				return d.color = color(d.race.replace(/ .*/, "")); 
-			})
-			.style("stroke", function(d) { 
-				return d3.rgb(d.color).darker(2); 
-			})
-			.append("title")
-			.text(function(d) { 
-				return d.name + "\n" + format(d.value); 
-			});
-
-// add in the title for the nodes
-	node.append("text")
-			.attr("x", -6)
-			.attr("y", function(d) { return d.dy / 2; })
-			.attr("dy", ".35em")
-			.attr("text-anchor", "end")
-			.attr("transform", null)
-			.text(function(d) { return d.name; })
-			.filter(function(d) { return d.x < width / 2; })
-			.attr("x", 6 + sankey.nodeWidth())
-			.attr("text-anchor", "start");
-
-// the function for moving the nodes
-	function dragmove(d) {
-		d3.select(this)
+	// append the svg object to the body of the page
+	var svg = d3.select("body").append("svg")
+			.attr("width", width + margin.left + margin.right)
+			.attr("height", height + margin.top + margin.bottom)
+			.append("g")
 			.attr("transform", 
-						"translate(" 
-							 + d.x + "," 
-							 + (d.y = Math.max(
-									0, Math.min(height - d.dy, d3.event.y))
-								 ) + ")");
-		sankey.relayout();
-		link.attr("d", path);
-	}
-});
+						"translate(" + margin.left + "," + margin.top + ")");
+
+	// Set the sankey diagram properties
+	var sankey = d3.sankey()
+			.nodeWidth(36)
+			.nodePadding(4)
+			.size([width, height]);
+
+	var path = sankey.link();
+
+	var text_wrap = {height: 32, width: 88};
+	var wrap_ws_sankey = d3.textwrap().bounds(text_wrap);
+
+	// load the data
+	// d3.json("1-mobility-rates.json").then(function(graph) {
+	d3.json("2-wealth-structure.json").then(function(graph) {	
+		draw_sankey(graph);
+
+		d3.selectAll('text')
+			.call(wrap_ws_sankey);
+
+		d3.selectAll('foreignObject > div')
+			.style('transform', function(d){
+				if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
+				return 'translate('+ x_pos +'px, '+ (d.dy/2 - this.getBoundingClientRect().height/2)  +'px)';
+			})
+			.style('text-align', function(d){
+				if (d.x < width / 2) return 'right'
+				return 'left';
+			});
+	});
 
 </script>
 </html>

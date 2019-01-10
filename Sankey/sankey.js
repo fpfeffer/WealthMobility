@@ -232,6 +232,7 @@ d3.sankey = function() {
 				// Push any overlapping nodes down.
 				nodes.sort(ascendingDepth);
 				for (i = 0; i < n; ++i) {
+					// nodePadding = (16*((i+1)%2));
 					node = nodes[i];
 					dy = y0 - node.y;
 					if (dy > 0) node.y += dy;
@@ -255,7 +256,8 @@ d3.sankey = function() {
 		}
 
 		function ascendingDepth(a, b) {
-			return a.y - b.y;
+			// return a.y - b.y;
+			return b.node - a.node ;
 		}
 	}
 
@@ -295,3 +297,15 @@ d3.sankey = function() {
 
 	return sankey;
 };
+
+function dragmove(d) {
+	d3.select(this)
+		.attr("transform", 
+					"translate(" 
+						 + d.x + "," 
+						 + (d.y = Math.max(
+								0, Math.min(height - d.dy, d3.event.y))
+							 ) + ")");
+	sankey.relayout();
+	link.attr("d", path);
+}

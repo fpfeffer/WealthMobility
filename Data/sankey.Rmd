@@ -14,10 +14,11 @@ library(jsonlite)
 library(networkD3)
 ```
 
+
 ```{r}
 df.mr <- read.csv("1-mobility-rates.csv", header=TRUE)
 
-df.mr %<>%
+df.mr %<>% 
   mutate(
     o = as.character(o),
     o = replace(o, o == "Lowest Quintile", "Quintile 1"),
@@ -31,7 +32,7 @@ head(df.mr)
 ```
 
 ```{r}
-nodes.mr <- df.mr %>%
+nodes.mr <- df.mr  %>%
   select(o, d, white) %>%
   rename(
     Parent = o,
@@ -40,12 +41,20 @@ nodes.mr <- df.mr %>%
   ) %>%
   gather(type, name, -race) %>%
   unique() %>%
+  arrange(desc(type), name, race) %>%
   mutate(
     race = ifelse(race == "No", "Black", "White"),
-    name = paste(type, race, name, sep = " "),
+    name = paste(name, sep = " "),
     node = seq.int(nrow(.))-1
   ) %>%
-  select(node, name, race)
+  select(node, name, race, type)  %>%
+  mutate(
+    name = replace(name, name == "Quintile 1", "bottom 20% wealth quantile"),
+    name = replace(name, name == "Quintile 2", "60% - 80% wealth quantile"),
+    name = replace(name, name == "Quintile 3", "40% - 60% wealth quantile"),
+    name = replace(name, name == "Quintile 4", "20% - 40% wealth quantile"),
+    name = replace(name, name == "Quintile 5", "top 20% wealth quantile")
+  )
 
 nodes.mr
 ```
@@ -55,17 +64,16 @@ nodes.mr
 links.mr <- df.mr %>%
   select(o, d, white, prob) %>%
   rename(
-    parent = o,
-    child = d,
+    source = o,
+    target = d,
     race = white,
     value = prob
   ) %>%
+  arrange(source, target, race) %>%
   mutate(
     race = ifelse(race == "No", "Black", "White"),
-    parent = as.factor(paste("Parent", race, parent, sep = " ")),
-    source = as.numeric(parent) - 1,
-    child = as.factor(paste("Child", race, child, sep = " ")),
-    target = as.numeric(child) - 1 + 10,
+    source = rep(rep(0:1, 5), 5) + rep(seq(0, 9, by = 2), each = 10),
+    target = rep(seq(10, 19), 5),
     value = value*100
   ) %>%
   select(source, target, value)
@@ -75,9 +83,6 @@ links.mr
 
 
 ```{r}
-toJSON(links.mr)
-toJSON(nodes.mr)
-
 write_json(links.mr, "links.json", pretty = TRUE)
 write_json(nodes.mr, "nodes.json", pretty = TRUE)
 ```
@@ -94,9 +99,10 @@ df.ws %<>%
     d = replace(d, d == "Lowest Quintile", "Quintile 1"),
     d = replace(d, d == "Highest Quintile", "Quintile 5")
   )
-  
+
 head(df.ws)
 ```
+
 
 ```{r}
 nodes.ws <- df.ws %>%
@@ -108,12 +114,20 @@ nodes.ws <- df.ws %>%
   ) %>%
   gather(type, name, -race) %>%
   unique() %>%
+  arrange(desc(type), name, race) %>%
   mutate(
     race = ifelse(race == "No", "Black", "White"),
-    name = paste(type, race, name, sep = " "),
+    name = paste(name, sep = " "),
     node = seq.int(nrow(.))-1
   ) %>%
-  select(node, name, race)
+  select(node, name, race, type)  %>%
+  mutate(
+    name = replace(name, name == "Quintile 1", "bottom 20% wealth quantile"),
+    name = replace(name, name == "Quintile 2", "60% - 80% wealth quantile"),
+    name = replace(name, name == "Quintile 3", "40% - 60% wealth quantile"),
+    name = replace(name, name == "Quintile 4", "20% - 40% wealth quantile"),
+    name = replace(name, name == "Quintile 5", "top 20% wealth quantile")
+  )
 
 nodes.ws
 ```
@@ -123,28 +137,24 @@ nodes.ws
 links.ws <- df.ws %>%
   select(o, d, white, n) %>%
   rename(
-    parent = o,
-    child = d,
+    source = o,
+    target = d,
     race = white,
     value = n
   ) %>%
+  arrange(source, target, race) %>%
   mutate(
     race = ifelse(race == "No", "Black", "White"),
-    parent = as.factor(paste("Parent", race, parent, sep = " ")),
-    source = as.numeric(parent) - 1,
-    child = as.factor(paste("Child", race, child, sep = " ")),
-    target = as.numeric(child) - 1 + 10
+    ssource = rep(rep(0:1, 5), 5) + rep(seq(0, 9, by = 2), each = 10),
+    starget = rep(seq(10, 19), 5),
   ) %>%
-  select(source, target, value)
+  select(source, target, value, race)
 
 links.ws
 ```
 
 
 ```{r}
-toJSON(links.ws)
-toJSON(nodes.ws)
-
 write_json(links.ws, "links.json", pretty = TRUE)
 write_json(nodes.ws, "nodes.json", pretty = TRUE)
 ```
