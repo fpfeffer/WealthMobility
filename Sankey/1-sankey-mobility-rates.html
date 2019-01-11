@@ -136,10 +136,36 @@ var wrap_mr_sankey = d3.textwrap().bounds(text_wrap);
 d3.json("1-mobility-rates.json").then(function(graph) {
 	draw_sankey(graph);
 
+	nodeRect.append("title")
+			.text(function(d, i) { 
+				// console.log(d);
+				return d.race + "\n" + d.name; 
+			});
+
 	// add the link titles
 	link.append("title")
 				.text(function(d) {
 				return d.source.name + " → " + d.target.name + "\n" + Math.round(d.value*100)/100 + " % "; });
+
+	// add in the title for the nodes
+	node.append("text")
+			.attr('class', 'group-labels')
+			.attr("x", function(d){
+				if (d.x < width / 2) return -sankey.nodeWidth()/2;
+				return 12+sankey.nodeWidth();
+			})
+			.attr("y", function(d) { return d.dy / 2; })
+			.attr("dy", ".35em")
+			.attr("text-anchor", "end")
+			.attr("transform", null)
+			.text(function(d, i) { 
+				return d.name; 
+			})
+			// .filter(function(d) { return d.x < width / 2; })
+			.attr("text-anchor", function(d){
+				if (d.x < width / 2) return "end";
+				return "start";
+			});
 
 	d3.selectAll('text')
 		.call(wrap_mr_sankey);
