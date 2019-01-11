@@ -8,7 +8,33 @@
 	<script src="https://d3js.org/d3.v5.min.js"></script>
 	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script> -->
 
+	<!-- Bootstrap Core CSS  -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900" rel="stylesheet">
+
 	<style>
+		h3 {
+			font-family: 'Raleway', sans-serif;
+			font-weight: 700;
+			font-size: 19px;
+			line-height: 32px;
+		}
+
+		.black {
+			font-weight: 600;
+			color: white;
+			background-color: rgba(96, 107, 210, 0.85);
+			padding: 4px 8px;
+			border-radius: : 4px;
+		}
+
+		.white {
+			font-weight: 600;
+			color: white;
+			background-color: rgba(255, 130, 94, 0.85);
+			padding: 4px 8px;
+		}
+
 		.node rect {
 			/*cursor: move;*/
 			fill-opacity: .9;
@@ -32,7 +58,7 @@
 
 		foreignObject > div {
 			font-family: 'Raleway', sans-serif;
-			font-weight: 400;
+			font-weight: 500;
 			font-size: 12px;
 			line-height: 11px;
 		}
@@ -40,26 +66,33 @@
 		@media (min-width: 992px) {
 			foreignObject > div {
 				font-family: 'Raleway', sans-serif;
-				font-weight: 400;
-				font-size: 14px;
-				line-height: 12px;
+				font-weight: 500;
+				font-size: 11px;
+				line-height: 10px;
 			}
 		}		
 
 		@media (max-width: 992px) {
 			foreignObject > div {
 				font-family: 'Raleway', sans-serif;
-				font-weight: 400;
-				font-size: 12px;
-				line-height: 11px;
+				font-weight: 500;
+				font-size: 11px;
+				line-height: 10px;
 			}
 		}
 	</style>
-
-	<!-- Bootstrap Core CSS	-->
-	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
 </head>
 <body>
+	<div class="container-fluid">
+		<!-- Interactive visualization -->
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<h3><span class="black" style="border-radius: 4px">Black</span> and <span class="white" style="border-radius: 4px">White</span> children raised in each of the wealth distribution: See where they end up as adults.
+				</h3>
+				<!-- <p>For every 10,000 children raised in Black and White households each, see where they end up.</p> -->
+			</div>
+		</div>
+	</div>
 </body>
 
 <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -95,7 +128,7 @@
 
 	var path = sankey.link();
 
-	var text_wrap = {height: 32, width: 88};
+	var text_wrap = {height: 32, width: 84};
 	var wrap_ws_sankey = d3.textwrap().bounds(text_wrap);
 
 	// load the data
@@ -103,18 +136,35 @@
 	d3.json("2-wealth-structure.json").then(function(graph) {	
 		draw_sankey(graph);
 
+		// add the link titles
+		link.append("title")
+					.text(function(d) {
+					return d.source.name + " → " + d.target.name; });
+
 		d3.selectAll('text')
 			.call(wrap_ws_sankey);
 
-		d3.selectAll('foreignObject > div')
-			.style('transform', function(d){
-				if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
-				return 'translate('+ x_pos +'px, '+ (d.dy/2 - this.getBoundingClientRect().height/2)  +'px)';
-			})
-			.style('text-align', function(d){
-				if (d.x < width / 2) return 'right'
-				return 'left';
-			});
+		d3.selectAll('foreignObject')
+		.attr('x', function(d){
+			if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
+			return x_pos;
+		})
+		.attr('y', function(d){
+			if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
+			return (d.dy/2 - this.getBoundingClientRect().height/2);
+		})
+		// .style('transform', function(d){
+		// 	if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
+		// 	return 'translate('+ x_pos +'px, '+ (d.dy/2 - this.getBoundingClientRect().height/2)  +'px)';
+		// })
+		// .style('color', function(d){
+		// 	if (d.race == "Black") return 'rgb(37%, 42%, 82%, 0.85)'
+		// 	return 'rgb(100%, 51%, 37%, 0.85)'
+		// })
+		.style('text-align', function(d){
+			if (d.x < width / 2) return 'right'
+			return 'left';
+		});
 	});
 
 </script>

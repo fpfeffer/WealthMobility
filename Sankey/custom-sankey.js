@@ -1,10 +1,10 @@
 function draw_sankey(graph){
 	sankey.nodes(graph.nodes)
-				.links(graph.links)
-				.layout(32);
+			.links(graph.links)
+			.layout(32);
 
 	// add in the links
-	var link = svg.append("g").selectAll(".link")
+	link = svg.append("g").selectAll(".link")
 			.data(graph.links)
 			.enter()
 			.append("path")
@@ -15,16 +15,17 @@ function draw_sankey(graph){
 			.style("stroke-width", function(d) { return Math.max(1, d.dy); })
 			.sort(function(a, b) { return b.dy - a.dy; });
 
-	// add the link titles
-	link.append("title")
-				.text(function(d) {
-				return d.source.name + " → " + 
-								d.target.name + "\n" + d.value; });
+	// // add the link titles
+	// link.append("title")
+	// 			.text(function(d) {
+	// 			return d.source.name + " → " + 
+	// 							d.target.name + "\n" + d.value; });
 
 	// add in the nodes
-	var node = svg.append("g").selectAll(".node")
+	node = svg.append("g").selectAll(".node")
 			.data(graph.nodes)
-			.enter().append("g")
+			.enter()
+			.append("g")
 			.attr("class", "node")
 			.attr("transform", function(d) { 
 				return "translate(" + d.x + "," + d.y + ")"; 
@@ -39,11 +40,10 @@ function draw_sankey(graph){
 			// 	.on("drag", dragmove));
 
 	// add the rectangles for the nodes
-	var nodeRect = node.append("rect")
+	nodeRect = node.append("rect")
 			.attr("class", function(d){
 				if (d.sourceLinks.length) return "node source-"+d.node;
 				return "node target-"+d.node;
-				console.log(d.node, d.sourceLinks.length);
 				;
 			})
 			.attr("height", function(d) { return d.dy; })

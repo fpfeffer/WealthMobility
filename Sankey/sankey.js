@@ -165,16 +165,16 @@ d3.sankey = function() {
 		//
 		initializeNodeDepth();
 		resolveCollisions();
-		for (var alpha = 1; iterations > 0; --iterations) {
-			relaxRightToLeft(alpha *= .99);
-			resolveCollisions();
-			relaxLeftToRight(alpha);
-			resolveCollisions();
-		}
+		// for (var alpha = 1; iterations > 0; --iterations) {
+		// 	relaxRightToLeft(alpha *= .99);
+		// 	resolveCollisions();
+		// 	relaxLeftToRight(alpha);
+		// 	resolveCollisions();
+		// }
 
 		function initializeNodeDepth() {
 			var ky = d3.min(nodesByBreadth, function(nodes) {
-				return (size[1] - (nodes.length - 1) * nodePadding) / d3.sum(nodes, value);
+				return (size[1] - (nodes.length - 1) * nodePadding*3 ) / d3.sum(nodes, value);
 			});
 
 			// var ky = 50;
@@ -232,7 +232,8 @@ d3.sankey = function() {
 				// Push any overlapping nodes down.
 				nodes.sort(ascendingDepth);
 				for (i = 0; i < n; ++i) {
-					// nodePadding = (16*((i+1)%2));
+					nodePadding = (16*(i%2)) + 4;
+
 					node = nodes[i];
 					dy = y0 - node.y;
 					if (dy > 0) node.y += dy;

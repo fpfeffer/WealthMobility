@@ -145,8 +145,8 @@ links.ws <- df.ws %>%
   arrange(source, target, race) %>%
   mutate(
     race = ifelse(race == "No", "Black", "White"),
-    ssource = rep(rep(0:1, 5), 5) + rep(seq(0, 9, by = 2), each = 10),
-    starget = rep(seq(10, 19), 5),
+    source = rep(rep(0:1, 5), 5) + rep(seq(0, 9, by = 2), each = 10),
+    target = rep(seq(10, 19), 5),
   ) %>%
   select(source, target, value, race)
 
