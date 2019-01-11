@@ -55,31 +55,6 @@ function draw_sankey(graph){
 				return d3.rgb(d.color).darker(2); 
 			});
 
-	nodeRect.append("title")
-			.text(function(d) { 
-				return d.name + "\n" + d.value; 
-			});
-
-	// add in the title for the nodes
-	node.append("text")
-			.attr('class', 'group-labels')
-			.attr("x", function(d){
-				if (d.x < width / 2) return -sankey.nodeWidth()/2;
-				return 12+sankey.nodeWidth();
-			})
-			.attr("y", function(d) { return d.dy / 2; })
-			.attr("dy", ".35em")
-			.attr("text-anchor", "end")
-			.attr("transform", null)
-			.text(function(d) { 
-				return d.name; 
-			})
-			// .filter(function(d) { return d.x < width / 2; })
-			.attr("text-anchor", function(d){
-				if (d.x < width / 2) return "end";
-				return "start";
-			});
-
 	link.on('mouseover', function(d){
 		elemClass = d3.select(this).attr('class').split("link ")[1];
 

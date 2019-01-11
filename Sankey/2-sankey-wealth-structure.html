@@ -133,13 +133,44 @@
 
 	// load the data
 	// d3.json("1-mobility-rates.json").then(function(graph) {
-	d3.json("2-wealth-structure.json").then(function(graph) {	
+	d3.json("2-wealth-structure.json").then(function(graph) {
 		draw_sankey(graph);
+
+		data = graph['nodes'].map( function (d, i, arr) {
+			idx = (((i+1)%2)-1/2)*2;
+			return Math.round((d.value/ (d.value + arr[i+idx].value))*1000)/10
+		});
+
+		nodeRect.append("title")
+			.text(function(d, i) { 
+				// console.log(d);
+				return d.race + "\n" + d.name; 
+			});
 
 		// add the link titles
 		link.append("title")
 					.text(function(d) {
 					return d.source.name + " → " + d.target.name; });
+
+		// add in the title for the nodes
+		node.append("text")
+				.attr('class', 'group-labels')
+				.attr("x", function(d){
+					if (d.x < width / 2) return -sankey.nodeWidth()/2;
+					return 12+sankey.nodeWidth();
+				})
+				.attr("y", function(d) { return d.dy / 2; })
+				.attr("dy", ".35em")
+				.attr("text-anchor", "end")
+				.attr("transform", null)
+				.text(function(d, i) { 
+					return d.name + "<br>" + data[i] + "%"; 
+				})
+				// .filter(function(d) { return d.x < width / 2; })
+				.attr("text-anchor", function(d){
+					if (d.x < width / 2) return "end";
+					return "start";
+				});
 
 		d3.selectAll('text')
 			.call(wrap_ws_sankey);
