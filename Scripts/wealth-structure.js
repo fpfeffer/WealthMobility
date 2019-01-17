@@ -252,6 +252,224 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 	})
 }
 
+function draw_flow_ws_inf(element, num_quantile, qScale_domain, black_ratio_scale, wealth_scale, parent = "all") {	
+	//d3.select('div#graph-ws').select('div').select('canvas').remove();
+	regl.destroy();
+	regl = createREGL({container: element.node()});
+
+	d3.selectAll('.label-prob-ws').remove();
+	$('.reset-button').css('visibility', 'hidden');
+
+	//parent == "all" ? count = 10000 : count = 4000;
+	count = 20000;
+	wealth_length = 4;
+
+	var yScale = d3.scaleLinear()
+		.domain([1, num_quantile])
+		.range([-0.7, 0.7]);
+
+	g_height = yScale.range().reduce((a, b) => Math.abs(a) + Math.abs(b), 0);
+
+	var yScale_px = d3.scaleLinear()
+		.domain([1, num_quantile])
+		.range([(0.5 + g_height/4) * canvas.h, (0.5 - g_height/4) * canvas.h]);
+
+	range_array = [];
+	
+	for (i = 1; i <= num_quantile; i++){
+		range_array.push(i);
+
+		quantile_pct = Math.round(100/num_quantile*10)/10;
+
+		if (num_quantile == 3 || num_quantile == 5){
+			(i % 2) ? (quantile_labels[i-1] = labels[Math.round(i*labels.length/num_quantile)-1] +" "+ quantile_pct + "%") : quantile_labels[i-1] = "";
+		} else if (num_quantile == 4) {
+			((i == 1) || (i == 4)) ? (quantile_labels[i-1] = labels[Math.round(i*labels.length/num_quantile)-1] +" "+ quantile_pct + "%") : quantile_labels[i-1] = "";
+		}
+	}
+
+	var qScale = d3.scaleThreshold()
+		.domain(qScale_domain)
+		.range(range_array);
+
+	var wScale = d3.scaleThreshold()
+		//.domain(wealth_scale[isB][p_quantile])
+	 	.range(range_array);
+
+	var bScale = d3.scaleThreshold()
+		//.domain(wealth_scale[isB][p_quantile])
+	 	.range(range_array);
+
+	var data = d3.range(count).map(i => {
+		var p = Math.random();
+		var p_quantile = qScale(p);
+		
+		var isB = (Math.random() <= black_ratio_scale[p_quantile]) ? 1 : 0;
+
+		if (isB){
+			var q = bScale.domain(wealth_scale[isB][p_quantile])( Math.random() );
+		} else {
+			var q = wScale.domain(wealth_scale[isB][p_quantile])( Math.random() );
+		};
+
+		return {
+			speed: 4 + 2 * Math.random(),
+			x: Math.random() * wealth_length,
+			y0: yScale(p_quantile),
+			y1: yScale(q),
+			dy: (Math.random() - 0.5)* 0.225,
+			isB
+		}
+	})
+
+	data = d3.shuffle(data);
+
+	// time_limit = (wealth_length + 2.25) / d3.min(data.map(x => x.speed / 60));
+
+	prob_pquantile = get_prob_pquintiles( Object.values(black_ratio_scale) );
+	prob_quantile = prob_quintiles;
+
+	svg_parent_ws.append('g')
+		.attr('class', 'label-prob-ws label-header')
+		.attr('transform', 'translate('+ label_margins/2 +', 0)')
+		.append('text')
+		.attr('class', 'prob-label header white-probability')
+		.text('racial composition parent generation');
+
+	svg_child_ws.append('g')
+		.attr('class', 'label-prob-ws label-header')
+		.attr('transform', 'translate('+ label_margins/2 +', 0)')
+		.append('text')
+		.attr('class', 'prob-label header black-probability')
+		.text('racial composition child generation');
+
+	d3.selectAll('text.prob-label').call(wrap_ws_header);
+
+	for (i = 1; i <= num_quantile; i++){
+		svg_parent_ws.append('g')
+			.attr('class', 'label-prob-ws label-category')
+			.attr('transform', 'translate(0, '+ (yScale_px(i) ) +')')
+			.append('text')
+			.attr('class', 'prob-frequency parent-probability')
+			.text(quantile_labels[i-1]);
+		svg_parent_ws.append('g')
+			.attr('class', 'label-prob-ws')
+			.attr('transform', 'translate('+ stats_width/2 +', '+ ((yScale_px(i)) - 12) +')')
+			.append('text')
+			.attr('class', 'prob-frequency parent-probability')
+			.text('white: ' + prob_pquantile[i-1][0] + "%" );
+		svg_parent_ws.append('g')
+			.attr('class', 'label-prob-ws')
+			.attr('transform', 'translate('+ stats_width/2 +', '+ ((yScale_px(i)) + 12) +')')
+			.append('text')
+			.attr('class', 'prob-frequency parent-probability')
+			.text('black: ' + prob_pquantile[i-1][1] + "%" );
+	}
+
+	d3.selectAll('text.prob-frequency').call(wrap_ws);
+
+	// setTimeout(function(){
+		
+	// }, (2.25 / d3.max( data.map(x => x.speed / 60)))*1000 );
+
+	for (i = 1; i <= num_quantile; i++){
+		svg_child_ws.append('g')
+			.attr('class', 'label-prob-ws label-category')
+			.attr('transform', 'translate('+ stats_width/2 +', '+ ((yScale_px(i)) ) +')')
+			.append('text')
+			.attr('class', 'prob-frequency child-probability')
+			.text(quantile_labels[i-1]);
+
+		svg_child_ws.append('g')
+			.attr('class', 'label-prob-ws')
+			.attr('transform', 'translate(0, '+ ((yScale_px(i))-12) +')')
+			.append('text')
+			.attr('class', 'prob-frequency child-probability')
+			.text('white: ' + prob_quantile[i-1][0] + "%" );
+
+		svg_child_ws.append('g')
+			.attr('class', 'label-prob-ws')
+			.attr('transform', 'translate(0, '+ ((yScale_px(i))+12) +')')
+			.append('text')
+			.attr('class', 'prob-frequency child-probability')
+			.text('black: ' + prob_quantile[i-1][1] + "%" );
+
+		d3.selectAll('text.prob-frequency').call(wrap_ws);
+	}
+
+	// setTimeout(function(){
+	// 	$('.reset-button').css('visibility', 'visible');
+	// }, time_limit*1000 );
+
+	var drawPoints = regl({
+		vert: `
+			precision mediump float;
+			attribute float speed, x, y0, y1, dy;
+			attribute float isB;
+			varying float c;
+			uniform float size;
+			uniform float interp;			
+			void main() {
+				// float t = x + interp*speed;
+				// float xprime = t - 5.00;
+				// float dx = xprime <= -1.0 ? 0.0 : (xprime + 1.0) / 2.0;
+
+				float t = mod(x + interp*speed, 2.0);
+				float xprime = t - 1.00;
+				float dx = t / 2.00;
+
+				// cubic ease
+				float ct = dx < 0.5
+					? 32.0 * pow(dx, 6.0)
+					: -0.5 * pow(abs(2.0 * dx - 2.0), 10.0) + 1.0;
+
+				float y = y0 + (y1 - y0) * ct;
+				// float y = xprime < 0.0 ? y0 : y1;
+
+				gl_Position = vec4(xprime, y + dy, 0, 1);
+				gl_PointSize = size;
+
+				c = isB;
+			}`,
+
+		frag: `
+			precision mediump float;
+			varying float c;
+			void main() {
+				vec4 black = vec4(0.37, 0.42, 0.82, 0.85);
+				vec4 white = vec4(1.00, 0.51, 0.37, 0.85);
+
+				gl_FragColor = c == 1.0 ? black : white;
+			}`,
+
+		attributes: {
+			speed: data.map(d => d.speed),
+			x:	data.map(d => d.x),
+			y0: data.map(d => d.y0),
+			y1: data.map(d => d.y1),
+			dy: data.map(d => d.dy),
+			isB: data.map(d => d.isB)
+		},
+		uniforms: {
+			size: 5 * dpi,
+			interp: function(context, props){
+				return props.interp;
+			}
+		},
+		primitive: 'point',
+		count
+	})
+
+	regl.frame(({ time }) => {
+		// if (time < time_limit){
+			drawPoints({ 
+				data: data,
+				interp: time / 60 
+			})	
+		// }
+	})
+}
+
 function get_wealth_scale(data, model_name){
 	diction = d3.nest()
 			.key( d => d.race )

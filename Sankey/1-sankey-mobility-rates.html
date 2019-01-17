@@ -6,6 +6,9 @@
 
 	<!-- D3 and JQuery Javascript -->
 	<script src="https://d3js.org/d3.v5.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+	<script src="sankey.js"></script>
 	
 	<!-- Bootstrap Core CSS  -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -55,20 +58,20 @@
 			stroke: #333;
 			stroke-opacity: .5;
 		}*/
-
+/*
 		foreignObject > div {
 			font-family: 'Raleway', sans-serif;
 			font-weight: 500;
-			font-size: 11px;
-			line-height: 10px;
+			font-size: 12px;
+			line-height: 11px;
 		}
 
 		@media (min-width: 992px) {
 			foreignObject > div {
 				font-family: 'Raleway', sans-serif;
 				font-weight: 500;
-				font-size: 12px;
-				line-height: 11px;
+				font-size: 14px;
+				line-height: 12px;
 			}
 		}		
 
@@ -76,10 +79,10 @@
 			foreignObject > div {
 				font-family: 'Raleway', sans-serif;
 				font-weight: 500;
-				font-size: 11px;
-				line-height: 10px;
+				font-size: 12px;
+				line-height: 11px;
 			}
-		}
+		}*/
 	</style>
 </head>
 <body>
@@ -94,15 +97,8 @@
 		</div>
 	</div>
 </body>
-
-
-<script src="https://d3js.org/d3.v5.min.js"></script>
-<script src="../Scripts/d3-textwrap.min.js" type="text/javascript"></script>
-<script src="sankey.js"></script>
-<script src="custom-sankey.js"></script>
 <script>
-	
-var units = "Widgets";
+$(document).tooltip( {show: false} );
 
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 180, bottom: 10, left: 180},
@@ -111,7 +107,7 @@ var margin = {top: 10, right: 180, bottom: 10, left: 180},
 
 // format variables
 var formatNumber = d3.format(",.0f"),		// zero decimal places
-		format = function(d) { return formatNumber(d) + " " + units; },
+		format = function(d) { return formatNumber(d) + " %"},
 		color = d3.scaleOrdinal().range(['rgb(37%, 42%, 82%, 0.85)', 'rgb(100%, 51%, 37%, 0.85)']);
 
 // append the svg object to the body of the page
@@ -129,16 +125,170 @@ var sankey = d3.sankey()
 
 var path = sankey.link();
 
-var text_wrap = {height: 32, width: 88};
-var wrap_mr_sankey = d3.textwrap().bounds(text_wrap);
+// var text_wrap = {height: 32, width: 72};
+// var wrap_mr_sankey = d3.textwrap().bounds(text_wrap);
 
 // load the data
 d3.json("1-mobility-rates.json").then(function(graph) {
 	draw_sankey(graph);
 
+	// d3.selectAll('text')
+	// 	.call(wrap_mr_sankey);
+
+	// d3.selectAll('foreignObject')
+	// 	.attr('x', function(d){
+	// 		if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
+	// 		return x_pos;
+	// 	})
+	// 	.attr('y', function(d){
+	// 		if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
+	// 		return d.dy; // (d.dy/2 - this.getBoundingClientRect().height/2);
+	// 	})
+	// 	// .style('transform', function(d){
+	// 	// 	if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
+	// 	// 	return 'translate('+ x_pos +'px, '+ (d.dy/2 - this.getBoundingClientRect().height/2)  +'px)';
+	// 	// })
+	// 	.style('text-align', function(d){
+	// 		if (d.x < width / 2) return 'right'
+	// 		return 'left';
+	// 	});
+});
+
+function draw_sankey(graph){
+	sankey.nodes(graph.nodes)
+			.links(graph.links)
+			.layout(32);
+
+	// add in the links
+	link = svg.append("g").selectAll(".link")
+			.data(graph.links)
+			.enter();
+
+	paths = link.append("path")
+			.attr("class", function(d){
+				return "link source-" + d.source.node; // + " target-" + d.target.node;
+			})
+			.attr("d", path)
+			.style("stroke-width", function(d) { return Math.max(1, d.dy); })
+			.style("stroke", function(d){ return color(d.source.race); })
+			.style("stroke-opacity", "0.2")
+			.sort(function(a, b) { return b.dy - a.dy; });
+
+	link.append("text")
+		.attr("class", function(d){ return "prob-" + d.source.node; })
+		.attr("x", (width - sankey.nodeWidth()) )
+		.attr("y", function(d, i){ return d.target.y + d.ty + d.dy / 2; })
+		.text(function(d, i){
+			return Math.round(d.value*100)/100 + " % ";
+		})
+		.attr("text-anchor", "end")
+		.style("visibility", "hidden");
+
+	// // add the link titles
+	// link.append("title")
+	// 			.text(function(d) {
+	// 			return d.source.name + " → " + 
+	// 							d.target.name + "\n" + d.value; });
+
+	// add in the nodes
+	node = svg.append("g").selectAll(".node")
+			.data(graph.nodes)
+			.enter()
+			.append("g")
+			.attr("class", "node")
+			.attr("transform", function(d) { 
+				return "translate(" + d.x + "," + d.y + ")"; 
+			});
+
+	// add the rectangles for the nodes
+	nodeRect = node.append("rect")
+			.attr("class", function(d){
+				if (d.sourceLinks.length) return "node source-"+d.node;
+				return "node target-"+d.node;
+				;
+			})
+			.attr("height", function(d) { return d.dy; })
+			.attr("width", sankey.nodeWidth())
+			.style("fill", function(d) { 
+				return d.color = color(d.race.replace(/ .*/, "")); 
+			})
+			.style("stroke", function(d) { 
+				return d3.rgb(d.color).darker(2); 
+			});
+
+	paths.on('mouseover', function(d){
+			elemClass = +d3.select(this).attr('class').split("-")[1];
+			if (elemClass % 2) {
+				elemClass_race = elemClass - 1
+			} else {
+				elemClass_race = elemClass + 1
+			}
+
+			d3.selectAll("path.source-"+elemClass)
+				.style("stroke-opacity", ".7");
+			d3.selectAll("path.source-"+elemClass_race)
+				.style("stroke-opacity", ".7");
+			d3.selectAll("text.prob-"+elemClass)
+				.style("visibility", "visible");
+			d3.selectAll("text.prob-"+elemClass_race)
+				.style("visibility", "visible");
+		})
+		.on('mouseout', function(d){
+			elemClass = +d3.select(this).attr('class').split("-")[1];
+			if (elemClass % 2) {
+				elemClass_race = elemClass - 1
+			} else {
+				elemClass_race = elemClass + 1
+			}
+
+			d3.selectAll("path.source-"+elemClass)
+				.style("stroke-opacity", ".2");
+			d3.selectAll("path.source-"+elemClass_race)
+				.style("stroke-opacity", ".2");	
+			d3.selectAll("text.prob-"+elemClass)
+				.style("visibility", "hidden");
+			d3.selectAll("text.prob-"+elemClass_race)
+				.style("visibility", "hidden");
+		});
+
+	nodeRect.on('mouseover', function(d){
+			elemClass = +d3.select(this).attr('class').split("-")[1];
+			if (elemClass % 2) {
+				elemClass_race = elemClass - 1
+			} else {
+				elemClass_race = elemClass + 1
+			}
+
+			d3.selectAll("path.source-"+elemClass)
+				.style("stroke-opacity", ".7");
+			d3.selectAll("path.source-"+elemClass_race)
+				.style("stroke-opacity", ".7");
+			d3.selectAll("text.prob-"+elemClass)
+				.style("visibility", "visible");
+			d3.selectAll("text.prob-"+elemClass_race)
+				.style("visibility", "visible");
+
+		})
+		.on('mouseout', function(d){
+			elemClass = +d3.select(this).attr('class').split("-")[1];
+			if (elemClass % 2) {
+				elemClass_race = elemClass - 1
+			} else {
+				elemClass_race = elemClass + 1
+			}
+
+			d3.selectAll("path.source-"+elemClass)
+				.style("stroke-opacity", ".2");
+			d3.selectAll("path.source-"+elemClass_race)
+				.style("stroke-opacity", ".2");
+			d3.selectAll("text.prob-"+elemClass)
+				.style("visibility", "hidden");
+			d3.selectAll("text.prob-"+elemClass_race)
+				.style("visibility", "hidden");
+		});
+
 	nodeRect.append("title")
 			.text(function(d, i) { 
-				// console.log(d);
 				return d.race + "\n" + d.name; 
 			});
 
@@ -149,49 +299,23 @@ d3.json("1-mobility-rates.json").then(function(graph) {
 
 	// add in the title for the nodes
 	node.append("text")
-			.attr('class', 'group-labels')
-			.attr("x", function(d){
-				if (d.x < width / 2) return -sankey.nodeWidth()/2;
-				return 12+sankey.nodeWidth();
-			})
-			.attr("y", function(d) { return d.dy / 2; })
-			.attr("dy", ".35em")
-			.attr("text-anchor", "end")
-			.attr("transform", null)
-			.text(function(d, i) { 
-				return d.name; 
-			})
-			// .filter(function(d) { return d.x < width / 2; })
-			.attr("text-anchor", function(d){
-				if (d.x < width / 2) return "end";
-				return "start";
-			});
-
-	d3.selectAll('text')
-		.call(wrap_mr_sankey);
-
-	d3.selectAll('foreignObject')
-		.attr('x', function(d){
-			if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
-			return x_pos;
+		.attr('class', 'group-labels')
+		.attr("x", function(d){
+			if (d.x < width / 2) return -sankey.nodeWidth()/2;
+			return 12+sankey.nodeWidth();
 		})
-		.attr('y', function(d){
-			if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
-			return (d.dy/2 - this.getBoundingClientRect().height/2);
+		.attr("y", function(d) { return d.dy; })
+		.attr("dy", ".35em")
+		.attr("text-anchor", "end")
+		.attr("transform", null)
+		.text(function(d, i) { 
+			if (i % 2) return d.name; 
 		})
-		// .style('transform', function(d){
-		// 	if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
-		// 	return 'translate('+ x_pos +'px, '+ (d.dy/2 - this.getBoundingClientRect().height/2)  +'px)';
-		// })
-		// .style('color', function(d){
-		// 	if (d.race == "Black") return 'rgb(37%, 42%, 82%, 0.85)'
-		// 	return 'rgb(100%, 51%, 37%, 0.85)'
-		// })
-		.style('text-align', function(d){
-			if (d.x < width / 2) return 'right'
-			return 'left';
+		.attr("text-anchor", function(d){
+			if (d.x < width / 2) return "end";
+			return "start";
 		});
-});
+}
 
 </script>
 </html>

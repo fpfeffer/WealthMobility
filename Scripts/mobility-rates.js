@@ -101,7 +101,7 @@ function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, pa
 	});
 
 	data = d3.shuffle(data);
-	time_limit = (wealth_length + 2.25) / d3.min( data.map(x => x.speed / 60) );
+	// time_limit = (wealth_length + 2.25) / d3.min( data.map(x => x.speed / 60) );
 
 	prob_q = prob_quintiles(bScale.domain(), wScale.domain());
 
@@ -121,7 +121,7 @@ function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, pa
 
 	svg_origin_mr.append('g')
 		.attr('class', 'label-prob-mr label-header')
-		.attr('transform', 'translate(0, '+ (yScale_px(parent) - 16) +')')
+		.attr('transform', 'translate(0, '+ (yScale_px(parent) - 4) +')')
 		.append('text')
 		.attr('class', 'prob-frequency header black-probability')
 		.text(quantile_labels[5-parent]);
@@ -132,19 +132,19 @@ function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, pa
 		for (i = 1; i <= num_quantile; i++){
 			svg_destination_mr.append('g')
 				.attr('class', 'label-prob-percent-mr')
-				.attr('transform', 'translate(0, '+ (yScale_px(i) ) +')')
+				.attr('transform', 'translate(0, '+ (yScale_px(i) - 4) +')')
 				.append('text')
 				.attr('class', 'prob-frequency white-probability')
 				.text( prob_q[i-1][0] + "%" );
 			svg_destination_mr.append('g')
 				.attr('class', 'label-prob-percent-mr')
-				.attr('transform', 'translate('+ stats_width/3 +', '+ (yScale_px(i)) +')')
+				.attr('transform', 'translate('+ stats_width/3 +', '+ (yScale_px(i) - 4) +')')
 				.append('text')
 				.attr('class', 'prob-frequency white-probability')
 				.text( prob_q[i-1][1] + "%");
 			svg_destination_mr.append('g')
 				.attr('class', 'label-prob-mr label-category')
-				.attr('transform', 'translate('+ 2*stats_width/3 +', '+ (yScale_px(i) ) +')')
+				.attr('transform', 'translate('+ 2*stats_width/3 +', '+ (yScale_px(i) - 4) +')')
 				.append('text')
 				.attr('class', 'prob-frequency white-probability')
 				.text(quintile_labels[i-1]);

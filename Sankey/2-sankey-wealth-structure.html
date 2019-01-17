@@ -6,7 +6,7 @@
 
 	<!-- D3 and JQuery Javascript -->
 	<script src="https://d3js.org/d3.v5.min.js"></script>
-	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 
 	<!-- Bootstrap Core CSS  -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -56,24 +56,24 @@
 			stroke-opacity: .5;
 		}*/
 
-		foreignObject > div {
+		text {
 			font-family: 'Raleway', sans-serif;
 			font-weight: 500;
-			font-size: 12px;
-			line-height: 11px;
+			font-size: 14px;
+			line-height: 12px;
 		}
 
 		@media (min-width: 992px) {
-			foreignObject > div {
+			text {
 				font-family: 'Raleway', sans-serif;
 				font-weight: 500;
-				font-size: 11px;
-				line-height: 10px;
+				font-size: 14px;
+				line-height: 12px;
 			}
 		}		
 
 		@media (max-width: 992px) {
-			foreignObject > div {
+			text {
 				font-family: 'Raleway', sans-serif;
 				font-weight: 500;
 				font-size: 11px;
@@ -98,13 +98,13 @@
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="../Scripts/d3-textwrap.min.js" type="text/javascript"></script>
 <script src="sankey.js"></script>
-<script src="custom-sankey.js"></script>
+<!-- <script src="custom-sankey.js"></script> -->
 <script>
 	var units = "Widgets";
 
 	// set the dimensions and margins of the graph
-	var margin = {top: 10, right: 180, bottom: 10, left: 180},
-			width = 900 - margin.left - margin.right,
+	var margin = {top: 10, right: 180, bottom: 10, left: 260},
+			width = 960 - margin.left - margin.right,
 			height = 800 - margin.top - margin.bottom;
 
 	// format variables
@@ -164,7 +164,7 @@
 				.attr("text-anchor", "end")
 				.attr("transform", null)
 				.text(function(d, i) { 
-					return d.name + "<br>" + data[i] + "%"; 
+					return data[i] + "%"; 
 				})
 				// .filter(function(d) { return d.x < width / 2; })
 				.attr("text-anchor", function(d){
@@ -172,31 +172,95 @@
 					return "start";
 				});
 
-		d3.selectAll('text')
-			.call(wrap_ws_sankey);
+		// add in the title for the nodes
+		node.append("text")
+				.attr('class', 'group-labels')
+				.attr("x", function(d){
+					if (d.x < width / 2) return -(60+sankey.nodeWidth()/2);
+					return 72+sankey.nodeWidth();
+				})
+				.attr("y", function(d) { return d.dy; })
+				.attr("dy", ".35em")
+				.attr("text-anchor", "end")
+				.attr("transform", null)
+				.text(function(d, i) { 
+					if (i % 2) return d.name; 
+				})
+				// .filter(function(d) { return d.x < width / 2; })
+				.attr("text-anchor", function(d){
+					if (d.x < width / 2) return "end";
+					return "start";
+				});
 
-		d3.selectAll('foreignObject')
-		.attr('x', function(d){
-			if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
-			return x_pos;
-		})
-		.attr('y', function(d){
-			if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
-			return (d.dy/2 - this.getBoundingClientRect().height/2);
-		})
-		// .style('transform', function(d){
+		// d3.selectAll('text')
+		// 	.call(wrap_ws_sankey);
+
+		// d3.selectAll('foreignObject')
+		// .attr('x', function(d){
 		// 	if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
-		// 	return 'translate('+ x_pos +'px, '+ (d.dy/2 - this.getBoundingClientRect().height/2)  +'px)';
+		// 	return x_pos;
 		// })
-		// .style('color', function(d){
-		// 	if (d.race == "Black") return 'rgb(37%, 42%, 82%, 0.85)'
-		// 	return 'rgb(100%, 51%, 37%, 0.85)'
+		// .attr('y', function(d){
+		// 	if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
+		// 	return (d.dy/2) - 6;
 		// })
-		.style('text-align', function(d){
-			if (d.x < width / 2) return 'right'
-			return 'left';
-		});
+		// .style('text-align', function(d){
+		// 	if (d.x < width / 2) return 'right'
+		// 	return 'left';
+		// });
 	});
+
+	function draw_sankey(graph){
+		sankey.nodes(graph.nodes)
+				.links(graph.links)
+				.layout(32);
+
+		// add in the links
+		link = svg.append("g").selectAll(".link")
+				.data(graph.links)
+				.enter()
+				.append("path")
+				.attr("class", function(d){
+					return "link source-" + d.source.node; // + " target-" + d.target.node;
+				})
+				.attr("d", path)
+				.style("stroke-width", function(d) { return Math.max(1, d.dy); })
+				.style("stroke", function(d){ return color(d.source.race); })
+				.style("stroke-opacity", "0.5")
+				.sort(function(a, b) { return b.dy - a.dy; });
+
+		// // add the link titles
+		// link.append("title")
+		// 			.text(function(d) {
+		// 			return d.source.name + " → " + 
+		// 							d.target.name + "\n" + d.value; });
+
+		// add in the nodes
+		node = svg.append("g").selectAll(".node")
+				.data(graph.nodes)
+				.enter()
+				.append("g")
+				.attr("class", "node")
+				.attr("transform", function(d) { 
+					return "translate(" + d.x + "," + d.y + ")"; 
+				});
+
+		// add the rectangles for the nodes
+		nodeRect = node.append("rect")
+				.attr("class", function(d){
+					if (d.sourceLinks.length) return "node source-"+d.node;
+					return "node target-"+d.node;
+					;
+				})
+				.attr("height", function(d) { return d.dy; })
+				.attr("width", sankey.nodeWidth())
+				.style("fill", function(d) { 
+					return d.color = color(d.race.replace(/ .*/, "")); 
+				})
+				.style("stroke", function(d) { 
+					return d3.rgb(d.color).darker(2); 
+				});
+	}
 
 </script>
 </html>
