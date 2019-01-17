@@ -13,6 +13,8 @@ function draw_sankey(graph){
 			})
 			.attr("d", path)
 			.style("stroke-width", function(d) { return Math.max(1, d.dy); })
+			.style("stroke", function(d){ return color(d.source.race); })
+			.style("stroke-opacity", "0.2")
 			.sort(function(a, b) { return b.dy - a.dy; });
 
 	// // add the link titles
@@ -59,14 +61,14 @@ function draw_sankey(graph){
 		elemClass = d3.select(this).attr('class').split("link ")[1];
 
 		d3.selectAll("path."+elemClass)
-			.style("stroke", "#333")
-			.style("stroke-opacity", ".5");
+			// .style("stroke", function(d){ return color(d.source.race); })
+			.style("stroke-opacity", ".8");
 	})
 	.on('mouseout', function(d){
 		elemClass = d3.select(this).attr('class').split("link ")[1];
 
 		d3.selectAll("path."+elemClass)
-			.style("stroke", "#979797")
+			// .style("stroke", function(d){ return color(d.source.race); })
 			.style("stroke-opacity", ".2");
 	});
 
