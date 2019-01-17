@@ -33,7 +33,7 @@ var dpi = window.devicePixelRatio;
 
 var wrap_mr = d3.textwrap().bounds({height: 32, width: 80});
 
-var quintile_labels = ['Bottom 20%', '', 'Middle 20%', '', 'Top 20%']
+var quintile_labels = ['Bottom 20%', '', '40% - 60%', '', 'Top 20%']
 
 function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, parent) {
 	current_pquintile = parent; // for s1-models.html
@@ -124,7 +124,7 @@ function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, pa
 		.attr('transform', 'translate(0, '+ (yScale_px(parent) - 16) +')')
 		.append('text')
 		.attr('class', 'prob-frequency header black-probability')
-		.text(quantile_labels[5-parent] + ' wealth quantile');
+		.text(quantile_labels[5-parent]);
 
 	d3.selectAll('text.prob-frequency').call(wrap_mr);
 
