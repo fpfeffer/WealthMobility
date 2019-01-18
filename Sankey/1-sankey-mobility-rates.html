@@ -106,6 +106,7 @@ var margin = {top: 10, right: 180, bottom: 10, left: 180},
 var formatNumber = d3.format(",.0f"),		// zero decimal places
 		format = function(d) { return formatNumber(d) + " %"},
 		color = d3.scaleOrdinal().range(['rgb(37%, 42%, 82%, 0.85)', 'rgb(100%, 51%, 37%, 0.85)']);
+		color_link = d3.scaleOrdinal().range(['rgb(37%, 42%, 82%, 0.95)', 'rgb(85%, 39%, 25%, 0.85)']);
 
 // append the svg object to the body of the page
 var svg = d3.select("body").append("svg")
@@ -143,7 +144,7 @@ function draw_sankey(graph){
 			})
 			.attr("d", path)
 			.style("stroke-width", function(d) { return Math.max(1, d.dy); })
-			.style("stroke", function(d){ return color(d.source.race); })
+			.style("stroke", function(d){ return color_link(d.source.race); })
 			.style("stroke-opacity", "0.3")
 			.sort(function(a, b) { return b.dy - a.dy; });
 
@@ -198,9 +199,9 @@ function draw_sankey(graph){
 			}
 
 			d3.selectAll("path.source-"+elemClass)
-				.style("stroke-opacity", ".8");
+				.style("stroke-opacity", ".7");
 			d3.selectAll("path.source-"+elemClass_race)
-				.style("stroke-opacity", ".8");
+				.style("stroke-opacity", ".7");
 			d3.selectAll("text.prob-"+elemClass)
 				.style("visibility", "visible");
 			d3.selectAll("text.prob-"+elemClass_race)
@@ -233,9 +234,9 @@ function draw_sankey(graph){
 			}
 
 			d3.selectAll("path.source-"+elemClass)
-				.style("stroke-opacity", ".8");
+				.style("stroke-opacity", ".7");
 			d3.selectAll("path.source-"+elemClass_race)
-				.style("stroke-opacity", ".8");
+				.style("stroke-opacity", ".7");
 			d3.selectAll("text.prob-"+elemClass)
 				.style("visibility", "visible");
 			d3.selectAll("text.prob-"+elemClass_race)
