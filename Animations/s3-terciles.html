@@ -151,7 +151,7 @@
 			<div class="col-sm-8 col-sm-offset-2">
 				<h3><span class="black" style="border-radius: 4px">Black</span> and <span class="white" style="border-radius: 4px">White</span> children across the wealth structure
 				</h3>
-				<div class="reset-button button" onclick="draw_flow_ws(div_ws, 3, qScale_domain_ws, black_ratio_quantile_ws, wealth_scale_ws)">Replay <i class="material-icons">replay</i></div>
+				<div class="reset-button button" onclick="draw_flow_ws_inf(div_ws, 3, qScale_domain_ws, black_ratio_quantile_ws, wealth_scale_ws)">Replay <i class="material-icons">replay</i></div>
 			</div>
 		</div>
 		<div class="row" style="margin-top: 40px;">
@@ -186,7 +186,7 @@
 		black_ratio_quantile_ws = get_black_ratio_quantile(data, 'n');
 		qScale_domain_ws = get_qscale(data, 'n');
 
-		draw_flow_ws(div_ws, 3, qScale_domain_ws, black_ratio_quantile_ws, wealth_scale_ws)
+		draw_flow_ws_inf(div_ws, 3, qScale_domain_ws, black_ratio_quantile_ws, wealth_scale_ws)
 	}
 
 	Promise.all([
