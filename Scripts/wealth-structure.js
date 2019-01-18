@@ -528,11 +528,13 @@ function get_prob_pquintiles(data){
 	var array = {'0': [], '1': []};
 
 	data.reduce(function(a, b, i, arr) { 
-		return array[1][i] = Math.round((arr[i]) * 1000) / 10;
+		if ((arr[i] * 100) < 0.5 || (arr[i] * 100) > 99.5 ) return array[1][i] = Math.round((arr[i]) * 1000) / 10;
+		return array[1][i] = Math.round((arr[i]) * 100);
 	}, 0);
 
-	data.reduce(function(a, b, i, arr) { 
-		return array[0][i] = Math.round((1-arr[i]) * 1000) / 10;
+	data.reduce(function(a, b, i, arr) {
+		if (((1 - arr[i]) * 100) < 0.5 || ((1 - arr[i]) * 100) > 99.5 ) return array[0][i] = Math.round((1 - arr[i]) * 1000) / 10;
+		return array[0][i] = Math.round((1-arr[i]) * 100);
 	}, 0);
 
 	return _.unzip(Object.values(array));
@@ -557,7 +559,7 @@ function get_prob_quintiles( data, model_name ){
 		return sum
 	}) ).map( function(d) {
 		sum = d.reduce((a, b) => a + b, 0);
-		return d.map( v => Math.round( (v/sum)*1000) / 10 );
+		return d.map( v => Math.round( (v/sum)*100) );
 	} );
 
 	return arr;

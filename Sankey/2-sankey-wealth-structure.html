@@ -21,6 +21,14 @@
 			line-height: 32px;
 		}
 
+		h4 {
+			margin-top: 48px;
+			font-family: 'Raleway', sans-serif;
+			font-weight: 500;
+			font-size: 16px;
+			line-height: 16px;
+		}
+
 		.black {
 			font-weight: 600;
 			color: white;
@@ -88,7 +96,10 @@
 		<!-- Interactive visualization -->
 		<div class="row">
 			<div class="col-md-10 col-md-offset-1">
-				<h3><span class="black" style="border-radius: 4px">Black</span> and <span class="white" style="border-radius: 4px">White</span> children raised in each of the wealth distribution: See where they end up as adults.
+				<h4>Figure S.2: Sankey diagram as static version of Animation 2</h4>
+			</div>
+			<div class="col-md-10 col-md-offset-1">
+				<h3><span class="black" style="border-radius: 4px">Black</span> and <span class="white" style="border-radius: 4px">White</span> wealth positions across generations: Individual Change and Structural Stability
 				</h3>
 				<!-- <p>For every 10,000 children raised in Black and White households each, see where they end up.</p> -->
 			</div>
@@ -131,7 +142,9 @@
 
 		data = graph['nodes'].map( function (d, i, arr) {
 			idx = (((i+1)%2)-1/2)*2;
-			return Math.round((d.value/ (d.value + arr[i+idx].value))*1000)/10
+			p = (d.value/ (d.value + arr[i+idx].value))*100;
+			if (p < 0.5 || p > 99.5) return Math.round((d.value/ (d.value + arr[i+idx].value))*1000)/10
+			return Math.round((d.value/ (d.value + arr[i+idx].value))*100)
 		});
 
 		nodeRect.append("title")

@@ -25,13 +25,13 @@
   },
   {
     "node": 4,
-    "name": "40% - 60%",
+    "name": "Middle 20%",
     "race": "Black",
     "type": "Parent"
   },
   {
     "node": 5,
-    "name": "40% - 60%",
+    "name": "Middle 20%",
     "race": "White",
     "type": "Parent"
   },
@@ -49,13 +49,13 @@
   },
   {
     "node": 8,
-    "name": "top 20%",
+    "name": "Top 20%",
     "race": "Black",
     "type": "Parent"
   },
   {
     "node": 9,
-    "name": "top 20%",
+    "name": "Top 20%",
     "race": "White",
     "type": "Parent"
   },
@@ -85,13 +85,13 @@
   },
   {
     "node": 14,
-    "name": "40% - 60%",
+    "name": "Middle 20%",
     "race": "Black",
     "type": "Child"
   },
   {
     "node": 15,
-    "name": "40% - 60%",
+    "name": "Middle 20%",
     "race": "White",
     "type": "Child"
   },
@@ -109,13 +109,13 @@
   },
   {
     "node": 18,
-    "name": "top 20%",
+    "name": "Top 20%",
     "race": "Black",
     "type": "Child"
   },
   {
     "node": 19,
-    "name": "top 20%",
+    "name": "Top 20%",
     "race": "White",
     "type": "Child"
   }

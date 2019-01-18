@@ -33,9 +33,18 @@
 
 		h3 {
 			font-family: 'Raleway', sans-serif;
-			font-weight: 700;
+			font-weight: 500;
 			font-size: 19px;
-			line-height: 32px;
+			line-height: 24px;
+			margin: 8px 0px;
+		}
+
+		h4 {
+			margin-top: 48px;
+			font-family: 'Raleway', sans-serif;
+			font-weight: 500;
+			font-size: 16px;
+			line-height: 16px;
 		}
 
 		p {
@@ -164,13 +173,16 @@
 		<!-- Interactive visualization -->
 		<div class="row">
 			<div class="col-md-10 col-md-offset-1">
+				<h4>Animation S.1: Transition probabilities produced under different modeling approaches</h4>
+			</div>
+			<div class="col-md-10 col-md-offset-1">
 				<h3>Model: 
 					<span>
 						<div class="dropdown" style="display: inline-block;">
 							<button class="btn btn-default dropdown-toggle drop-btn-long" type="button" data-toggle="dropdown">Ordered Logistic (joint estimation)
 							<span class="caret"></span></button>
 							<ul class="dropdown-menu dropdown-menu-model dropdown-bar">
-								<li class="drop-menu-item"><a onclick="update_model(data, this.id)" id="ologit_sep">Ordered Logistic (joint estimation)</a></li>
+								<li class="drop-menu-item"><a onclick="update_model(data, this.id)" id="ologit">Ordered Logistic (joint estimation)</a></li>
 								<li class="drop-menu-item"><a onclick="update_model(data, this.id)" id="ologit_sep">Ordered Logistic (separate estimation)</a></li>
 								<li class="drop-menu-item"><a onclick="update_model(data, this.id)" id="stereo">Stereotype</a></li>
 								<li class="drop-menu-item"><a onclick="update_model(data, this.id)" id="mlogit">Multinomial Logistic (Observed)</a></li>
@@ -184,14 +196,14 @@
 				<h3><span class="black" style="border-radius: 4px">Black</span> and <span class="white" style="border-radius: 4px">White</span> children raised in the
 					<span>
 						<div class="dropdown" style="display: inline-block;">
-							<button class="btn btn-default dropdown-toggle drop-btn" type="button" data-toggle="dropdown">40% - 60%
+							<button class="btn btn-default dropdown-toggle drop-btn" type="button" data-toggle="dropdown">Middle 20%
 							<span class="caret"></span></button>
 							<ul class="dropdown-menu dropdown-menu-wScale dropdown-bar">
-								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 5)">top 20%</a></li>
+								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 5)">Top 20%</a></li>
 								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 4)">20% - 40%</a></li>
-								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 3)">40% - 60%</a></li>
+								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 3)">Middle 20%</a></li>
 								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 2)">60% - 80%</a></li>
-								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 1)">bottom 20%</a></li>
+								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 1)">Bottom 20%</a></li>
 							</ul>
 						</div>
 					</span> of the wealth distribution: Where do they end up as adults?
