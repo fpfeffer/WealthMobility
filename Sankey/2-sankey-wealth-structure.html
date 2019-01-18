@@ -7,6 +7,7 @@
 	<!-- D3 and JQuery Javascript -->
 	<script src="https://d3js.org/d3.v5.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+	<script src="../Scripts/sankey.js"></script>
 
 	<!-- Bootstrap Core CSS  -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -94,11 +95,6 @@
 		</div>
 	</div>
 </body>
-
-<script src="https://d3js.org/d3.v5.min.js"></script>
-<script src="../Scripts/d3-textwrap.min.js" type="text/javascript"></script>
-<script src="sankey.js"></script>
-<!-- <script src="custom-sankey.js"></script> -->
 <script>
 	var units = "Widgets";
 
@@ -128,12 +124,9 @@
 
 	var path = sankey.link();
 
-	var text_wrap = {height: 32, width: 84};
-	var wrap_ws_sankey = d3.textwrap().bounds(text_wrap);
-
 	// load the data
 	// d3.json("1-mobility-rates.json").then(function(graph) {
-	d3.json("2-wealth-structure.json").then(function(graph) {
+	d3.json("../Data/2-wealth-structure.json").then(function(graph) {
 		draw_sankey(graph);
 
 		data = graph['nodes'].map( function (d, i, arr) {
@@ -191,23 +184,6 @@
 					if (d.x < width / 2) return "end";
 					return "start";
 				});
-
-		// d3.selectAll('text')
-		// 	.call(wrap_ws_sankey);
-
-		// d3.selectAll('foreignObject')
-		// .attr('x', function(d){
-		// 	if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
-		// 	return x_pos;
-		// })
-		// .attr('y', function(d){
-		// 	if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
-		// 	return (d.dy/2) - 6;
-		// })
-		// .style('text-align', function(d){
-		// 	if (d.x < width / 2) return 'right'
-		// 	return 'left';
-		// });
 	});
 
 	function draw_sankey(graph){

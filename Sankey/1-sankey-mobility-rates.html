@@ -8,7 +8,7 @@
 	<script src="https://d3js.org/d3.v5.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-	<script src="sankey.js"></script>
+	<script src="../Scripts/sankey.js"></script>
 	
 	<!-- Bootstrap Core CSS  -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -54,35 +54,21 @@
 			stroke-opacity: .2;*/
 		}
 
-		/*.link:hover {
-			stroke: #333;
-			stroke-opacity: .5;
-		}*/
-/*
-		foreignObject > div {
+
+
+		text {
 			font-family: 'Raleway', sans-serif;
 			font-weight: 500;
-			font-size: 12px;
-			line-height: 11px;
+			font-size: 16px;
+			line-height: 18px;
 		}
 
-		@media (min-width: 992px) {
-			foreignObject > div {
-				font-family: 'Raleway', sans-serif;
-				font-weight: 500;
-				font-size: 14px;
-				line-height: 12px;
-			}
-		}		
-
-		@media (max-width: 992px) {
-			foreignObject > div {
-				font-family: 'Raleway', sans-serif;
-				font-weight: 500;
-				font-size: 12px;
-				line-height: 11px;
-			}
-		}*/
+		text.mobility-rates {
+			font-family: 'Raleway', sans-serif;
+			font-weight: 700;
+			font-size: 14px;
+			line-height: 12px;
+		}
 	</style>
 </head>
 <body>
@@ -125,33 +111,9 @@ var sankey = d3.sankey()
 
 var path = sankey.link();
 
-// var text_wrap = {height: 32, width: 72};
-// var wrap_mr_sankey = d3.textwrap().bounds(text_wrap);
-
 // load the data
-d3.json("1-mobility-rates.json").then(function(graph) {
+d3.json("../Data/1-mobility-rates.json").then(function(graph) {
 	draw_sankey(graph);
-
-	// d3.selectAll('text')
-	// 	.call(wrap_mr_sankey);
-
-	// d3.selectAll('foreignObject')
-	// 	.attr('x', function(d){
-	// 		if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
-	// 		return x_pos;
-	// 	})
-	// 	.attr('y', function(d){
-	// 		if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
-	// 		return d.dy; // (d.dy/2 - this.getBoundingClientRect().height/2);
-	// 	})
-	// 	// .style('transform', function(d){
-	// 	// 	if (d.x < width/2) { x_pos = - (text_wrap.width + 12) } else { x_pos = (d.dx + 12) }
-	// 	// 	return 'translate('+ x_pos +'px, '+ (d.dy/2 - this.getBoundingClientRect().height/2)  +'px)';
-	// 	// })
-	// 	.style('text-align', function(d){
-	// 		if (d.x < width / 2) return 'right'
-	// 		return 'left';
-	// 	});
 });
 
 function draw_sankey(graph){
@@ -175,7 +137,7 @@ function draw_sankey(graph){
 			.sort(function(a, b) { return b.dy - a.dy; });
 
 	link.append("text")
-		.attr("class", function(d){ return "prob-" + d.source.node; })
+		.attr("class", function(d){ return "mobility-rates prob-" + d.source.node; })
 		.attr("x", (width - sankey.nodeWidth()) )
 		.attr("y", function(d, i){ return d.target.y + d.ty + d.dy / 2; })
 		.text(function(d, i){

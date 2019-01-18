@@ -51,6 +51,8 @@
 			padding: 6px 12px !important;
 			text-align: left;
 			margin: 0px 8px;
+			font-size: 16px !important;
+			font-weight: inherit !important;
 		}
 
 		.drop-btn-long {
@@ -58,6 +60,8 @@
 			padding: 6px 12px !important;
 			text-align: left;
 			margin: 0px 8px;
+			font-size: 16px !important;
+			font-weight: inherit !important;
 		}
 
 		text {
@@ -154,25 +158,6 @@
 		"4": 0.5,
 		"5": 0.5
 	};
-
-	// wealth_scale_mr = {
-	// 	"0": {
-	// 		"1": [0.343, 0.613, 0.804, 0.932],
-	// 		"2": [0.247, 0.489, 0.703, 0.881],
-	// 		"3": [0.194, 0.412, 0.632, 0.841],
-	// 		"4": [0.114, 0.278, 0.489, 0.748],
-	// 		"5": [0.045, 0.136, 0.303, 0.595]
-	// 	},
-	// 	"1": {
-	// 		"1": [0.525, 0.799, 0.947, 0.986],
-	// 		"2": [0.435, 0.719, 0.910, 0.972],
-	// 		"3": [0.379, 0.66, 0.878, 0.958],
-	// 		"4": [0.275, 0.537, 0.796, 0.919],
-	// 		"5": [0.148, 0.349, 0.631, 0.823]
-	// 	}
-	// };
-
-	// qScale_domain_mr = [0.191, 0.396, 0.593, 0.801];
 </script>
 <body>
 	<div class="container-fluid">
@@ -196,7 +181,7 @@
 				<!-- <p>For every 10,000 children raised in Black and White households each, see where they end up.</p> -->
 			</div>
 			<div class="col-md-10 col-md-offset-1">
-				<h3><span class="black" style="border-radius: 4px">Black</span> and <span class="white" style="border-radius: 4px">White</span> children raised in 
+				<h3><span class="black" style="border-radius: 4px">Black</span> and <span class="white" style="border-radius: 4px">White</span> children raised in the
 					<span>
 						<div class="dropdown" style="display: inline-block;">
 							<button class="btn btn-default dropdown-toggle drop-btn" type="button" data-toggle="dropdown">40% - 60%
@@ -209,7 +194,7 @@
 								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 1)">bottom 20%</a></li>
 							</ul>
 						</div>
-					</span> of the wealth distribution: See where they end up as adults.
+					</span> of the wealth distribution: Where do they end up as adults?
 				</h3>
 				<!-- <p>For every 10,000 children raised in Black and White households each, see where they end up.</p> -->
 				<!-- <div class="reset-button button" onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 3)">Start <i class="material-icons">play_arrow</i></div> -->

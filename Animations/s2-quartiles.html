@@ -38,13 +38,14 @@
 			line-height: 32px;
 		}
 
-		/*.drop-btn {
-			width: 128px !important;
+		.drop-btn {
 			display: inline-block;
 			padding: 6px 12px !important;
 			text-align: left;
 			margin: 0px 8px;
-		}*/
+			font-size: 16px !important;
+			font-weight: inherit !important;
+		}
 
 		text {
 			font-family: 'Raleway', sans-serif;
@@ -106,8 +107,8 @@
 			border: 1px solid #dc2127;
 			color: #dc2127;
 			font-family: 'Raleway', sans-serif;
-			font-size: 16px;
-			font-weight: 600;
+			font-size: 16px !important;
+			font-weight: inherit !important;
 			cursor: pointer;
 			padding: 6px 0px !important;
 			visibility: hidden;
@@ -137,7 +138,7 @@
 				<h3>Data: 
 					<span>
 						<div class="dropdown" style="display: inline-block;">
-							<button class="btn btn-default dropdown-toggle drop-btn-long" type="button" data-toggle="dropdown">Full Sample
+							<button class="btn btn-default dropdown-toggle drop-btn" type="button" data-toggle="dropdown">Full Sample
 							<span class="caret"></span></button>
 							<ul class="dropdown-menu dropdown-menu-model dropdown-bar">
 								<li class="drop-menu-item"><a onclick="update_model(d, 'n')">Full Sample</a></li>
@@ -191,7 +192,7 @@
 <script>
 	$(function(){
 		$(".dropdown-menu-model").on('click', 'li a', function(){
-			$(".drop-btn-long:first-child").html($(this).text()+ ' <span class="caret"></span>');
+			$(".drop-btn:first-child").html($(this).text()+ ' <span class="caret"></span>');
 		});
 	});
 
