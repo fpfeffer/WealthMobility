@@ -267,9 +267,12 @@ function draw_sankey(graph){
 			});
 
 	// add the link titles
+	// link.append("title")
+	// 			.text(function(d) {
+	// 			return d.source.name + " → " + d.target.name + "\n" + Math.round(d.value*100)/100 + " % "; });
 	link.append("title")
 				.text(function(d) {
-				return d.source.name + " → " + d.target.name + "\n" + Math.round(d.value*100)/100 + " % "; });
+				return d.source.name + " → " + d.target.name; });
 
 	// add in the title for the nodes
 	node.append("text")
