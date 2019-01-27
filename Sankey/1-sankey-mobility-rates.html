@@ -92,8 +92,9 @@
 		</div>
 	</div>
 </body>
+
 <script>
-$(document).tooltip( {show: false} );
+	$(document).tooltip( {show: false} );
 
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 180, bottom: 10, left: 180},
@@ -120,11 +121,11 @@ var sankey = d3.sankey()
 var path = sankey.link();
 
 // load the data
-d3.json("../Data/1-mobility.json").then(function(graph) {
-	draw_sankey(graph);
+d3.json("../Data/1-mobility-rates.json").then(function(graph) {
+	draw_sankey_mr(graph);
 });
 
-function draw_sankey(graph){
+function draw_sankey_mr(graph){
 	sankey.nodes(graph.nodes)
 			.links(graph.links)
 			.layout(32);
@@ -280,6 +281,5 @@ function draw_sankey(graph){
 			return "start";
 		});
 }
-
 </script>
 </html>
