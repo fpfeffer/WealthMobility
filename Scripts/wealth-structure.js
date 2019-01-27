@@ -1,7 +1,11 @@
-var graph_width = d3.select('div#graph-ws').node().getBoundingClientRect().width;
-	min_stats_width = 80;
-	stats_width = d3.select('div.stats-ws').node().getBoundingClientRect().width;
+var 
+	// gets the width of the bounding div element
+	graph_width = d3.select('div#graph-ws').node().getBoundingClientRect().width,
 
+	// computes the width of the SVG container which displays outcome statistics
+	stats_width = d3.select('div.stats-ws').node().getBoundingClientRect().width,
+
+	// dimensions for the HTML Canvas element
 	canvas = { w: graph_width, h: 12*graph_width/16 },
 	margin = { left: 10, bottom: 10, right: 10, top: 10 },
 	text_container = {w: 120, h: 64};
@@ -15,8 +19,11 @@ var div_ws = d3.select('#graph-ws')
 			.style('height', canvas.h + 'px')
 			.style('display', 'inline-block');
 	
+	// Initialises canvas element 
 var regl = createREGL({container: div_ws.node()});
 
+	// Creates SVG elements for displaying the origin and destination probabilities
+	// These are referenced subsequently by their element IDs
 var svg_parent_ws = d3.select('#stats-parent-ws')
 			.append('svg')
 			.attr('height', canvas.h)
@@ -29,24 +36,30 @@ var svg_child_ws = d3.select('#stats-child-ws')
 			.attr('width', stats_width)
 			.style('display', 'inline');
 
+	// Calculates the Device Pixel Ratio which is used to compute the size of the dots on screen
 var dpi = window.devicePixelRatio;
 
 var label_margins = 8;
 
+	// Initialises the height and width for text wrap
+	// From the d3-textwrap.js library
 var wrap_ws = d3.textwrap().bounds({height: 32, width: (stats_width/2 - label_margins)});
 var wrap_ws_header = d3.textwrap().bounds({height: 32, width: (stats_width - label_margins)});
+
 var quantile_labels = []; //['Bottom 20%', '', 'Middle 20%', '', 'Top 20%'];
 var labels = ['Bottom', 'Middle', 'Top']
 
+
+// Function to draw the wealth structure graph
+// This animation simulates the dots and stops, and is used in the graphs presented in the main section
+// The code structure and the REGL code is similar to the one used in `mobility-rates.js`
 function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, wealth_scale, parent = "all") {	
-	//d3.select('div#graph-ws').select('div').select('canvas').remove();
 	regl.destroy();
 	regl = createREGL({container: element.node()});
 
 	d3.selectAll('.label-prob-ws').remove();
 	$('.reset-button').css('visibility', 'hidden');
 
-	//parent == "all" ? count = 10000 : count = 4000;
 	count = 20000;
 	wealth_length = 4;
 
@@ -252,21 +265,22 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 	})
 }
 
+
+// Function to draw the wealth structure graph
+// This animation runs on loop, and is used in the graphs presented in the supplemental materials
 function draw_flow_ws_inf(element, num_quantile, qScale_domain, black_ratio_scale, wealth_scale, parent = "all") {	
-	//d3.select('div#graph-ws').select('div').select('canvas').remove();
 	regl.destroy();
 	regl = createREGL({container: element.node()});
 
 	d3.selectAll('.label-prob-ws').remove();
 	$('.reset-button').css('visibility', 'hidden');
 
-	//parent == "all" ? count = 10000 : count = 4000;
 	count = 20000;
 	wealth_length = 4;
 
 	var yScale = d3.scaleLinear()
 		.domain([1, num_quantile])
-		.range([-0.7, 0.7]);
+		.range([-0.75, 0.75]);
 
 	g_height = yScale.range().reduce((a, b) => Math.abs(a) + Math.abs(b), 0);
 
@@ -324,8 +338,6 @@ function draw_flow_ws_inf(element, num_quantile, qScale_domain, black_ratio_scal
 
 	data = d3.shuffle(data);
 
-	// time_limit = (wealth_length + 2.25) / d3.min(data.map(x => x.speed / 60));
-
 	prob_pquantile = get_prob_pquintiles( Object.values(black_ratio_scale) );
 	prob_quantile = prob_quintiles;
 
@@ -368,10 +380,6 @@ function draw_flow_ws_inf(element, num_quantile, qScale_domain, black_ratio_scal
 
 	d3.selectAll('text.prob-frequency').call(wrap_ws);
 
-	// setTimeout(function(){
-		
-	// }, (2.25 / d3.max( data.map(x => x.speed / 60)))*1000 );
-
 	for (i = 1; i <= num_quantile; i++){
 		svg_child_ws.append('g')
 			.attr('class', 'label-prob-ws label-category')
@@ -396,10 +404,6 @@ function draw_flow_ws_inf(element, num_quantile, qScale_domain, black_ratio_scal
 
 		d3.selectAll('text.prob-frequency').call(wrap_ws);
 	}
-
-	// setTimeout(function(){
-	// 	$('.reset-button').css('visibility', 'visible');
-	// }, time_limit*1000 );
 
 	var drawPoints = regl({
 		vert: `

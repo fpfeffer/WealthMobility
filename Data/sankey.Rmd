@@ -11,7 +11,6 @@ library(magrittr)
 library(tidyr)
 library(purrr)
 library(jsonlite)
-library(networkD3)
 ```
 
 
@@ -31,6 +30,7 @@ df.mr %<>%
 head(df.mr)
 ```
 
+
 ```{r}
 nodes.mr <- df.mr  %>%
   select(o, d, white) %>%
@@ -49,14 +49,12 @@ nodes.mr <- df.mr  %>%
   ) %>%
   select(node, name, race, type)  %>%
   mutate(
-    name = replace(name, name == "Quintile 1", "bottom 20% wealth quantile"),
-    name = replace(name, name == "Quintile 2", "60% - 80% wealth quantile"),
-    name = replace(name, name == "Quintile 3", "40% - 60% wealth quantile"),
-    name = replace(name, name == "Quintile 4", "20% - 40% wealth quantile"),
-    name = replace(name, name == "Quintile 5", "top 20% wealth quantile")
+    name = replace(name, name == "Quintile 1", "Bottom 20%"),
+    name = replace(name, name == "Quintile 2", "60% - 80%"),
+    name = replace(name, name == "Quintile 3", "Middle 20%"),
+    name = replace(name, name == "Quintile 4", "20% - 40%"),
+    name = replace(name, name == "Quintile 5", "Top 20%")
   )
-
-nodes.mr
 ```
 
 
@@ -77,14 +75,12 @@ links.mr <- df.mr %>%
     value = value*100
   ) %>%
   select(source, target, value)
-
-links.mr
 ```
 
-
 ```{r}
-write_json(links.mr, "links.json", pretty = TRUE)
-write_json(nodes.mr, "nodes.json", pretty = TRUE)
+mr <- list(nodes = nodes.mr, links = links.mr)
+
+write_json(mr, "1-mobility-rates.json", pretty = TRUE)
 ```
 
 ```{r}
@@ -122,14 +118,12 @@ nodes.ws <- df.ws %>%
   ) %>%
   select(node, name, race, type)  %>%
   mutate(
-    name = replace(name, name == "Quintile 1", "bottom 20% wealth quantile"),
-    name = replace(name, name == "Quintile 2", "60% - 80% wealth quantile"),
-    name = replace(name, name == "Quintile 3", "40% - 60% wealth quantile"),
-    name = replace(name, name == "Quintile 4", "20% - 40% wealth quantile"),
-    name = replace(name, name == "Quintile 5", "top 20% wealth quantile")
+    name = replace(name, name == "Quintile 1", "Bottom 20%"),
+    name = replace(name, name == "Quintile 2", "60% - 80%"),
+    name = replace(name, name == "Quintile 3", "Middle 20%"),
+    name = replace(name, name == "Quintile 4", "20% - 40%"),
+    name = replace(name, name == "Quintile 5", "Top 20%")
   )
-
-nodes.ws
 ```
 
 
@@ -149,13 +143,12 @@ links.ws <- df.ws %>%
     target = rep(seq(10, 19), 5),
   ) %>%
   select(source, target, value, race)
-
-links.ws
 ```
 
 
 ```{r}
-write_json(links.ws, "links.json", pretty = TRUE)
-write_json(nodes.ws, "nodes.json", pretty = TRUE)
+ws <- list(nodes = nodes.ws, links = links.ws)
+
+write_json(ws, "2-wealth-structure.json", pretty = TRUE)
 ```
 

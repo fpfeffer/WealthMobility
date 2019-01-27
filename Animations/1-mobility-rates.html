@@ -115,15 +115,6 @@
 		}
 	</style>
 </head>
-<script>
-	var black_ratio_quintile_mr = {
-		"1": 0.5,
-		"2": 0.5,
-		"3": 0.5,
-		"4": 0.5,
-		"5": 0.5
-	};
-</script>
 <body>
 	<div class="container-fluid">
 		<!-- Interactive visualization -->
@@ -176,6 +167,14 @@
 			$(".drop-btn:first-child").html($(this).text()+ ' <span class="caret"></span>');
 		});
 	});
+
+	var black_ratio_quintile_mr = {
+		"1": 0.5,
+		"2": 0.5,
+		"3": 0.5,
+		"4": 0.5,
+		"5": 0.5
+	};
 
 	d3.csv('../Data/1-mobility-rates.csv').then(function(d) {
 		data = d;

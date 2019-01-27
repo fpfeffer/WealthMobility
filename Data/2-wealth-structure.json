@@ -1,426 +1,426 @@
-{"nodes":[
-  {
-    "node": 0,
-    "name": "bottom 20%",
-    "race": "Black",
-    "type": "Parent"
-  },
-  {
-    "node": 1,
-    "name": "bottom 20%",
-    "race": "White",
-    "type": "Parent"
-  },
-  {
-    "node": 2,
-    "name": "60% - 80%",
-    "race": "Black",
-    "type": "Parent"
-  },
-  {
-    "node": 3,
-    "name": "60% - 80%",
-    "race": "White",
-    "type": "Parent"
-  },
-  {
-    "node": 4,
-    "name": "Middle 20%",
-    "race": "Black",
-    "type": "Parent"
-  },
-  {
-    "node": 5,
-    "name": "Middle 20%",
-    "race": "White",
-    "type": "Parent"
-  },
-  {
-    "node": 6,
-    "name": "20% - 40%",
-    "race": "Black",
-    "type": "Parent"
-  },
-  {
-    "node": 7,
-    "name": "20% - 40%",
-    "race": "White",
-    "type": "Parent"
-  },
-  {
-    "node": 8,
-    "name": "Top 20%",
-    "race": "Black",
-    "type": "Parent"
-  },
-  {
-    "node": 9,
-    "name": "Top 20%",
-    "race": "White",
-    "type": "Parent"
-  },
-  {
-    "node": 10,
-    "name": "bottom 20%",
-    "race": "Black",
-    "type": "Child"
-  },
-  {
-    "node": 11,
-    "name": "bottom 20%",
-    "race": "White",
-    "type": "Child"
-  },
-  {
-    "node": 12,
-    "name": "60% - 80%",
-    "race": "Black",
-    "type": "Child"
-  },
-  {
-    "node": 13,
-    "name": "60% - 80%",
-    "race": "White",
-    "type": "Child"
-  },
-  {
-    "node": 14,
-    "name": "Middle 20%",
-    "race": "Black",
-    "type": "Child"
-  },
-  {
-    "node": 15,
-    "name": "Middle 20%",
-    "race": "White",
-    "type": "Child"
-  },
-  {
-    "node": 16,
-    "name": "20% - 40%",
-    "race": "Black",
-    "type": "Child"
-  },
-  {
-    "node": 17,
-    "name": "20% - 40%",
-    "race": "White",
-    "type": "Child"
-  },
-  {
-    "node": 18,
-    "name": "Top 20%",
-    "race": "Black",
-    "type": "Child"
-  },
-  {
-    "node": 19,
-    "name": "Top 20%",
-    "race": "White",
-    "type": "Child"
-  }
-],
-"links":[
-  {
-    "source": 0,
-    "target": 10,
-    "value": 2735.6421,
-    "race": "Black"
-  },
-  {
-    "source": 1,
-    "target": 11,
-    "value": 2570.1541,
-    "race": "White"
-  },
-  {
-    "source": 0,
-    "target": 12,
-    "value": 1939.874,
-    "race": "Black"
-  },
-  {
-    "source": 1,
-    "target": 13,
-    "value": 2360.3831,
-    "race": "White"
-  },
-  {
-    "source": 0,
-    "target": 14,
-    "value": 1101.515,
-    "race": "Black"
-  },
-  {
-    "source": 1,
-    "target": 15,
-    "value": 1418.6119,
-    "race": "White"
-  },
-  {
-    "source": 0,
-    "target": 16,
-    "value": 368.519,
-    "race": "Black"
-  },
-  {
-    "source": 1,
-    "target": 17,
-    "value": 797.664,
-    "race": "White"
-  },
-  {
-    "source": 0,
-    "target": 18,
-    "value": 112.436,
-    "race": "Black"
-  },
-  {
-    "source": 1,
-    "target": 19,
-    "value": 912.398,
-    "race": "White"
-  },
-  {
-    "source": 2,
-    "target": 10,
-    "value": 1196.467,
-    "race": "Black"
-  },
-  {
-    "source": 3,
-    "target": 11,
-    "value": 2633.2161,
-    "race": "White"
-  },
-  {
-    "source": 2,
-    "target": 12,
-    "value": 858.4211,
-    "race": "Black"
-  },
-  {
-    "source": 3,
-    "target": 13,
-    "value": 3395.9141,
-    "race": "White"
-  },
-  {
-    "source": 2,
-    "target": 14,
-    "value": 702.396,
-    "race": "Black"
-  },
-  {
-    "source": 3,
-    "target": 15,
-    "value": 2821.927,
-    "race": "White"
-  },
-  {
-    "source": 2,
-    "target": 16,
-    "value": 158.701,
-    "race": "Black"
-  },
-  {
-    "source": 3,
-    "target": 17,
-    "value": 1973.1688,
-    "race": "White"
-  },
-  {
-    "source": 2,
-    "target": 18,
-    "value": 61.316,
-    "race": "Black"
-  },
-  {
-    "source": 3,
-    "target": 19,
-    "value": 1484.7209,
-    "race": "White"
-  },
-  {
-    "source": 4,
-    "target": 10,
-    "value": 404.066,
-    "race": "Black"
-  },
-  {
-    "source": 5,
-    "target": 11,
-    "value": 2352.248,
-    "race": "White"
-  },
-  {
-    "source": 4,
-    "target": 12,
-    "value": 290.033,
-    "race": "Black"
-  },
-  {
-    "source": 5,
-    "target": 13,
-    "value": 2895.481,
-    "race": "White"
-  },
-  {
-    "source": 4,
-    "target": 14,
-    "value": 383.864,
-    "race": "Black"
-  },
-  {
-    "source": 5,
-    "target": 15,
-    "value": 3165.1089,
-    "race": "White"
-  },
-  {
-    "source": 4,
-    "target": 16,
-    "value": 42.088,
-    "race": "Black"
-  },
-  {
-    "source": 5,
-    "target": 17,
-    "value": 3052.0161,
-    "race": "White"
-  },
-  {
-    "source": 4,
-    "target": 18,
-    "value": 9.37,
-    "race": "Black"
-  },
-  {
-    "source": 5,
-    "target": 19,
-    "value": 2204.0681,
-    "race": "White"
-  },
-  {
-    "source": 6,
-    "target": 10,
-    "value": 21.87,
-    "race": "Black"
-  },
-  {
-    "source": 7,
-    "target": 11,
-    "value": 1735.293,
-    "race": "White"
-  },
-  {
-    "source": 6,
-    "target": 12,
-    "value": 13.319,
-    "race": "Black"
-  },
-  {
-    "source": 7,
-    "target": 13,
-    "value": 2254.364,
-    "race": "White"
-  },
-  {
-    "source": 6,
-    "target": 14,
-    "value": 0,
-    "race": "Black"
-  },
-  {
-    "source": 7,
-    "target": 15,
-    "value": 3341.7151,
-    "race": "White"
-  },
-  {
-    "source": 6,
-    "target": 16,
-    "value": 15.598,
-    "race": "Black"
-  },
-  {
-    "source": 7,
-    "target": 17,
-    "value": 4160.5439,
-    "race": "White"
-  },
-  {
-    "source": 6,
-    "target": 18,
-    "value": 0,
-    "race": "Black"
-  },
-  {
-    "source": 7,
-    "target": 19,
-    "value": 3946.2949,
-    "race": "White"
-  },
-  {
-    "source": 8,
-    "target": 10,
-    "value": 3.287,
-    "race": "Black"
-  },
-  {
-    "source": 9,
-    "target": 11,
-    "value": 993.9849,
-    "race": "White"
-  },
-  {
-    "source": 8,
-    "target": 12,
-    "value": 2.741,
-    "race": "Black"
-  },
-  {
-    "source": 9,
-    "target": 13,
-    "value": 976.6549,
-    "race": "White"
-  },
-  {
-    "source": 8,
-    "target": 14,
-    "value": 76.135,
-    "race": "Black"
-  },
-  {
-    "source": 9,
-    "target": 15,
-    "value": 1807.906,
-    "race": "White"
-  },
-  {
-    "source": 8,
-    "target": 16,
-    "value": 89.458,
-    "race": "Black"
-  },
-  {
-    "source": 9,
-    "target": 17,
-    "value": 4847.0679,
-    "race": "White"
-  },
-  {
-    "source": 8,
-    "target": 18,
-    "value": 0,
-    "race": "Black"
-  },
-  {
-    "source": 9,
-    "target": 19,
-    "value": 6137.522,
-    "race": "White"
-  }
-]
+{
+  "nodes": [
+    {
+      "node": 0,
+      "name": "Bottom 20%",
+      "race": "Black",
+      "type": "Parent"
+    },
+    {
+      "node": 1,
+      "name": "Bottom 20%",
+      "race": "White",
+      "type": "Parent"
+    },
+    {
+      "node": 2,
+      "name": "60% - 80%",
+      "race": "Black",
+      "type": "Parent"
+    },
+    {
+      "node": 3,
+      "name": "60% - 80%",
+      "race": "White",
+      "type": "Parent"
+    },
+    {
+      "node": 4,
+      "name": "Middle 20%",
+      "race": "Black",
+      "type": "Parent"
+    },
+    {
+      "node": 5,
+      "name": "Middle 20%",
+      "race": "White",
+      "type": "Parent"
+    },
+    {
+      "node": 6,
+      "name": "20% - 40%",
+      "race": "Black",
+      "type": "Parent"
+    },
+    {
+      "node": 7,
+      "name": "20% - 40%",
+      "race": "White",
+      "type": "Parent"
+    },
+    {
+      "node": 8,
+      "name": "Top 20%",
+      "race": "Black",
+      "type": "Parent"
+    },
+    {
+      "node": 9,
+      "name": "Top 20%",
+      "race": "White",
+      "type": "Parent"
+    },
+    {
+      "node": 10,
+      "name": "Bottom 20%",
+      "race": "Black",
+      "type": "Child"
+    },
+    {
+      "node": 11,
+      "name": "Bottom 20%",
+      "race": "White",
+      "type": "Child"
+    },
+    {
+      "node": 12,
+      "name": "60% - 80%",
+      "race": "Black",
+      "type": "Child"
+    },
+    {
+      "node": 13,
+      "name": "60% - 80%",
+      "race": "White",
+      "type": "Child"
+    },
+    {
+      "node": 14,
+      "name": "Middle 20%",
+      "race": "Black",
+      "type": "Child"
+    },
+    {
+      "node": 15,
+      "name": "Middle 20%",
+      "race": "White",
+      "type": "Child"
+    },
+    {
+      "node": 16,
+      "name": "20% - 40%",
+      "race": "Black",
+      "type": "Child"
+    },
+    {
+      "node": 17,
+      "name": "20% - 40%",
+      "race": "White",
+      "type": "Child"
+    },
+    {
+      "node": 18,
+      "name": "Top 20%",
+      "race": "Black",
+      "type": "Child"
+    },
+    {
+      "node": 19,
+      "name": "Top 20%",
+      "race": "White",
+      "type": "Child"
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "target": 10,
+      "value": 2735.6421,
+      "race": "Black"
+    },
+    {
+      "source": 1,
+      "target": 11,
+      "value": 2570.1541,
+      "race": "White"
+    },
+    {
+      "source": 0,
+      "target": 12,
+      "value": 1939.874,
+      "race": "Black"
+    },
+    {
+      "source": 1,
+      "target": 13,
+      "value": 2360.3831,
+      "race": "White"
+    },
+    {
+      "source": 0,
+      "target": 14,
+      "value": 1101.515,
+      "race": "Black"
+    },
+    {
+      "source": 1,
+      "target": 15,
+      "value": 1418.6119,
+      "race": "White"
+    },
+    {
+      "source": 0,
+      "target": 16,
+      "value": 368.519,
+      "race": "Black"
+    },
+    {
+      "source": 1,
+      "target": 17,
+      "value": 797.664,
+      "race": "White"
+    },
+    {
+      "source": 0,
+      "target": 18,
+      "value": 112.436,
+      "race": "Black"
+    },
+    {
+      "source": 1,
+      "target": 19,
+      "value": 912.398,
+      "race": "White"
+    },
+    {
+      "source": 2,
+      "target": 10,
+      "value": 1196.467,
+      "race": "Black"
+    },
+    {
+      "source": 3,
+      "target": 11,
+      "value": 2633.2161,
+      "race": "White"
+    },
+    {
+      "source": 2,
+      "target": 12,
+      "value": 858.4211,
+      "race": "Black"
+    },
+    {
+      "source": 3,
+      "target": 13,
+      "value": 3395.9141,
+      "race": "White"
+    },
+    {
+      "source": 2,
+      "target": 14,
+      "value": 702.396,
+      "race": "Black"
+    },
+    {
+      "source": 3,
+      "target": 15,
+      "value": 2821.927,
+      "race": "White"
+    },
+    {
+      "source": 2,
+      "target": 16,
+      "value": 158.701,
+      "race": "Black"
+    },
+    {
+      "source": 3,
+      "target": 17,
+      "value": 1973.1688,
+      "race": "White"
+    },
+    {
+      "source": 2,
+      "target": 18,
+      "value": 61.316,
+      "race": "Black"
+    },
+    {
+      "source": 3,
+      "target": 19,
+      "value": 1484.7209,
+      "race": "White"
+    },
+    {
+      "source": 4,
+      "target": 10,
+      "value": 404.066,
+      "race": "Black"
+    },
+    {
+      "source": 5,
+      "target": 11,
+      "value": 2352.248,
+      "race": "White"
+    },
+    {
+      "source": 4,
+      "target": 12,
+      "value": 290.033,
+      "race": "Black"
+    },
+    {
+      "source": 5,
+      "target": 13,
+      "value": 2895.481,
+      "race": "White"
+    },
+    {
+      "source": 4,
+      "target": 14,
+      "value": 383.864,
+      "race": "Black"
+    },
+    {
+      "source": 5,
+      "target": 15,
+      "value": 3165.1089,
+      "race": "White"
+    },
+    {
+      "source": 4,
+      "target": 16,
+      "value": 42.088,
+      "race": "Black"
+    },
+    {
+      "source": 5,
+      "target": 17,
+      "value": 3052.0161,
+      "race": "White"
+    },
+    {
+      "source": 4,
+      "target": 18,
+      "value": 9.37,
+      "race": "Black"
+    },
+    {
+      "source": 5,
+      "target": 19,
+      "value": 2204.0681,
+      "race": "White"
+    },
+    {
+      "source": 6,
+      "target": 10,
+      "value": 21.87,
+      "race": "Black"
+    },
+    {
+      "source": 7,
+      "target": 11,
+      "value": 1735.293,
+      "race": "White"
+    },
+    {
+      "source": 6,
+      "target": 12,
+      "value": 13.319,
+      "race": "Black"
+    },
+    {
+      "source": 7,
+      "target": 13,
+      "value": 2254.364,
+      "race": "White"
+    },
+    {
+      "source": 6,
+      "target": 14,
+      "value": 0,
+      "race": "Black"
+    },
+    {
+      "source": 7,
+      "target": 15,
+      "value": 3341.7151,
+      "race": "White"
+    },
+    {
+      "source": 6,
+      "target": 16,
+      "value": 15.598,
+      "race": "Black"
+    },
+    {
+      "source": 7,
+      "target": 17,
+      "value": 4160.5439,
+      "race": "White"
+    },
+    {
+      "source": 6,
+      "target": 18,
+      "value": 0,
+      "race": "Black"
+    },
+    {
+      "source": 7,
+      "target": 19,
+      "value": 3946.2949,
+      "race": "White"
+    },
+    {
+      "source": 8,
+      "target": 10,
+      "value": 3.287,
+      "race": "Black"
+    },
+    {
+      "source": 9,
+      "target": 11,
+      "value": 993.9849,
+      "race": "White"
+    },
+    {
+      "source": 8,
+      "target": 12,
+      "value": 2.741,
+      "race": "Black"
+    },
+    {
+      "source": 9,
+      "target": 13,
+      "value": 976.6549,
+      "race": "White"
+    },
+    {
+      "source": 8,
+      "target": 14,
+      "value": 76.135,
+      "race": "Black"
+    },
+    {
+      "source": 9,
+      "target": 15,
+      "value": 1807.906,
+      "race": "White"
+    },
+    {
+      "source": 8,
+      "target": 16,
+      "value": 89.458,
+      "race": "Black"
+    },
+    {
+      "source": 9,
+      "target": 17,
+      "value": 4847.0679,
+      "race": "White"
+    },
+    {
+      "source": 8,
+      "target": 18,
+      "value": 0,
+      "race": "Black"
+    },
+    {
+      "source": 9,
+      "target": 19,
+      "value": 6137.522,
+      "race": "White"
+    }
+  ]
 }
-

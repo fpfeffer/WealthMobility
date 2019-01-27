@@ -1,376 +1,376 @@
-{"nodes":[
-  {
-    "node": 0,
-    "name": "Bottom 20%",
-    "race": "Black",
-    "type": "Parent"
-  },
-  {
-    "node": 1,
-    "name": "Bottom 20%",
-    "race": "White",
-    "type": "Parent"
-  },
-  {
-    "node": 2,
-    "name": "60% - 80%",
-    "race": "Black",
-    "type": "Parent"
-  },
-  {
-    "node": 3,
-    "name": "60% - 80%",
-    "race": "White",
-    "type": "Parent"
-  },
-  {
-    "node": 4,
-    "name": "Middle 20%",
-    "race": "Black",
-    "type": "Parent"
-  },
-  {
-    "node": 5,
-    "name": "Middle 20%",
-    "race": "White",
-    "type": "Parent"
-  },
-  {
-    "node": 6,
-    "name": "20% - 40%",
-    "race": "Black",
-    "type": "Parent"
-  },
-  {
-    "node": 7,
-    "name": "20% - 40%",
-    "race": "White",
-    "type": "Parent"
-  },
-  {
-    "node": 8,
-    "name": "Top 20%",
-    "race": "Black",
-    "type": "Parent"
-  },
-  {
-    "node": 9,
-    "name": "Top 20%",
-    "race": "White",
-    "type": "Parent"
-  },
-  {
-    "node": 10,
-    "name": "Bottom 20%",
-    "race": "Black",
-    "type": "Child"
-  },
-  {
-    "node": 11,
-    "name": "Bottom 20%",
-    "race": "White",
-    "type": "Child"
-  },
-  {
-    "node": 12,
-    "name": "60% - 80%",
-    "race": "Black",
-    "type": "Child"
-  },
-  {
-    "node": 13,
-    "name": "60% - 80%",
-    "race": "White",
-    "type": "Child"
-  },
-  {
-    "node": 14,
-    "name": "Middle 20%",
-    "race": "Black",
-    "type": "Child"
-  },
-  {
-    "node": 15,
-    "name": "Middle 20%",
-    "race": "White",
-    "type": "Child"
-  },
-  {
-    "node": 16,
-    "name": "20% - 40%",
-    "race": "Black",
-    "type": "Child"
-  },
-  {
-    "node": 17,
-    "name": "20% - 40%",
-    "race": "White",
-    "type": "Child"
-  },
-  {
-    "node": 18,
-    "name": "Top 20%",
-    "race": "Black",
-    "type": "Child"
-  },
-  {
-    "node": 19,
-    "name": "Top 20%",
-    "race": "White",
-    "type": "Child"
-  }
-],
-"links":[
-  {
-    "source": 0,
-    "target": 10,
-    "value": 46.4303
-  },
-  {
-    "source": 1,
-    "target": 11,
-    "value": 31.6962
-  },
-  {
-    "source": 0,
-    "target": 12,
-    "value": 26.6285
-  },
-  {
-    "source": 1,
-    "target": 13,
-    "value": 27.519
-  },
-  {
-    "source": 0,
-    "target": 14,
-    "value": 14.7708
-  },
-  {
-    "source": 1,
-    "target": 15,
-    "value": 20.2248
-  },
-  {
-    "source": 0,
-    "target": 16,
-    "value": 8.1396
-  },
-  {
-    "source": 1,
-    "target": 17,
-    "value": 13.286
-  },
-  {
-    "source": 0,
-    "target": 18,
-    "value": 4.0308
-  },
-  {
-    "source": 1,
-    "target": 19,
-    "value": 7.2741
-  },
-  {
-    "source": 2,
-    "target": 10,
-    "value": 42.5672
-  },
-  {
-    "source": 3,
-    "target": 11,
-    "value": 22.6933
-  },
-  {
-    "source": 2,
-    "target": 12,
-    "value": 27.3026
-  },
-  {
-    "source": 3,
-    "target": 13,
-    "value": 25.1812
-  },
-  {
-    "source": 2,
-    "target": 14,
-    "value": 16.1855
-  },
-  {
-    "source": 3,
-    "target": 15,
-    "value": 23.0911
-  },
-  {
-    "source": 2,
-    "target": 16,
-    "value": 9.263
-  },
-  {
-    "source": 3,
-    "target": 17,
-    "value": 18.0016
-  },
-  {
-    "source": 2,
-    "target": 18,
-    "value": 4.6816
-  },
-  {
-    "source": 3,
-    "target": 19,
-    "value": 11.0328
-  },
-  {
-    "source": 4,
-    "target": 10,
-    "value": 38.5429
-  },
-  {
-    "source": 5,
-    "target": 11,
-    "value": 16.4303
-  },
-  {
-    "source": 4,
-    "target": 12,
-    "value": 27.6985
-  },
-  {
-    "source": 5,
-    "target": 13,
-    "value": 21.6554
-  },
-  {
-    "source": 4,
-    "target": 14,
-    "value": 17.6862
-  },
-  {
-    "source": 5,
-    "target": 15,
-    "value": 23.9926
-  },
-  {
-    "source": 4,
-    "target": 16,
-    "value": 10.5863
-  },
-  {
-    "source": 5,
-    "target": 17,
-    "value": 22.2987
-  },
-  {
-    "source": 4,
-    "target": 18,
-    "value": 5.4861
-  },
-  {
-    "source": 5,
-    "target": 19,
-    "value": 15.623
-  },
-  {
-    "source": 6,
-    "target": 10,
-    "value": 39.4947
-  },
-  {
-    "source": 7,
-    "target": 11,
-    "value": 9.8842
-  },
-  {
-    "source": 6,
-    "target": 12,
-    "value": 27.6354
-  },
-  {
-    "source": 7,
-    "target": 13,
-    "value": 15.6653
-  },
-  {
-    "source": 6,
-    "target": 14,
-    "value": 17.3299
-  },
-  {
-    "source": 7,
-    "target": 15,
-    "value": 22.1838
-  },
-  {
-    "source": 6,
-    "target": 16,
-    "value": 10.2577
-  },
-  {
-    "source": 7,
-    "target": 17,
-    "value": 27.348
-  },
-  {
-    "source": 6,
-    "target": 18,
-    "value": 5.2823
-  },
-  {
-    "source": 7,
-    "target": 19,
-    "value": 24.9187
-  },
-  {
-    "source": 8,
-    "target": 10,
-    "value": 10.463
-  },
-  {
-    "source": 9,
-    "target": 11,
-    "value": 4.6043
-  },
-  {
-    "source": 8,
-    "target": 12,
-    "value": 16.3101
-  },
-  {
-    "source": 9,
-    "target": 13,
-    "value": 8.5155
-  },
-  {
-    "source": 8,
-    "target": 14,
-    "value": 22.5424
-  },
-  {
-    "source": 9,
-    "target": 15,
-    "value": 15.547
-  },
-  {
-    "source": 8,
-    "target": 16,
-    "value": 26.932
-  },
-  {
-    "source": 9,
-    "target": 17,
-    "value": 28.3383
-  },
-  {
-    "source": 8,
-    "target": 18,
-    "value": 23.7524
-  },
-  {
-    "source": 9,
-    "target": 19,
-    "value": 42.9949
-  }
-]
+{
+  "nodes": [
+    {
+      "node": 0,
+      "name": "Bottom 20%",
+      "race": "Black",
+      "type": "Parent"
+    },
+    {
+      "node": 1,
+      "name": "Bottom 20%",
+      "race": "White",
+      "type": "Parent"
+    },
+    {
+      "node": 2,
+      "name": "60% - 80%",
+      "race": "Black",
+      "type": "Parent"
+    },
+    {
+      "node": 3,
+      "name": "60% - 80%",
+      "race": "White",
+      "type": "Parent"
+    },
+    {
+      "node": 4,
+      "name": "Middle 20%",
+      "race": "Black",
+      "type": "Parent"
+    },
+    {
+      "node": 5,
+      "name": "Middle 20%",
+      "race": "White",
+      "type": "Parent"
+    },
+    {
+      "node": 6,
+      "name": "20% - 40%",
+      "race": "Black",
+      "type": "Parent"
+    },
+    {
+      "node": 7,
+      "name": "20% - 40%",
+      "race": "White",
+      "type": "Parent"
+    },
+    {
+      "node": 8,
+      "name": "Top 20%",
+      "race": "Black",
+      "type": "Parent"
+    },
+    {
+      "node": 9,
+      "name": "Top 20%",
+      "race": "White",
+      "type": "Parent"
+    },
+    {
+      "node": 10,
+      "name": "Bottom 20%",
+      "race": "Black",
+      "type": "Child"
+    },
+    {
+      "node": 11,
+      "name": "Bottom 20%",
+      "race": "White",
+      "type": "Child"
+    },
+    {
+      "node": 12,
+      "name": "60% - 80%",
+      "race": "Black",
+      "type": "Child"
+    },
+    {
+      "node": 13,
+      "name": "60% - 80%",
+      "race": "White",
+      "type": "Child"
+    },
+    {
+      "node": 14,
+      "name": "Middle 20%",
+      "race": "Black",
+      "type": "Child"
+    },
+    {
+      "node": 15,
+      "name": "Middle 20%",
+      "race": "White",
+      "type": "Child"
+    },
+    {
+      "node": 16,
+      "name": "20% - 40%",
+      "race": "Black",
+      "type": "Child"
+    },
+    {
+      "node": 17,
+      "name": "20% - 40%",
+      "race": "White",
+      "type": "Child"
+    },
+    {
+      "node": 18,
+      "name": "Top 20%",
+      "race": "Black",
+      "type": "Child"
+    },
+    {
+      "node": 19,
+      "name": "Top 20%",
+      "race": "White",
+      "type": "Child"
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "target": 10,
+      "value": 46.4303
+    },
+    {
+      "source": 1,
+      "target": 11,
+      "value": 31.6962
+    },
+    {
+      "source": 0,
+      "target": 12,
+      "value": 26.6285
+    },
+    {
+      "source": 1,
+      "target": 13,
+      "value": 27.519
+    },
+    {
+      "source": 0,
+      "target": 14,
+      "value": 14.7708
+    },
+    {
+      "source": 1,
+      "target": 15,
+      "value": 20.2248
+    },
+    {
+      "source": 0,
+      "target": 16,
+      "value": 8.1396
+    },
+    {
+      "source": 1,
+      "target": 17,
+      "value": 13.286
+    },
+    {
+      "source": 0,
+      "target": 18,
+      "value": 4.0308
+    },
+    {
+      "source": 1,
+      "target": 19,
+      "value": 7.2741
+    },
+    {
+      "source": 2,
+      "target": 10,
+      "value": 42.5672
+    },
+    {
+      "source": 3,
+      "target": 11,
+      "value": 22.6933
+    },
+    {
+      "source": 2,
+      "target": 12,
+      "value": 27.3026
+    },
+    {
+      "source": 3,
+      "target": 13,
+      "value": 25.1812
+    },
+    {
+      "source": 2,
+      "target": 14,
+      "value": 16.1855
+    },
+    {
+      "source": 3,
+      "target": 15,
+      "value": 23.0911
+    },
+    {
+      "source": 2,
+      "target": 16,
+      "value": 9.263
+    },
+    {
+      "source": 3,
+      "target": 17,
+      "value": 18.0016
+    },
+    {
+      "source": 2,
+      "target": 18,
+      "value": 4.6816
+    },
+    {
+      "source": 3,
+      "target": 19,
+      "value": 11.0328
+    },
+    {
+      "source": 4,
+      "target": 10,
+      "value": 38.5429
+    },
+    {
+      "source": 5,
+      "target": 11,
+      "value": 16.4303
+    },
+    {
+      "source": 4,
+      "target": 12,
+      "value": 27.6985
+    },
+    {
+      "source": 5,
+      "target": 13,
+      "value": 21.6554
+    },
+    {
+      "source": 4,
+      "target": 14,
+      "value": 17.6862
+    },
+    {
+      "source": 5,
+      "target": 15,
+      "value": 23.9926
+    },
+    {
+      "source": 4,
+      "target": 16,
+      "value": 10.5863
+    },
+    {
+      "source": 5,
+      "target": 17,
+      "value": 22.2987
+    },
+    {
+      "source": 4,
+      "target": 18,
+      "value": 5.4861
+    },
+    {
+      "source": 5,
+      "target": 19,
+      "value": 15.623
+    },
+    {
+      "source": 6,
+      "target": 10,
+      "value": 39.4947
+    },
+    {
+      "source": 7,
+      "target": 11,
+      "value": 9.8842
+    },
+    {
+      "source": 6,
+      "target": 12,
+      "value": 27.6354
+    },
+    {
+      "source": 7,
+      "target": 13,
+      "value": 15.6653
+    },
+    {
+      "source": 6,
+      "target": 14,
+      "value": 17.3299
+    },
+    {
+      "source": 7,
+      "target": 15,
+      "value": 22.1838
+    },
+    {
+      "source": 6,
+      "target": 16,
+      "value": 10.2577
+    },
+    {
+      "source": 7,
+      "target": 17,
+      "value": 27.348
+    },
+    {
+      "source": 6,
+      "target": 18,
+      "value": 5.2823
+    },
+    {
+      "source": 7,
+      "target": 19,
+      "value": 24.9187
+    },
+    {
+      "source": 8,
+      "target": 10,
+      "value": 10.463
+    },
+    {
+      "source": 9,
+      "target": 11,
+      "value": 4.6043
+    },
+    {
+      "source": 8,
+      "target": 12,
+      "value": 16.3101
+    },
+    {
+      "source": 9,
+      "target": 13,
+      "value": 8.5155
+    },
+    {
+      "source": 8,
+      "target": 14,
+      "value": 22.5424
+    },
+    {
+      "source": 9,
+      "target": 15,
+      "value": 15.547
+    },
+    {
+      "source": 8,
+      "target": 16,
+      "value": 26.932
+    },
+    {
+      "source": 9,
+      "target": 17,
+      "value": 28.3383
+    },
+    {
+      "source": 8,
+      "target": 18,
+      "value": 23.7524
+    },
+    {
+      "source": 9,
+      "target": 19,
+      "value": 42.9949
+    }
+  ]
 }
-

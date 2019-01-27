@@ -62,8 +62,6 @@
 			stroke-opacity: .2;*/
 		}
 
-
-
 		text {
 			font-family: 'Raleway', sans-serif;
 			font-weight: 500;
@@ -102,11 +100,9 @@ var margin = {top: 10, right: 180, bottom: 10, left: 180},
 		width = 900 - margin.left - margin.right,
 		height = 800 - margin.top - margin.bottom;
 
-// format variables
-var formatNumber = d3.format(",.0f"),		// zero decimal places
-		format = function(d) { return formatNumber(d) + " %"},
-		color = d3.scaleOrdinal().range(['rgb(37%, 42%, 82%, 0.85)', 'rgb(100%, 51%, 37%, 0.85)']);
-		color_link = d3.scaleOrdinal().range(['rgb(37%, 42%, 82%, 0.95)', 'rgb(85%, 39%, 25%, 0.85)']);
+// Scales to calculate the colors of the nodes and paths respectively
+var color = d3.scaleOrdinal().range(['rgb(37%, 42%, 82%, 0.85)', 'rgb(100%, 51%, 37%, 0.85)']);
+	color_link = d3.scaleOrdinal().range(['rgb(37%, 42%, 82%, 0.95)', 'rgb(85%, 39%, 25%, 0.85)']);
 
 // append the svg object to the body of the page
 var svg = d3.select("body").append("svg")
@@ -124,7 +120,7 @@ var sankey = d3.sankey()
 var path = sankey.link();
 
 // load the data
-d3.json("../Data/1-mobility-rates.json").then(function(graph) {
+d3.json("../Data/1-mobility.json").then(function(graph) {
 	draw_sankey(graph);
 });
 
@@ -134,9 +130,12 @@ function draw_sankey(graph){
 			.layout(32);
 
 	// add in the links
+	// the link variable does not contain any SVG elements
+	// But is used to bind SVG paths and text labels
 	link = svg.append("g").selectAll(".link")
 			.data(graph.links)
 			.enter();
+
 
 	paths = link.append("path")
 			.attr("class", function(d){
@@ -157,12 +156,6 @@ function draw_sankey(graph){
 		})
 		.attr("text-anchor", "end")
 		.style("visibility", "hidden");
-
-	// // add the link titles
-	// link.append("title")
-	// 			.text(function(d) {
-	// 			return d.source.name + " → " + 
-	// 							d.target.name + "\n" + d.value; });
 
 	// add in the nodes
 	node = svg.append("g").selectAll(".node")
@@ -190,6 +183,8 @@ function draw_sankey(graph){
 				return d3.rgb(d.color).darker(2); 
 			});
 
+	// To make the text labels visible on mouseover
+	// and to add in tooltips for mouseover on nodes
 	paths.on('mouseover', function(d){
 			elemClass = +d3.select(this).attr('class').split("-")[1];
 			if (elemClass % 2) {
@@ -265,14 +260,6 @@ function draw_sankey(graph){
 			.text(function(d, i) { 
 				return d.race + "\n" + d.name; 
 			});
-
-	// add the link titles
-	// link.append("title")
-	// 			.text(function(d) {
-	// 			return d.source.name + " → " + d.target.name + "\n" + Math.round(d.value*100)/100 + " % "; });
-	// link.append("title")
-	// 			.text(function(d) {
-	// 			return d.source.name + " → " + d.target.name; });
 
 	// add in the title for the nodes
 	node.append("text")
