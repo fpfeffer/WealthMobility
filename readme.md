@@ -1,4 +1,4 @@
-# Visualizing Intergenerational Wealth Mobility and Racial Inequality
+# Intergenerational Wealth Mobility and Racial Inequality
 We visualize the flow of individuals between parental wealth positions and their own wealth positions with a focus on racial differences in these flows and the reproduction of racial gaps across two generations.
 
 ## Main findings
