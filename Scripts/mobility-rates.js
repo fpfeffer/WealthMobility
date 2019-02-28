@@ -43,9 +43,9 @@ var dpi = window.devicePixelRatio;
 
 	// Initialises the height and width for text wrap
 	// From the d3-textwrap.js library
-var wrap_mr = d3.textwrap().bounds({height: 32, width: 80});
+var wrap_mr = d3.textwrap().bounds({height: 48, width: 80});
 
-function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, parent) {
+function draw_flow_mr(d, element, num_quantile, model_name, parent) { // black_ratio_scale, wealth_scale, parent) {
 	current_pquintile = parent; // for s1-models.html
 
 	regl.destroy();
@@ -83,6 +83,8 @@ function draw_flow_mr(element, num_quantile, black_ratio_scale, wealth_scale, pa
 	for (i = 1; i <= num_quantile; i++){
 		range_array.push(i);
 	}
+
+	wealth_scale = get_wealth_scale(d, model_name);
 
 	// A threshold scale for computing the quantiles for people by race (white and black respectively)
 	var wScale = d3.scaleThreshold()

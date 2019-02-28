@@ -78,7 +78,7 @@
 			text-align: center;
 		}
 
-		@media (min-width: 992px) {
+		@media (min-width: 1200px) {
 			foreignObject > div {
 				font-family: 'Raleway', sans-serif;
 				font-weight: 400;
@@ -88,7 +88,7 @@
 			}
 		}		
 
-		@media (max-width: 992px) {
+		@media (max-width: 1200px) {
 			foreignObject > div {
 				font-family: 'Raleway', sans-serif;
 				font-weight: 400;
@@ -129,11 +129,11 @@
 							<button class="btn btn-default dropdown-toggle drop-btn" type="button" data-toggle="dropdown">Middle 20%
 							<span class="caret"></span></button>
 							<ul class="dropdown-menu dropdown-bar">
-								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 5)">Top 20%</a></li>
-								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 4)">20% - 40%</a></li>
-								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 3)">Middle 20%</a></li>
-								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 2)">60% - 80%</a></li>
-								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 1)">Bottom 20%</a></li>
+								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(data, div, num_quantile, 'prob', 5)">Top 20%</a></li>
+								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(data, div, num_quantile, 'prob', 4)">20% - 40%</a></li>
+								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(data, div, num_quantile, 'prob', 3)">Middle 20%</a></li>
+								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(data, div, num_quantile, 'prob', 2)">60% - 80%</a></li>
+								<li class="drop-menu-item drop-menu-q"><a onclick="draw_flow_mr(data, div, num_quantile, 'prob', 1)">Bottom 20%</a></li>
 							</ul>
 						</div>
 					</span> of the wealth distribution: Where do they end up as adults?
@@ -162,13 +162,16 @@
 
 <script src="../Scripts/mobility-rates.js"></script>
 <script>
+	const div = div_mr;
+	const num_quantile = 5;
+	
 	$(function(){
 		$(".dropdown-menu").on('click', 'li a', function(){
 			$(".drop-btn:first-child").html($(this).text()+ ' <span class="caret"></span>');
 		});
 	});
 
-	var black_ratio_quintile_mr = {
+	const black_ratio_scale = {
 		"1": 0.5,
 		"2": 0.5,
 		"3": 0.5,
@@ -181,9 +184,8 @@
 		data.forEach(function( x, i ){
 			x.w == 0 ? x['race'] = 1 : x['race'] = 0;
 		});
-		wealth_scale_mr = get_wealth_scale(data, 'prob');
 
-		draw_flow_mr(div_mr, 5, black_ratio_quintile_mr, wealth_scale_mr, 3);// "all");
+		draw_flow_mr(data, div, num_quantile, 'prob', 3);// "all");
 	});
 </script>
 </html>

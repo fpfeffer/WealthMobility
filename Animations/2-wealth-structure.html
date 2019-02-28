@@ -61,7 +61,7 @@
 			text-align: center;
 		}
 
-		@media (min-width: 992px) {
+		@media (min-width: 1200px) {
 			foreignObject > div {
 				font-family: 'Raleway', sans-serif;
 				font-weight: 400;
@@ -71,7 +71,7 @@
 			}
 		}		
 
-		@media (max-width: 992px) {
+		@media (max-width: 1200px) {
 			foreignObject > div {
 				font-family: 'Raleway', sans-serif;
 				font-weight: 400;
@@ -135,7 +135,7 @@
 				<h4>Animation 2: Wealth Structure</h4>
 				<h3><span class="black" style="border-radius: 4px">Black</span> and <span class="white" style="border-radius: 4px">White</span> wealth positions across generations: Individual change and structural stability
 				</h3>
-				<div class="reset-button button" onclick="draw_flow_ws(div_ws, 5, qScale_domain_ws, black_ratio_quantile_ws, wealth_scale_ws)">Replay <i class="material-icons">replay</i></div>
+				<div class="reset-button button" onclick="draw_flow_ws(data, div, num_quantiles, 'n')">Replay <i class="material-icons">replay</i></div>
 			</div>
 		</div>
 		<div class="row" style="margin-top: 40px;">
@@ -159,6 +159,9 @@
 
 <script src="../Scripts/wealth-structure.js"></script>
 <script>
+	const div = div_ws;
+	const num_quantiles = 4;
+	
 	$(function(){
 		$(".dropdown-menu").on('click', 'li a', function(){
 			$(".drop-btn:first-child").html($(this).text()+ ' <span class="caret"></span>');
@@ -171,13 +174,7 @@
 			x.w == 0 ? x['race'] = 1 : x['race'] = 0;
 		});
 
-		wealth_scale_ws = get_wealth_scale(data, 'n');
-		black_ratio_quantile_ws = get_black_ratio_quantile(data, 'n')
-		qScale_domain_ws = get_qscale(data, 'n');
-
-		prob_quintiles = get_prob_quintiles(data, 'n');
-
-		draw_flow_ws(div_ws, 5, qScale_domain_ws, black_ratio_quantile_ws, wealth_scale_ws);
+		draw_flow_ws(data, div, num_quantiles, 'n');
 	});
 </script>
 </html>

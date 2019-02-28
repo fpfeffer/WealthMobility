@@ -43,8 +43,8 @@ var label_margins = 8;
 
 	// Initialises the height and width for text wrap
 	// From the d3-textwrap.js library
-var wrap_ws = d3.textwrap().bounds({height: 32, width: (stats_width/2 - label_margins)});
-var wrap_ws_header = d3.textwrap().bounds({height: 32, width: (stats_width - label_margins)});
+var wrap_ws = d3.textwrap().bounds({height: 48, width: (stats_width/2 - label_margins)});
+var wrap_ws_header = d3.textwrap().bounds({height: 48, width: (stats_width - label_margins)});
 
 var quantile_labels = []; //['Bottom 20%', '', 'Middle 20%', '', 'Top 20%'];
 var labels = ['Bottom', 'Middle', 'Top']
@@ -53,7 +53,7 @@ var labels = ['Bottom', 'Middle', 'Top']
 // Function to draw the wealth structure graph
 // This animation simulates the dots and stops, and is used in the graphs presented in the main section
 // The code structure and the REGL code is similar to the one used in `mobility-rates.js`
-function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, wealth_scale, parent = "all") {	
+function draw_flow_ws(d, element, num_quantile, model_name, parent = "all") { //qScale_domain, black_ratio_scale, wealth_scale) {	
 	regl.destroy();
 	regl = createREGL({container: element.node()});
 
@@ -86,6 +86,12 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 			((i == 1) || (i == 4)) ? (quantile_labels[i-1] = labels[Math.round(i*labels.length/num_quantile)-1] +" "+ quantile_pct + "%") : quantile_labels[i-1] = "";
 		}
 	}
+
+	wealth_scale = get_wealth_scale(d, model_name);
+	black_ratio_scale = get_black_ratio_quantile(d, model_name);
+	qScale_domain = get_qscale(d, model_name);
+	prob_pquantile = get_prob_pquintiles( Object.values(black_ratio_scale) );
+	prob_quantile = get_prob_quantiles(d, model_name);
 
 	var qScale = d3.scaleThreshold()
 		.domain(qScale_domain)
@@ -124,9 +130,6 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 	data = d3.shuffle(data);
 
 	time_limit = (wealth_length + 2.25) / d3.min(data.map(x => x.speed / 60));
-
-	prob_pquantile = get_prob_pquintiles( Object.values(black_ratio_scale) );
-	prob_quantile = get_prob_quantiles(d, 'n');
 
 	svg_parent_ws.append('g')
 		.attr('class', 'label-prob-ws label-header')
@@ -301,7 +304,6 @@ function draw_flow_ws_inf(d, element, num_quantile, model_name, parent = "all") 
 			((i == 1) || (i == 4)) ? (quantile_labels[i-1] = labels[Math.round(i*labels.length/num_quantile)-1] +" "+ quantile_pct + "%") : quantile_labels[i-1] = "";
 		}
 	}
-
 
 	wealth_scale = get_wealth_scale(d, model_name);
 	black_ratio_scale = get_black_ratio_quantile(d, model_name);
