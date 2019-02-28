@@ -126,7 +126,7 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 	time_limit = (wealth_length + 2.25) / d3.min(data.map(x => x.speed / 60));
 
 	prob_pquantile = get_prob_pquintiles( Object.values(black_ratio_scale) );
-	prob_quantile = prob_quintiles;
+	prob_quantile = get_prob_quantiles(d, 'n');
 
 	svg_parent_ws.append('g')
 		.attr('class', 'label-prob-ws label-header')
@@ -268,7 +268,7 @@ function draw_flow_ws(element, num_quantile, qScale_domain, black_ratio_scale, w
 
 // Function to draw the wealth structure graph
 // This animation runs on loop, and is used in the graphs presented in the supplemental materials
-function draw_flow_ws_inf(element, num_quantile, qScale_domain, black_ratio_scale, wealth_scale, parent = "all") {	
+function draw_flow_ws_inf(d, element, num_quantile, model_name, parent = "all") { //, qScale_domain, black_ratio_scale, wealth_scale, parent = "all") {	
 	regl.destroy();
 	regl = createREGL({container: element.node()});
 
@@ -301,6 +301,13 @@ function draw_flow_ws_inf(element, num_quantile, qScale_domain, black_ratio_scal
 			((i == 1) || (i == 4)) ? (quantile_labels[i-1] = labels[Math.round(i*labels.length/num_quantile)-1] +" "+ quantile_pct + "%") : quantile_labels[i-1] = "";
 		}
 	}
+
+
+	wealth_scale = get_wealth_scale(d, model_name);
+	black_ratio_scale = get_black_ratio_quantile(d, model_name);
+	qScale_domain = get_qscale(d, model_name);
+	prob_pquantile = get_prob_pquintiles( Object.values(black_ratio_scale) );
+	prob_quantile = get_prob_quantiles(d, model_name);
 
 	var qScale = d3.scaleThreshold()
 		.domain(qScale_domain)
@@ -337,9 +344,6 @@ function draw_flow_ws_inf(element, num_quantile, qScale_domain, black_ratio_scal
 	})
 
 	data = d3.shuffle(data);
-
-	prob_pquantile = get_prob_pquintiles( Object.values(black_ratio_scale) );
-	prob_quantile = prob_quintiles;
 
 	svg_parent_ws.append('g')
 		.attr('class', 'label-prob-ws label-header')
@@ -544,7 +548,7 @@ function get_prob_pquintiles(data){
 	return _.unzip(Object.values(array));
 }
 
-function get_prob_quintiles( data, model_name ){
+function get_prob_quantiles( data, model_name ){
 	diction = d3.nest()
 			.key( d => d.race )
 			.key( d => d.destination )

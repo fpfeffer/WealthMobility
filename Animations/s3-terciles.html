@@ -187,6 +187,9 @@
 
 <script src="../Scripts/wealth-structure.js"></script>
 <script>
+	const div = div_ws;
+	const num_quantiles = 3;
+
 	$(function(){
 		$(".dropdown-menu-model").on('click', 'li a', function(){
 			$(".drop-btn:first-child").html($(this).text()+ ' <span class="caret"></span>');
@@ -194,11 +197,7 @@
 	});
 
 	function update_model(data, model_name){
-		wealth_scale_ws = get_wealth_scale(data, model_name);
-		black_ratio_quantile_ws = get_black_ratio_quantile(data, 'n');
-		qScale_domain_ws = get_qscale(data, 'n');
-
-		draw_flow_ws_inf(div_ws, 3, qScale_domain_ws, black_ratio_quantile_ws, wealth_scale_ws)
+		draw_flow_ws_inf(data, div, num_quantiles, model_name)
 	}
 
 	Promise.all([
@@ -215,13 +214,7 @@
 			x.w == 0 ? x['race'] = 1 : x['race'] = 0;
 		});
 
-		wealth_scale_ws = get_wealth_scale(d, 'n');
-		black_ratio_quantile_ws = get_black_ratio_quantile(d, 'n');
-		qScale_domain_ws = get_qscale(d, 'n');
-
-		prob_quintiles = get_prob_quintiles(d, 'n');
-
-		draw_flow_ws_inf(div_ws, 3, qScale_domain_ws, black_ratio_quantile_ws, wealth_scale_ws);
+		draw_flow_ws_inf(d, div, num_quantiles, 'n');
 	})
 </script>
 </html>
