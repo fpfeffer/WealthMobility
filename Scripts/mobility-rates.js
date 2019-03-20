@@ -54,7 +54,7 @@ function draw_flow_mr(d, element, num_quantile, model_name, parent) { // black_r
 	d3.selectAll('.label-prob-mr').remove();
 	d3.selectAll('.label-prob-percent-mr').remove();
 
-	quantile_labels = Object.values( document.getElementsByClassName('drop-menu-q') ).map(d => d.innerText).reverse();
+	quantile_labels = Object.values( document.getElementsByClassName('drop-menu-q') ).map(d => d.innerText);
 
 	// Specifies the number of dots to be displayed
 	count = 10000;
