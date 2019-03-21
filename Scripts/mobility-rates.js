@@ -48,12 +48,16 @@ var wrap_mr = d3.textwrap().bounds({height: 48, width: 80});
 function draw_flow_mr(d, element, num_quantile, model_name, parent) { // black_ratio_scale, wealth_scale, parent) {
 	current_pquintile = parent; // for s1-models.html
 
+	// Destroys the REGL container each time the 
+	// input is updated using the dropdown
+	// and a new REGL is created
 	regl.destroy();
 	regl = createREGL({container: element.node()});
 	
 	d3.selectAll('.label-prob-mr').remove();
 	d3.selectAll('.label-prob-percent-mr').remove();
 
+	// Labels for the origin quantiles
 	quantile_labels = Object.values( document.getElementsByClassName('drop-menu-q') ).map(d => d.innerText);
 
 	// Specifies the number of dots to be displayed
@@ -149,6 +153,7 @@ function draw_flow_mr(d, element, num_quantile, model_name, parent) { // black_r
 
 	d3.selectAll('text.prob-frequency').call(wrap_mr);
 
+	console.log(quantile_labels);
 
 	// Displays the outcome probabilities
 	for (i = 1; i <= num_quantile; i++){
@@ -164,12 +169,13 @@ function draw_flow_mr(d, element, num_quantile, model_name, parent) { // black_r
 			.append('text')
 			.attr('class', 'prob-frequency white-probability')
 			.text( prob_q[i-1][1] + "%");
+
 		svg_destination_mr.append('g')
 			.attr('class', 'label-prob-mr label-category')
 			.attr('transform', 'translate('+ 2*stats_width/3 +', '+ (yScale_px(i) - 4) +')')
 			.append('text')
 			.attr('class', 'prob-frequency white-probability')
-			.text(quantile_labels[i-1]);
+			.text(quantile_labels[5 - i]); // the labels have been reversed
 
 		d3.selectAll('text.prob-frequency').call(wrap_mr);
 	}
